@@ -11,8 +11,8 @@ The algopoap_contract.json contains the ABI Schema for parent AlgoPoaP contract 
 
 ```mermaid
   graph TD;
-      Parent AlgoPoaP ASC-->AlgoPoaP item ASC;
-      AlgoPoaP User-->AlgoPoaP item ASC;
-      AlgoPoaP Author-->Parent AlgoPoaP ASC;
-      AlgoPoaP Author-->AlgoPoaP item ASC;
+      Parent_AlgoPoaP_ASC-->AlgoPoaP_item_ASC;
+      AlgoPoaP_User-->AlgoPoaP_item_ASC;
+      AlgoPoaP_Author-->Parent_AlgoPoaP_ASC;
+      AlgoPoaP_Author-->AlgoPoaP_item_ASC;
 ```
