@@ -1,5 +1,15 @@
-# algopoap-smartcontracts
-Algorand SmartContracts for AlgoPoaP dApp.
+# AlgoPoaP Smart Contracts
+
+## Algorand SmartContracts for AlgoPoaP dApp and AlgoPoaP Service.
+----
+
+```mermaid
+  graph TD;
+      Parent_AlgoPoaP_ASC-->AlgoPoaP_item_ASC;
+      AlgoPoaP_User-->AlgoPoaP_item_ASC;
+      AlgoPoaP_Author-->Parent_AlgoPoaP_ASC;
+      AlgoPoaP_Author-->AlgoPoaP_item_ASC;
+```
 
 AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL v 6.0 on AVM V1.1
 
@@ -9,10 +19,4 @@ Since AlgoPoaP is totally decentralized, trustless and permissionless: Every Alg
 
 The algopoap_contract.json contains the ABI Schema for parent AlgoPoaP contract and algopoap_item_contract.json is the full ABI Schema of AlgoPoaP item contract which will be created by an C2C call via an inner transaction.
 
-```mermaid
-  graph TD;
-      Parent_AlgoPoaP_ASC-->AlgoPoaP_item_ASC;
-      AlgoPoaP_User-->AlgoPoaP_item_ASC;
-      AlgoPoaP_Author-->Parent_AlgoPoaP_ASC;
-      AlgoPoaP_Author-->AlgoPoaP_item_ASC;
-```
+
