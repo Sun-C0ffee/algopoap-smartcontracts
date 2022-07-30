@@ -1,0 +1,31 @@
+{
+    "name": "algopoap-smartcontracts",
+    "version": "0.0.1",
+    "description": "This package implements AlgoPoaP's smart contracts on Algorand blockchain",
+    "main": "node algopoap-start.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "node algopoap-start.js",
+      "deploy": "node algopoap-deploy.js"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/AlgoPoaP/algopoap-smartcontracts.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/AlgoPoaP/algopoap-smartcontracts/issues"
+    },
+    "homepage": "https://github.com/AlgoPoaP/algopoap-smartcontracts#readme",
+    "dependencies": {
+      "axios": "^0.26.0",
+      "algosdk": "latest",
+      "node-fetch": "2",
+      "esrever":"latest",
+      "winston":"latest",
+      "chalk":"4.1.0"
+    }
+  }
+  
