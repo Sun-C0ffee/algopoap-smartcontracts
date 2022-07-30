@@ -1,0 +1,13 @@
+{
+    "name":"algopoap-item-contract",
+    "desc": "AlgoPoaP Item smart contract",
+    "networks":{
+        "MainNet":{
+            "appID": 0
+        },
+        "TestNet":{
+            "appID": 0
+        }
+    },
+    "methods":[]
+}

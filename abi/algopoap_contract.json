@@ -1,0 +1,13 @@
+{
+    "name":"algopoap-contract",
+    "desc": "AlgoPoaP Parent smart contract",
+    "networks":{
+        "MainNet":{
+            "appID": 0
+        },
+        "TestNet":{
+            "appID": 0
+        }
+    },
+    "methods":[]
+}
