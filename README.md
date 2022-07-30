@@ -2,7 +2,7 @@
 ## Algorand SmartContracts for AlgoPoaP dApp and AlgoPoaP Service.
 
 
-## Entities Relations:
+### Entities Relations:
 
 ```mermaid
   graph TD;
@@ -18,7 +18,7 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 
 AlgoPoaP Parent contract is created and thereafter every AlgoPoaP item is created by this parent contract based on configurations needed.
 
-## Lifecycle:
+### Lifecycle:
 
 ```mermaid
   stateDiagram-v2
