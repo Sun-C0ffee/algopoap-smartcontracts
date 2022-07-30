@@ -1,5 +1,4 @@
 # AlgoPoaP Smart Contracts
-
 ## Algorand SmartContracts for AlgoPoaP dApp and AlgoPoaP Service.
 
 
