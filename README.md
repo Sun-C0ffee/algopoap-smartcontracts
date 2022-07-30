@@ -1,7 +1,7 @@
 # AlgoPoaP Smart Contracts
 
 ## Algorand SmartContracts for AlgoPoaP dApp and AlgoPoaP Service.
-----
+
 
 ## Entities Relations:
 
@@ -14,8 +14,6 @@
       AlgoPoaP_Author== interacts ==>Parent_AlgoPoaP_ASC;
       AlgoPoaP_Author== interacts ==>AlgoPoaP_item_ASC;
 ```
-
-----
 
 AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL v 6.0 on AVM V1.1
 
