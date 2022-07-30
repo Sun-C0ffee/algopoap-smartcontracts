@@ -1,7 +1,11 @@
-# AlgoPoaP Smart Contracts
-## Algorand SmartContracts for AlgoPoaP dApp and AlgoPoaP Service.
+![](https://avatars.githubusercontent.com/u/106061767?s=96&v=4)
+# AlgoPoaP Smart Contracts 
 
+**Algorand SmartContracts for AlgoPoaP dApp and AlgoPoaP Service.**
 
+AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL v 6.0 on AVM V1.1. AlgoPoaP Parent contract is created and thereafter every AlgoPoaP item is created by this parent contract based on configurations needed.
+
+----
 ### Entities Relations:
 
 ```mermaid
@@ -14,10 +18,7 @@
       AlgoPoaP_Author== interacts ==>AlgoPoaP_item_ASC;
 ```
 
-AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL v 6.0 on AVM V1.1
-
-AlgoPoaP Parent contract is created and thereafter every AlgoPoaP item is created by this parent contract based on configurations needed.
-
+----
 ### Lifecycle:
 
 ```mermaid
