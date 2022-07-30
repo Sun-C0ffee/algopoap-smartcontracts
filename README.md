@@ -13,7 +13,7 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
       AlgoPoaP_Service== creates ==>Parent_AlgoPoaP_ASC;
       Parent_AlgoPoaP_ASC== creates ==>AlgoPoaP_Controler_ASC;
       Parent_AlgoPoaP_ASC== creates ==>AlgoPoaP_item_ASC;
-      Parent_AlgoPoaP_ASC== creates ==>AlgoPoaP_item_ASC;
+      
       AlgoPoaP_User== interacts ==>AlgoPoaP_item_ASC;
       AlgoPoaP_item_ASC== interacts ==>AlgoPoaP_Controler_ASC;
       AlgoPoaP_Author== interacts ==>Parent_AlgoPoaP_ASC;
