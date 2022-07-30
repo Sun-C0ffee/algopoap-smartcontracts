@@ -34,7 +34,35 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
     Archive --> [*]
 ```
 ----
+### UseCase:
 
+```mermaid
+  flowchart TB
+     id1([User]) --uses--> onboard 
+     id2([Author]) --uses--> onboard
+     id3([System]) --uses--> initiate
+    subgraph initiate
+    id4([deploy parent]) 
+    id5([deploy controllers])
+    end 
+    subgraph onboard
+    id6([optin]) 
+    id7([write states])
+    end
+    subgraph author
+    id8([create]) 
+    id9([optin]) 
+    id10([write states])
+    end
+    subgraph attend
+      id11([optin]) 
+    id12([write states])
+    id13([release])
+    end
+    id2 --> author
+    id1 --> attend
+```
+----
 
 
 Since AlgoPoaP is totally decentralized, trustless and permissionless: Every AlgoPoaP item author has full authority of the created PoaPs (AlgoPoaP-DAO is coming with dao, voting and governance features in near future, after startup formation)!
