@@ -30,9 +30,8 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
     Parent_AlgoPoaP_ASC --> AlgoPoaP_Controler_ASC
     Parent_AlgoPoaP_ASC --> AlgoPoaP_item_ASC
     
-    AlgoPoaP_item_ASC --> Release
     AlgoPoaP_item_ASC --> Archive
-    Release --> [*]
+    Archive --> [*]
 ```
 ----
 
