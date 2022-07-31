@@ -66,11 +66,18 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
     itemASC --extends--> parentASC
 
 ```
-----
 
 
 Since AlgoPoaP is totally decentralized, trustless and permissionless: Every AlgoPoaP item author has full authority of the created PoaPs (AlgoPoaP-DAO is coming with dao, voting and governance features in near future, after startup formation. Preferably I will use integration to an already working service with ABI)!
 
 The algopoap_contract.json contains the ABI Schema for parent AlgoPoaP contract and algopoap_item_contract.json is the full ABI Schema of AlgoPoaP item contract which will be created by an C2C call via an inner transaction.
+
+----
+### PoaP Dynamic NFTs:
+
+AlgoPoaP initially starts by using and issuing one type of parametrized SVG certificate including the QRCode of issuance transaction on Algorand. It's planned for **PoaP NFT Design Studio**
+
+![](/algopoap-nft-sample.png)
+
 
 
