@@ -37,29 +37,34 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 
 ```mermaid
   flowchart TB
-     id1([User]) --uses--> onboard 
-     id2([Author]) --uses--> onboard
-     id3([System]) --uses--> initiate
-    subgraph initiate
-    id4([deploy parent]) 
-    id5([deploy controllers])
+    id1([Author]) --uses--> parentASC
+    id1([Author]) --uses--> itemASC
+    id2([User]) --uses--> itemASC 
+    id2([User]) --uses--> parentASC 
+    id2([User]) --uses--> controllerASC 
+
+    subgraph -
+
+      subgraph parentASC
+      id6([optin])--uses-->id7([update states]) 
+      
+      id9([closeout])
+      end
+      subgraph itemASC
+      id8([create]) 
+      id9([optin]) 
+      id10([update states])
+      id13([Respond C2C])
+      id9([closeout]) 
+      end
+      subgraph controllerASC
+      id13([Respond C2C])
+      end
     end 
-    subgraph onboard
-    id6([optin]) 
-    id7([write states])
-    end
-    subgraph author
-    id8([create]) 
-    id9([optin]) 
-    id10([write states])
-    end
-    subgraph attend
-      id11([optin]) 
-    id12([write states])
-    id13([release])
-    end
-    id2 --> author
-    id1 --> attend
+   
+    controllerASC --extends--> itemASC
+    itemASC --extends--> parentASC
+
 ```
 ----
 
