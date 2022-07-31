@@ -25,11 +25,10 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 
 ```mermaid
   stateDiagram-v2
-    [*] --> Parent_AlgoPoaP_ASC
-    Parent_AlgoPoaP_ASC --> [*]
+    [*] --> AlgoPoaP_Service
+    AlgoPoaP_Service --> Parent_AlgoPoaP_ASC
     Parent_AlgoPoaP_ASC --> AlgoPoaP_Controler_ASC
     Parent_AlgoPoaP_ASC --> AlgoPoaP_item_ASC
-    
     AlgoPoaP_item_ASC --> Archive
     Archive --> [*]
 ```
