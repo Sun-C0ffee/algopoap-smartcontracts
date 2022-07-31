@@ -75,7 +75,7 @@ The algopoap_contract.json contains the ABI Schema for parent AlgoPoaP contract 
 ----
 ### PoaP Dynamic NFTs:
 
-AlgoPoaP initially starts by using and issuing one type of parametrized SVG certificate including the QRCode of issuance transaction on Algorand. BYON (Bring your own NFT) is planned for next phases and also there is an idea of  **PoaP NFT Design Studio** under assessment currently.
+AlgoPoaP initially issues just one type of parametrized SVG certificate including the QRCode of issuance transaction on Algorand. BYON (Bring your own NFT) is planned for next phases and also there is an idea of  **PoaP NFT Design Studio** under assessment currently.
 
 ![](/algopoap-nft-sample.png)
 
