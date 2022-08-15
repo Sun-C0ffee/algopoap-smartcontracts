@@ -69,6 +69,36 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 ```
 ----
 
+### AlgoPoaP ASC ABI :
+
+```mermaid
+  classDiagram
+    AlgoPoaP_ASC <|-- PoaP
+    AlgoPoaP_ASC : +Uint64 poap_txn_count
+    AlgoPoaP_ASC : +Uint64 poap_issuance_count
+    AlgoPoaP_ASC : +Uint64 poap_geo_issuance_count
+    AlgoPoaP_ASC : +Uint64 poap_qr_issuance_count
+    AlgoPoaP_ASC : +Uint64 poap_sig_issuance_count
+    AlgoPoaP_ASC : +Uint64 poap_item_count
+    AlgoPoaP_ASC : +Uint64 poap_author_count
+     AlgoPoaP_ASC : +Uint64 poap_attendee_count
+    AlgoPoaP_ASC : +String poap_last_appid
+    AlgoPoaP_ASC : +String poap_last_author
+    AlgoPoaP_ASC : +String poap_last_attendee
+   
+    class PoaP {
+        +Uint64 poap_created_count
+        +String poap_last_item
+        +setup()
+        +activate()
+        +claim()
+        +release()
+        +metrics()
+    }
+    
+```
+----
+
 ### AlgoPoaP Item ASC TEAL Graph:
 
 ```mermaid
@@ -123,36 +153,6 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
     b_metrics_update --> Log_and_Return
     
     Log_and_Return --> [*]
-    
-```
-----
-
-### AlgoPoaP ASC ABI :
-
-```mermaid
-  classDiagram
-    AlgoPoaP_ASC <|-- PoaP
-    AlgoPoaP_ASC : +Uint64 poap_txn_count
-    AlgoPoaP_ASC : +Uint64 poap_issuance_count
-    AlgoPoaP_ASC : +Uint64 poap_geo_issuance_count
-    AlgoPoaP_ASC : +Uint64 poap_qr_issuance_count
-    AlgoPoaP_ASC : +Uint64 poap_sig_issuance_count
-    AlgoPoaP_ASC : +Uint64 poap_item_count
-    AlgoPoaP_ASC : +Uint64 poap_author_count
-     AlgoPoaP_ASC : +Uint64 poap_attendee_count
-    AlgoPoaP_ASC : +String poap_last_appid
-    AlgoPoaP_ASC : +String poap_last_author
-    AlgoPoaP_ASC : +String poap_last_attendee
-   
-    class PoaP {
-        +Uint64 poap_created_count
-        +String poap_last_item
-        +setup()
-        +activate()
-        +claim()
-        +release()
-        +metrics()
-    }
     
 ```
 ----
