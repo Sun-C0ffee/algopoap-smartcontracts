@@ -12,8 +12,8 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 
 ```mermaid
   graph TD;
-      AlgoPoaP_Service== creates ==>Parent_AlgoPoaP_ASC;
-      Parent_AlgoPoaP_ASC== creates ==>AlgoPoaP_item_ASC;
+      AlgoPoaP_Service== manages ==>Parent_AlgoPoaP_ASC;
+      Parent_AlgoPoaP_ASC== manages ==>AlgoPoaP_item_ASC;
       
       AlgoPoaP_Attendee== interacts ==>AlgoPoaP_item_ASC;
       AlgoPoaP_Author== interacts ==>Parent_AlgoPoaP_ASC;
@@ -38,33 +38,62 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 ----
 
 
+
 ### UseCase:
 
 ```mermaid
   flowchart TB
-    id1([Author]) --uses--> parentASC
-    id1([Author]) --uses--> itemASC
-    id2([Attendee]) --uses--> itemASC 
-    id2([Attendee]) --uses--> parentASC 
 
-    subgraph -
+    id1([Author]) --uses--> parentMethodCalls
+    id1([Author]) --uses--> parentAppCalls
+    id1([Author]) --uses--> itemMethodCalls
+    
 
-      subgraph parentASC
-      id6([optin])--uses-->id7([update states]) 
+    id2([Attendee]) --uses--> parentAppCalls 
+    id2([Attendee]) --uses--> itemMethodCalls 
+  
+
+    subgraph AlgoPoaP
       
-      id9([closeout])
+      subgraph parentASC
+        subgraph parentAppCalls
+        id3([create]) 
+        id4([update]) 
+        id5([delete]) 
+        id6([setup]) 
+        id6([optin]) 
+        id7([closeout]) 
+        end
+        subgraph parentMethodCalls
+        id8([create]) 
+        id9([update]) 
+        id10([delete]) 
+        id11([get_metrics]) 
+        end
       end
       subgraph itemASC
-      id8([create]) 
-      id9([optin]) 
-      id10([update states])
-      id13([Respond C2C])
-      id9([closeout]) 
+        
+        
+        subgraph itemAppCalls
+        id12([optin])
+        id13([create]) 
+        id14([update]) 
+        id15([delete]) 
+        id16([setup]) 
+        id17([closeout]) 
+        end
+        subgraph itemMethodCalls
+        id18([activate]) 
+        id19([claim]) 
+        id20([release]) 
+        id21([get_metrics]) 
+        end
       end
+      
     end 
    
-
-    itemASC --extends--> parentASC
+    
+    
 
 ```
 ----
@@ -89,20 +118,20 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 
     b_on_completion --> b_noop
     b_noop --> b_setup
-    b_noop --> Log_and_Return
+    b_setup --> Log_and_Return
 
-    method --> c2c_create
+    abi_methods --> c2c_create
     c2c_create --> Log_and_Return
-    method --> c2c_delete
+    abi_methods --> c2c_delete
     c2c_delete --> Log_and_Return
-    method --> c2c_update
+    abi_methods --> c2c_update
     c2c_update --> Log_and_Return
-    method --> c2c_closeout
-    c2c_closeout --> Log_and_Return
+
    
-    method --> metrics
-    metrics --> b_metrics_update
-    b_metrics_update --> Log_and_Return
+    abi_methods --> get_metrics
+    get_metrics --> sub_metrics_update
+    sub_metrics_update --> get_metrics
+    get_metrics --> Log_and_Return
 
     Log_and_Return --> [*]
     
@@ -111,9 +140,13 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 
 ### AlgoPoaP ASC ABI :
 
+Note 1: Data fields are global states of AlgoPoaP parent smart contract.
+
+Note 2: Fee collection is not included anywhere at this phase of AlgoPoaP MVP development but certainly is a priority prior to public TESTNET deployment. It happens on parent smart contract.
+
 ```mermaid
   classDiagram
-    AlgoPoaP_ASC <|-- PoaP
+    class AlgoPoaP_ASC
     AlgoPoaP_ASC : +Uint64 poap_onboard_count
     AlgoPoaP_ASC : +Uint64 poap_count
     AlgoPoaP_ASC : +Uint64 poap_txn_count
@@ -128,19 +161,18 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 
     AlgoPoaP_ASC : +Uint64 poap_author_count
     AlgoPoaP_ASC : +Uint64 poap_attendee_count
-    AlgoPoaP_ASC : +String poap_last_appid
-    AlgoPoaP_ASC : +String poap_last_author
-    AlgoPoaP_ASC : +String poap_last_attendee
-   
-    class PoaP {
-        +create()
-        +update()
-        +delete()
-        +closeout()
-        +metrics()
-    }
+    AlgoPoaP_ASC : +Byte poap_last_appid
+    AlgoPoaP_ASC : +Byte poap_last_author
+    AlgoPoaP_ASC : +Byte poap_last_attendee
+    AlgoPoaP_ASC : +create(pay,byte[],byte[])uint64
+    AlgoPoaP_ASC : +update(application,byte[],byte[])bool
+    AlgoPoaP_ASC : +delete(application)bool
+    AlgoPoaP_ASC : +get_metrics()byte[]
+    AlgoPoaP_ASC : +get_metric(string)byte[]
     
 ```
+Note 1: Author has all metrics in localState of AlgoPoaP Item smart contract and all Authored AlgoPoaPs (upt to 16 item) in localState of AlgoPoaP smart contract (parent) 
+
 ----
 
 ### AlgoPoaP Item ASC TEAL Graph:
@@ -164,31 +196,36 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 
     b_on_completion --> b_noop
     b_noop --> b_setup
-    b_setup --> b_nft_create
+    b_setup --> sub_nft_create
+    sub_nft_create --> b_setup
     b_setup --> Log_and_Return
    
 
 
-    method --> activate
-    activate --> b_activate
-    b_activate --> Log_and_Return
+    abi_methods --> activate
+    activate --> Log_and_Return
+
+    abi_methods --> release
+    release --> Log_and_Return
+
+    abi_methods --> claim
+    claim --> sub_geo
+    sub_geo --> claim
+    claim --> sub_time
+    sub_time --> claim
+    claim --> sub_qr
+    sub_qr --> claim
+    claim --> sub_sig
+    sub_sig --> claim
+    claim --> sub_nft_send
+    sub_nft_send --> claim
+    claim --> Log_and_Return
 
 
-    method --> claim
-    claim --> b_claim
-
-    b_claim --> b_geo
-    b_claim --> b_time
-    b_claim --> b_sig
-    b_claim --> b_qr
-    b_claim --> b_nft_send
-    b_claim --> Log_and_Return
-
-
-    method --> release
-    release --> b_release_sig
-    b_release_sig --> b_nft_send
-    b_release --> Log_and_Return
+    
+  
+    abi_methods --> get_metrics
+    get_metrics --> Log_and_Return
   
     
     Log_and_Return --> [*]
@@ -197,9 +234,11 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 ----
 ### AlgoPoaP ASC ITEM ABI :
 
+Note: Data fields are global states of AlgoPoaP item smart contract.
+
 ```mermaid
   classDiagram
-    AlgoPoaP_ASC_ITEM <|-- PoaP_ITEM
+    class AlgoPoaP_ASC_ITEM
     AlgoPoaP_ASC_ITEM : +Uint64 poap_item_onboard_count
     AlgoPoaP_ASC_ITEM : +Uint64 poap_item_txn_count
     AlgoPoaP_ASC_ITEM : +Uint64 poap_item_apply_count
@@ -212,18 +251,22 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
     AlgoPoaP_ASC_ITEM : +Uint64 poap_item_sig_check_count
 
     AlgoPoaP_ASC_ITEM : +Uint64 poap_item_attendee_count
-    AlgoPoaP_ASC_ITEM : +String poap_item_last_attendee
-    AlgoPoaP_ASC_ITEM : +String poap_item_last_apply
-    AlgoPoaP_ASC_ITEM : +String poap_item_last_issuance
-    AlgoPoaP_ASC_ITEM : +String poap_item_last_nft_issuance
-    AlgoPoaP_ASC_ITEM : +String poap_item_last_txn_issuance
-   
-    class PoaP_ITEM {
-        +setup()
-        +activate()
-        +claim()
-        +release()
-        +metrics()
-    }
+    AlgoPoaP_ASC_ITEM : +Byte poap_item_last_attendee
+    AlgoPoaP_ASC_ITEM : +Byte poap_item_last_apply
+    AlgoPoaP_ASC_ITEM : +Byte poap_item_last_issuance
+    AlgoPoaP_ASC_ITEM : +Byte poap_item_last_nft_issuance
+    AlgoPoaP_ASC_ITEM : +Byte poap_item_last_txn_issuance
+    AlgoPoaP_ASC_ITEM : +activate(appl,pay)byte[]
+    AlgoPoaP_ASC_ITEM : +claim(appl,pay,account,uint16,uint48,uint24,uint48,uint24,uint64,string)string
+    AlgoPoaP_ASC_ITEM : +release(appl)byte[]
+    AlgoPoaP_ASC_ITEM : +get_metric(string)byte[]
+    AlgoPoaP_ASC_ITEM : +get_metrics()byte[]
+  
     
 ```
+
+----
+
+Since AlgoPoaP is totally decentralized, trustless and permission-less: Every AlgoPoaP item author has full authority of the created PoaPs (AlgoPoaP-DAO is coming with dao, voting and governance features in near future, after startup formation. Preferably I will use integration to an already working service with ABI)!
+
+The algopoap_contract.json contains the ABI Schema for parent AlgoPoaP contract and algopoap_item_contract.json is the full ABI Schema of AlgoPoaP item contract which will be created by an C2C call via an inner transaction.

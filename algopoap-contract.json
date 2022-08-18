@@ -9,5 +9,82 @@
             "appID": 0
         }
     },
-    "methods":[]
+    "methods":[
+        {
+            "name": "create",
+            "args": [
+              {
+                "type": "pay",
+                "name": "pay"
+              },
+              {
+                "type": "byte[]",
+                "name": "asc_approval_bytes"
+              },
+              {
+                "type": "byte[]",
+                "name": "asc_clear_bytes"
+              }
+            ],
+            "returns": {
+              "type": "uint64"
+            },
+            "desc": "Creates a new AlgoPoaP item smartcontract and returns the app id"
+          },
+          {
+            "name": "update",
+            "args": [
+              {
+                "type": "application",
+                "name": "application"
+              },
+              {
+                "type": "byte[]",
+                "name": "asc_approval_bytes"
+              },
+              {
+                "type": "byte[]",
+                "name": "asc_clear_bytes"
+              }
+            ],
+            "returns": {
+              "type": "bool"
+            },
+            "desc": "Updates an AlgoPoaP item smartcontract and returns bool (true on success)"
+          },
+          {
+            "name": "delete",
+            "args": [
+              {
+                "type": "application",
+                "name": "application"
+              }
+            ],
+            "returns": {
+              "type": "bool"
+            },
+            "desc": "Deletes an AlgoPoaP item smartcontract and returns bool (true on success)"
+          },
+          {
+            "name": "get_metric",
+            "args": [
+              {
+                "type": "string",
+                "name": "metric_signature"
+              }
+            ],
+            "returns": {
+              "type": "byte[]"
+            },
+            "desc": "Gets an specific metric by signature string"
+          },
+          {
+            "name": "get_metrics",
+            "args": [],
+            "returns": {
+              "type": "byte[]"
+            },
+            "desc": "Gets an specific metric by signature string"
+          }
+    ]
 }

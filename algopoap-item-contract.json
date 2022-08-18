@@ -1,13 +1,115 @@
 {
-    "name":"algopoap-item-contract",
+    "name": "algopoap-item-contract",
     "desc": "AlgoPoaP Item smart contract",
-    "networks":{
-        "MainNet":{
+    "networks": {
+        "MainNet": {
             "appID": 0
         },
-        "TestNet":{
+        "TestNet": {
             "appID": 0
         }
     },
-    "methods":[]
+    "methods": [
+        {
+            "name": "activate",
+            "args": [
+                {
+                    "type": "appl",
+                    "name": "parent_call"
+                },
+                {
+                    "type": "pay",
+                    "name": "pay"
+                }
+            ],
+            "returns": {
+                "type": "byte[]"
+            },
+            "desc": "Activates an AlgoPoaP item smart contract and returns all metrics"
+        },
+        {
+            "name": "claim",
+            "args": [
+                {
+                    "type": "appl",
+                    "name": "parent_call"
+                },
+                {
+                    "type": "pay",
+                    "name": "pay"
+                },
+                {
+                    "type": "account",
+                    "name": "attendee_account"
+                },
+                {
+                    "type": "uint16",
+                    "name": "lat_1"
+                },
+                {
+                    "type": "uint48",
+                    "name": "lat_2"
+                },
+                {
+                    "type": "uint24",
+                    "name": "lng_1"
+                },
+                {
+                    "type": "uint48",
+                    "name": "lng_2"
+                },
+                {
+                    "type": "uint24",
+                    "name": "geo_buffer"
+                },
+                {
+                    "type": "uint64",
+                    "name": "timestamp"
+                },
+                {
+                    "type": "string",
+                    "name": "qr_secret"
+                }
+                
+            ],
+            "returns": {
+                "type": "string"
+            },
+            "desc": "Claims an AlgoPoaP for an attendee and returns NFT sending inner-transaction hash"
+        },
+        {
+            "name": "release",
+            "args": [
+                {
+                    "type": "appl",
+                    "name": "parent_call"
+                }
+            ],
+            "returns": {
+                "type": "byte[]"
+            },
+            "desc": "Allows all AlgoPoaP attendee's to start claiming"
+        },
+        {
+            "name": "get_metric",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "metric_signature"
+                }
+            ],
+            "returns": {
+                "type": "byte[]"
+            },
+            "desc": "Gets an specific metric by signature string"
+        },
+        {
+            "name": "get_metrics",
+            "args": [],
+            "returns": {
+                "type": "byte[]"
+            },
+            "desc": "Gets an specific metric by signature string"
+        }
+    ]
 }
