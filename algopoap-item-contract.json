@@ -88,7 +88,7 @@
             "returns": {
                 "type": "byte[]"
             },
-            "desc": "Allows all AlgoPoaP attendee's to start claiming"
+            "desc": "Releases AlgoPoaP and allows all AlgoPoaP attendee's to start claiming"
         },
         {
             "name": "get_metric",
