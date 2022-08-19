@@ -23,7 +23,7 @@
                 }
             ],
             "returns": {
-                "type": "byte[]"
+                "type": "string[]"
             },
             "desc": "Activates an AlgoPoaP item smart contract and returns all metrics"
         },
@@ -86,7 +86,7 @@
                 }
             ],
             "returns": {
-                "type": "byte[]"
+                "type": "string[]"
             },
             "desc": "Releases AlgoPoaP and allows all AlgoPoaP attendee's to start claiming"
         },
@@ -99,7 +99,7 @@
                 }
             ],
             "returns": {
-                "type": "byte[]"
+                "type": "string[]"
             },
             "desc": "Gets an specific metric by signature string"
         },
@@ -107,7 +107,7 @@
             "name": "get_metrics",
             "args": [],
             "returns": {
-                "type": "byte[]"
+                "type": "string[]"
             },
             "desc": "Gets an specific metric by signature string"
         }
