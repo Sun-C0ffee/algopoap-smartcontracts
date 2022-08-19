@@ -74,7 +74,7 @@
               }
             ],
             "returns": {
-              "type": "byte[]"
+              "type": "string[]"
             },
             "desc": "Gets an specific metric by signature string"
           },
@@ -82,7 +82,7 @@
             "name": "get_metrics",
             "args": [],
             "returns": {
-              "type": "byte[]"
+              "type": "string[]"
             },
             "desc": "Gets an specific metric by signature string"
           }
