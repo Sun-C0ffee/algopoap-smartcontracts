@@ -29,24 +29,24 @@ b b_log_return
 method "c2c_create(pay,byte[],byte[])uint64"
 txn ApplicationArgs 0
 ==
-bnz c2c_create
+bnz method_c2c_create
 
 method "c2c_update(application,byte[],byte[])bool"
 txn ApplicationArgs 0
 ==
-bnz c2c_update
+bnz method_c2c_update
 
 method "c2c_delete(application)bool"
 txn ApplicationArgs 0
 ==
-bnz c2c_delete
+bnz method_c2c_delete
 
 method "get_metric(application)string"
 txn ApplicationArgs 0
 ==
-bnz get_metric
+bnz method_get_metric
 
 method "get_metrics(application)string[]"
 txn ApplicationArgs 0
 ==
-bnz get_metrics
+bnz method_get_metrics
