@@ -1,30 +1,66 @@
 #pragma version 6
 b b_main
+
 b_main:
-callsub sub_general_checks
-sub_general_checks:
-retsub
-b_on_completion:
+
 b_creation:
 b b_log_return
+
 b_optin:
 b b_log_return
+
 b_deletion:
 b b_log_return
+
 b_update:
 b b_log_return
+
 b_closeout:
 b b_log_return
 
 sub_nft_create:
 retsub 
 sub_setup:
-callsub create_nft
+callsub sub_create_nft
 retsub 
 
 b_noop:
 callsub sub_setup
 b b_log_return
+
+
+b_gate:
+
+txn OnCompletion
+int DeleteApplication
+==
+bnz b_deletion
+
+// Handle update application call to reject
+txn OnCompletion
+int UpdateApplication
+==
+bnz b_update
+
+// Handle CloseOut application call to reject
+txn OnCompletion
+int CloseOut
+==
+bnz b_closeout
+
+// Handle optin application
+txn OnCompletion
+int OptIn
+==
+bnz b_optin
+
+
+// Handle NoOp Application
+txn OnCompletion
+int NoOp
+==
+bnz b_noop
+
 
 method "c2c_create(pay,byte[],byte[])uint64"
 txn ApplicationArgs 0
@@ -50,3 +86,7 @@ method "get_metrics(application)string[]"
 txn ApplicationArgs 0
 ==
 bnz method_get_metrics
+
+b b_gate
+b_err:
+err
