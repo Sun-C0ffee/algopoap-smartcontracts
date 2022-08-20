@@ -41,7 +41,7 @@ txn ApplicationArgs 0
 ==
 bnz c2c_delete
 
-method "get_metric(application)string[]"
+method "get_metric(application)string"
 txn ApplicationArgs 0
 ==
 bnz get_metric

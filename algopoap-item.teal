@@ -14,12 +14,12 @@ txn ApplicationArgs 0
 ==
 bnz method_claim
 
-method "get_metric(application)bool"
+method "get_metric(application)string"
 txn ApplicationArgs 0
 ==
 bnz method_get_metric
 
-method "get_metrics(application)bool"
+method "get_metrics(application)string[]"
 txn ApplicationArgs 0
 ==
 bnz method_get_metrics
