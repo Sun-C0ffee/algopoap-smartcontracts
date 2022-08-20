@@ -1,45 +1,7 @@
 #pragma version 6
+
 b b_main
-
 b_main:
-
-b_creation:
-b b_log_return
-
-b_optin:
-b b_log_return
-
-b_deletion:
-b b_log_return
-
-b_update:
-b b_log_return
-
-b_closeout:
-b b_log_return
-
-sub_nft_create:
-retsub 
-sub_setup:
-callsub sub_create_nft
-retsub 
-
-b_noop:
-callsub sub_setup
-b b_log_return
-
-method_c2c_create:
-b b_log_return
-method_c2c_update:
-b b_log_return
-method_c2c_delete:
-b b_log_return
-method_get_metric:
-b b_log_return
-method_get_metrics:
-b b_log_return
-
-b_gate:
 txn OnCompletion
 int DeleteApplication
 ==
@@ -96,10 +58,53 @@ txn ApplicationArgs 0
 ==
 bnz method_get_metrics
 
-b b_gate
+b b_error
+
+
+
+b_creation:
+b b_log_return
+
+b_optin:
+b b_log_return
+
+b_deletion:
+b b_log_return
+
+b_update:
+b b_log_return
+
+b_closeout:
+b b_log_return
+
+sub_nft_create:
+retsub 
+sub_setup:
+callsub sub_create_nft
+retsub 
+
+b_noop:
+callsub sub_setup
+b b_log_return
+
+method_c2c_create:
+b b_log_return
+
+method_c2c_update:
+b b_log_return
+
+method_c2c_delete:
+b b_log_return
+
+method_get_metric:
+b b_log_return
+
+method_get_metrics:
+b b_log_return
+
 b_log_return:
 log
 int 1
 return
-b_err:
+b_error:
 err
