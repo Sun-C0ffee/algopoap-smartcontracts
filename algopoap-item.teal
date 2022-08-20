@@ -1,4 +1,15 @@
 #pragma version 6
+
+// Handles creation of 
+sub_nft_create:
+retsub 
+sub_setup:
+callsub sub_create_nft
+retsub 
+
+
+
+
 method "activate(pay,byte[],byte[])uint64"
 txn ApplicationArgs 0
 ==
