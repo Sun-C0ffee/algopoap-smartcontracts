@@ -1,4 +1,13 @@
 #pragma version 6
+// AlgoPoaP
+// Website: https://algopoap.com
+// dApp: https://algopoap.xyz
+// Authors: @emg110.algo, @sheghzo.algo
+// Github: https://github.com/algopoap
+
+
+// AlgoPoaP Smart Contract
+
 //Starts immidiately by a root main branch
 b b_main
 //Main ruter branch which checks the call and routes to designated branch
