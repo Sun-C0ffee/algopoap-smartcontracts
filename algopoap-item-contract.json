@@ -19,7 +19,11 @@
                 },
                 {
                     "type": "pay",
-                    "name": "pay"
+                    "name": "pay_min_fees"
+                },
+                {
+                    "type": "axfer",
+                    "name": "optin_algopoap_nft"
                 }
             ],
             "returns": {
@@ -36,7 +40,11 @@
                 },
                 {
                     "type": "pay",
-                    "name": "pay"
+                    "name": "pay_min_fee"
+                },
+                {
+                    "type": "axfer",
+                    "name": "optin_algopoap_nft"
                 },
                 {
                     "type": "account",
