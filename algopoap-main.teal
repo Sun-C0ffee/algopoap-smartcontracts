@@ -41,12 +41,12 @@ txn ApplicationArgs 0
 ==
 bnz c2c_delete
 
-method "get_metric(application)bool"
+method "get_metric(application)string[]"
 txn ApplicationArgs 0
 ==
 bnz get_metric
 
-method "get_metrics(application)bool"
+method "get_metrics(application)string[]"
 txn ApplicationArgs 0
 ==
 bnz get_metrics
