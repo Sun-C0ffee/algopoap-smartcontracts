@@ -1,14 +1,36 @@
 #pragma version 6
+//Starts immidiately by a root main branch
+b b_main
+//Main ruter branch which checks the call and routes to designated branch
+b_main:
 
-// Handles creation of 
-sub_nft_create:
-retsub 
-sub_setup:
-callsub sub_create_nft
-retsub 
+// Checking Application ID to be zero (app in creation)
+txn ApplicationID
+bz b_creation
 
+// Checking onCompletion type for delete application call
+txn OnCompletion
+int DeleteApplication
+==
+bnz b_deletion
 
+// Checking onCompletion type for update application call
+txn OnCompletion
+int UpdateApplication
+==
+bnz b_update
 
+// Checking onCompletion type for close out application call
+txn OnCompletion
+int CloseOut
+==
+bnz b_closeout
+
+// Checking onCompletion type for optin application call
+txn OnCompletion
+int OptIn
+==
+bnz b_optin
 
 method "activate(pay,byte[],byte[])uint64"
 txn ApplicationArgs 0
@@ -34,3 +56,79 @@ method "get_metrics(application)string[]"
 txn ApplicationArgs 0
 ==
 bnz method_get_metrics
+
+// Checking onCompletion type for noop application call
+txn OnCompletion
+int NoOp
+==
+bnz b_noop
+
+//If non of checks matched then error and reject
+b b_error
+
+
+// Handles creating a new main AlgoPoaP smart contract
+b_creation:
+b b_log_return
+
+// Handles opting into (onboarding) a main AlgoPoaP smart contract
+b_optin:
+b b_log_return
+
+// Handles deletion of a main AlgoPoaP smart contract
+b_deletion:
+b b_log_return
+
+// Handles update of a main AlgoPoaP smart contract
+b_update:
+b b_log_return
+
+// Handles close out (offboarding) from a main AlgoPoaP smart contract
+b_closeout:
+b b_log_return
+
+
+// Handles creation of 
+sub_nft_create:
+retsub 
+sub_setup:
+callsub sub_create_nft
+retsub 
+
+b_noop:
+callsub sub_setup
+b b_log_return
+
+method_activate:
+b b_log_return
+
+method_claim:
+b b_log_return
+
+method_release:
+b b_log_return
+
+method_get_metric:
+b b_log_return
+
+method_get_metrics:
+b b_log_return
+
+b_log_return:
+log
+int 1
+return
+
+b_error:
+err
+
+
+
+
+
+
+
+
+
+
+
