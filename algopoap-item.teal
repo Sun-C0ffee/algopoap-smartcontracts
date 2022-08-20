@@ -13,6 +13,10 @@
 b b_main
 //Main ruter branch which checks the call and routes to designated branch
 b_main:
+txn NumAppArgs
+int 0
+==
+bnz b_method_check
 
 // Checking Application ID to be zero (app in creation)
 txn ApplicationID
@@ -41,6 +45,25 @@ txn OnCompletion
 int OptIn
 ==
 bnz b_optin
+
+// Checking onCompletion type for noop application call
+txn OnCompletion
+int NoOp
+==
+bnz b_error
+
+//If non of method checks matched then error and reject (to have no arg , noop calls diverted to error most seems to be a good practice to dedicate noop calls to method calls)
+b b_error
+
+
+b_method_check:
+
+// Checking application call's Arg 0 for activate method signature
+method "setup(appl,pay,axfer,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,bool,bool,bool,bool)uint64"
+txn ApplicationArgs 0
+==
+bnz method_activate
+
 
 // Checking application call's Arg 0 for activate method signature
 method "activate(appl,pay,axfer)uint64"
@@ -72,13 +95,7 @@ txn ApplicationArgs 0
 ==
 bnz method_get_metrics
 
-// Checking onCompletion type for noop application call
-txn OnCompletion
-int NoOp
-==
-bnz b_noop
-
-//If non of checks matched then error and reject
+//If non of method checks matched then error and reject
 b b_error
 
 
