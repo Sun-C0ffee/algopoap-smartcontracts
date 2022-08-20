@@ -32,26 +32,31 @@ int OptIn
 ==
 bnz b_optin
 
+// Checking application call's Arg 0 for activate method signature
 method "activate(pay,byte[],byte[])uint64"
 txn ApplicationArgs 0
 ==
 bnz method_activate
 
+// Checking application call's Arg 0 for release method signature
 method "release(application,byte[],byte[])bool"
 txn ApplicationArgs 0
 ==
 bnz method_release
 
+// Checking application call's Arg 0 for claim method signature
 method "claim(application)bool"
 txn ApplicationArgs 0
 ==
 bnz method_claim
 
+// Checking application call's Arg 0 for get_metric method signature
 method "get_metric(application)string"
 txn ApplicationArgs 0
 ==
 bnz method_get_metric
 
+// Checking application call's Arg 0 for get_metrics method signature
 method "get_metrics(application)string[]"
 txn ApplicationArgs 0
 ==
@@ -88,9 +93,11 @@ b_closeout:
 b b_log_return
 
 
-// Handles creation of 
+// Handles creation of AlgoPoaP NFT during setup
 sub_nft_create:
 retsub 
+
+// Handles setting up global states and creation of AlgoPoaP NFT
 sub_setup:
 callsub sub_create_nft
 retsub 
