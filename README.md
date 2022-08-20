@@ -103,7 +103,8 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 ```mermaid
   stateDiagram-v2
     [*] --> b_main
-    b_main --> b_general_checks
+    b_main --> sub_general_checks
+    sub_general_checks --> b_main
     b_main --> b_on_completion
     b_on_completion --> b_creation
     b_creation --> Log_and_Return
@@ -117,8 +118,9 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
     b_closeout --> Log_and_Return
 
     b_on_completion --> b_noop
-    b_noop --> b_setup
-    b_setup --> Log_and_Return
+    b_noop --> sub_setup
+    sub_setup --> b_noop
+    b_noop --> Log_and_Return
 
     abi_methods --> c2c_create
     c2c_create --> Log_and_Return
@@ -132,6 +134,11 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
     get_metrics --> sub_metrics_update
     sub_metrics_update --> get_metrics
     get_metrics --> Log_and_Return
+
+    abi_methods --> get_metric
+    get_metric --> sub_metric_update
+    sub_metric_update --> get_metric
+    get_metric --> Log_and_Return
 
     Log_and_Return --> [*]
     
@@ -174,6 +181,7 @@ Note 2: Fee collection is not included anywhere at this phase of AlgoPoaP MVP de
 Note 1: Author has all metrics in localState of AlgoPoaP Item smart contract and all Authored AlgoPoaPs (upt to 16 item) in localState of AlgoPoaP smart contract (parent) 
 
 ----
+
 ### AlgoPoaP ASC ABI Schema :
 ```js
 {
@@ -275,8 +283,9 @@ Note 1: Author has all metrics in localState of AlgoPoaP Item smart contract and
 ```mermaid
   stateDiagram-v2
     [*] --> b_main
-    b_main --> b_general_checks
-    b_general_checks --> b_on_completion
+    b_main --> sub_general_checks
+    sub_general_checks --> b_main
+    b_main --> b_on_completion
     
     b_on_completion --> b_creation
     b_creation --> Log_and_Return
@@ -290,10 +299,11 @@ Note 1: Author has all metrics in localState of AlgoPoaP Item smart contract and
     b_closeout --> Log_and_Return
 
     b_on_completion --> b_noop
-    b_noop --> b_setup
-    b_setup --> sub_nft_create
-    sub_nft_create --> b_setup
-    b_setup --> Log_and_Return
+    b_noop --> sub_setup
+    sub_setup --> sub_nft_create
+    sub_nft_create --> sub_setup
+    sub_setup --> b_noop
+    b_noop --> Log_and_Return
    
 
 
@@ -327,9 +337,10 @@ Note 1: Author has all metrics in localState of AlgoPoaP Item smart contract and
     
 ```
 ----
+
 ### AlgoPoaP ASC ITEM ABI :
 
-Note: Data fields are global states of AlgoPoaP item smart contract.
+Note 1: Data fields are global states of AlgoPoaP item smart contract.
 
 ```mermaid
   classDiagram
@@ -351,17 +362,159 @@ Note: Data fields are global states of AlgoPoaP item smart contract.
     AlgoPoaP_ASC_ITEM : +Byte poap_item_last_issuance
     AlgoPoaP_ASC_ITEM : +Byte poap_item_last_nft_issuance
     AlgoPoaP_ASC_ITEM : +Byte poap_item_last_txn_issuance
-    AlgoPoaP_ASC_ITEM : +activate(appl,pay)byte[]
-    AlgoPoaP_ASC_ITEM : +claim(appl,pay,account,uint16,uint48,uint24,uint48,uint24,uint64,string)string
+    AlgoPoaP_ASC_ITEM : +activate(appl,pay,axfer)byte[]
+    AlgoPoaP_ASC_ITEM : +claim(appl,pay,axfer,account,uint16,uint48,uint24,uint48,uint24,uint64,string)string
     AlgoPoaP_ASC_ITEM : +release(appl)byte[]
     AlgoPoaP_ASC_ITEM : +get_metric(string)byte[]
     AlgoPoaP_ASC_ITEM : +get_metrics()byte[]
+    
   
     
 ```
+
 ----
 
 ### AlgoPoaP ASC ITEM ABI Schema :
+```js
+{
+    "name": "algopoap-item-contract",
+    "desc": "AlgoPoaP Item smart contract",
+    "networks": {
+        "MainNet": {
+            "appID": 0
+        },
+        "TestNet": {
+            "appID": 0
+        }
+    },
+    "methods": [
+        {
+            "name": "activate",
+            "args": [
+                {
+                    "type": "appl",
+                    "name": "parent_call"
+                },
+                {
+                    "type": "pay",
+                    "name": "pay_min_fees"
+                },
+                {
+                    "type": "axfer",
+                    "name": "optin_algopoap_nft"
+                }
+            ],
+            "returns": {
+                "type": "byte[]"
+            },
+            "desc": "Activates an AlgoPoaP item smart contract and returns all metrics"
+        },
+        {
+            "name": "claim",
+            "args": [
+                {
+                    "type": "appl",
+                    "name": "parent_call"
+                },
+                {
+                    "type": "pay",
+                    "name": "pay_min_fee"
+                },
+                {
+                    "type": "axfer",
+                    "name": "optin_algopoap_nft"
+                },
+                
+                {
+                    "type": "account",
+                    "name": "attendee_account"
+                },
+                {
+                    "type": "uint16",
+                    "name": "lat_1"
+                },
+                {
+                    "type": "uint48",
+                    "name": "lat_2"
+                },
+                {
+                    "type": "uint24",
+                    "name": "lng_1"
+                },
+                {
+                    "type": "uint48",
+                    "name": "lng_2"
+                },
+                {
+                    "type": "uint24",
+                    "name": "geo_buffer"
+                },
+                {
+                    "type": "uint64",
+                    "name": "timestamp"
+                },
+                {
+                    "type": "string",
+                    "name": "qr_secret"
+                }
+                
+            ],
+            "returns": {
+                "type": "string"
+            },
+            "desc": "Claims an AlgoPoaP for an attendee and returns NFT sending inner-transaction hash"
+        },
+        {
+            "name": "release",
+            "args": [
+                {
+                    "type": "appl",
+                    "name": "parent_call"
+                }
+            ],
+            "returns": {
+                "type": "byte[]"
+            },
+            "desc": "Releases AlgoPoaP and allows all AlgoPoaP attendee's to start claiming"
+        },
+        {
+            "name": "get_metric",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "metric_signature"
+                }
+            ],
+            "returns": {
+                "type": "byte[]"
+            },
+            "desc": "Gets an specific metric by signature string"
+        },
+        {
+            "name": "get_metrics",
+            "args": [],
+            "returns": {
+                "type": "byte[]"
+            },
+            "desc": "Gets an specific metric by signature string"
+        }
+    ]
+}
+
+```
+----
+
+
+
+Since AlgoPoaP is totally decentralized, trustless and permission-less: Every AlgoPoaP item author has full authority of the created PoaPs (AlgoPoaP-DAO is coming with dao, voting and governance features in near future, after startup formation. Preferably I will use integration to an already working service with ABI)!
+
+The algopoap_contract.json contains the ABI Schema for parent AlgoPoaP contract and algopoap_item_contract.json is the full ABI Schema of AlgoPoaP item contract which will be created by an C2C call via an inner transaction.
+
+
+
+
+
+
 ```js
 {
     "name": "algopoap-item-contract",

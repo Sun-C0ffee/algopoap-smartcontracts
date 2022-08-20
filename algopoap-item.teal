@@ -1,1 +1,25 @@
 #pragma version 6
+method "activate(pay,byte[],byte[])uint64"
+txn ApplicationArgs 0
+==
+bnz method_deploy
+
+method "release(application,byte[],byte[])bool"
+txn ApplicationArgs 0
+==
+bnz method_update
+
+method "claim(application)bool"
+txn ApplicationArgs 0
+==
+bnz method_destroy
+
+method "get_metric(application)bool"
+txn ApplicationArgs 0
+==
+bnz method_destroy
+
+method "get_metrics(application)bool"
+txn ApplicationArgs 0
+==
+bnz method_destroy

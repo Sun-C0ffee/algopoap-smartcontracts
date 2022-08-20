@@ -1,1 +1,52 @@
 #pragma version 6
+b b_main
+b_main:
+callsub b_general_checks
+b_general_checks:
+retsub
+b_on_completion:
+b_creation:
+b b_log_return
+b_optin:
+b b_log_return
+b_deletion:
+b b_log_return
+b_update:
+b b_log_return
+b_closeout:
+b b_log_return
+
+sub_nft_create:
+retsub 
+sub_setup:
+callsub create_nft
+retsub 
+
+b_noop:
+callsub sub_setup
+b b_log_return
+
+method "c2c_create(pay,byte[],byte[])uint64"
+txn ApplicationArgs 0
+==
+bnz c2c_create
+
+method "c2c_update(application,byte[],byte[])bool"
+txn ApplicationArgs 0
+==
+bnz c2c_update
+
+method "c2c_delete(application)bool"
+txn ApplicationArgs 0
+==
+bnz c2c_delete
+
+method "get_metric(application)bool"
+txn ApplicationArgs 0
+==
+bnz get_metric
+
+method "get_metrics(application)bool"
+txn ApplicationArgs 0
+==
+bnz get_metrics
