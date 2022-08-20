@@ -1,8 +1,8 @@
 #pragma version 6
 b b_main
 b_main:
-callsub b_general_checks
-b_general_checks:
+callsub sub_general_checks
+sub_general_checks:
 retsub
 b_on_completion:
 b_creation:
