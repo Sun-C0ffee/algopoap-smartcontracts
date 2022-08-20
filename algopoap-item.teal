@@ -2,24 +2,24 @@
 method "activate(pay,byte[],byte[])uint64"
 txn ApplicationArgs 0
 ==
-bnz method_deploy
+bnz method_activate
 
 method "release(application,byte[],byte[])bool"
 txn ApplicationArgs 0
 ==
-bnz method_update
+bnz method_release
 
 method "claim(application)bool"
 txn ApplicationArgs 0
 ==
-bnz method_destroy
+bnz method_claim
 
 method "get_metric(application)bool"
 txn ApplicationArgs 0
 ==
-bnz method_destroy
+bnz method_get_metric
 
 method "get_metrics(application)bool"
 txn ApplicationArgs 0
 ==
-bnz method_destroy
+bnz method_get_metrics
