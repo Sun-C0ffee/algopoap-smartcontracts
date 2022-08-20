@@ -11,6 +11,92 @@
     },
     "methods": [
         {
+            "name": "setup",
+            "args": [
+                {
+                    "type": "appl",
+                    "name": "parent_call"
+                },
+                {
+                    "type": "pay",
+                    "name": "pay_min_fee"
+                },
+                {
+                    "type": "account",
+                    "name": "author_account"
+                },
+                {
+                    "type": "uint16",
+                    "name": "lat_1"
+                },
+                {
+                    "type": "uint48",
+                    "name": "lat_2"
+                },
+                {
+                    "type": "uint24",
+                    "name": "lng_1"
+                },
+                {
+                    "type": "uint48",
+                    "name": "lng_2"
+                },
+                {
+                    "type": "uint24",
+                    "name": "geo_buffer"
+                },
+                {
+                    "type": "uint64",
+                    "name": "start timestamp"
+                },
+                {
+                    "type": "uint64",
+                    "name": "end timestamp"
+                },
+                {
+                    "type": "string",
+                    "name": "event_name"
+                },
+                {
+                    "type": "string",
+                    "name": "event_logo"
+                },
+                {
+                    "type": "string",
+                    "name": "event_desc"
+                },
+                {
+                    "type": "string",
+                    "name": "company_name"
+                },
+                {
+                    "type": "string",
+                    "name": "company_logo"
+                },
+                {
+                    "type": "bool",
+                    "name": "has_NFT"
+                },
+                {
+                    "type": "bool",
+                    "name": "has_GEO"
+                },
+                {
+                    "type": "bool",
+                    "name": "has_SIG"
+                },
+                {
+                    "type": "bool",
+                    "name": "has_QR"
+                }
+                
+            ],
+            "returns": {
+                "type": "string"
+            },
+            "desc": "Sets up an AlgoPoaP smart contract item"
+        },
+        {
             "name": "activate",
             "args": [
                 {

@@ -59,7 +59,7 @@ b b_error
 b_method_check:
 
 // Checking application call's Arg 0 for activate method signature
-method "setup(appl,pay,axfer,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,bool,bool,bool,bool)uint64"
+method "setup(appl,pay,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,bool,bool,bool,bool)string"
 txn ApplicationArgs 0
 ==
 bnz method_activate
