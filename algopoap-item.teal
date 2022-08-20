@@ -33,31 +33,31 @@ int OptIn
 bnz b_optin
 
 // Checking application call's Arg 0 for activate method signature
-method "activate(pay,byte[],byte[])uint64"
+method "activate(appl,pay,axfer)uint64"
 txn ApplicationArgs 0
 ==
 bnz method_activate
 
 // Checking application call's Arg 0 for release method signature
-method "release(application,byte[],byte[])bool"
+method "release(appl)bool"
 txn ApplicationArgs 0
 ==
 bnz method_release
 
 // Checking application call's Arg 0 for claim method signature
-method "claim(application)bool"
+method "claim(appl,pay,axfer,account,uint16,uint48,uint24,uint48,uint24,uint64,string)bool"
 txn ApplicationArgs 0
 ==
 bnz method_claim
 
 // Checking application call's Arg 0 for get_metric method signature
-method "get_metric(application)string"
+method "get_metric(string)string"
 txn ApplicationArgs 0
 ==
 bnz method_get_metric
 
 // Checking application call's Arg 0 for get_metrics method signature
-method "get_metrics(application)string[]"
+method "get_metrics()string[]"
 txn ApplicationArgs 0
 ==
 bnz method_get_metrics
