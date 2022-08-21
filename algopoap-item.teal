@@ -99,9 +99,14 @@ bnz method_get_metrics
 //If non of method checks matched then error and reject
 b b_error
 
+//Checks the Sender to be the Creator (AlgoPoaP Author)
 sub_check_author:
-callsub sub_check_author
+txn Sender
+global CreatorAddress
+==
+assert
 retsub
+
 // Handles creating a new item AlgoPoaP smart contract
 b_creation:
 byte "algopoap:item:create:"
