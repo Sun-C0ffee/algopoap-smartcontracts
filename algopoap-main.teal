@@ -208,7 +208,6 @@ itxn_field Fee
 
 itxn_submit
 
-// Using the ARC4 return string, concat the newly created appID.
 byte 0x151f7c75
 itxn CreatedApplicationID
 itob
@@ -217,6 +216,8 @@ b b_log_return
 
 //Handles ABI method call for contract to contract update of an AlgoPoaP item
 method_item_update:
+
+// Inner transaction to update the AlgoPoaP item smart contract
 itxn_begin
 
 int appl
@@ -261,6 +262,8 @@ b b_log_return
 
 //Handles ABI method call for contract to contract deletion of an AlgoPoaP item
 method_item_delete:
+
+// Inner transaction to delete the AlgoPoaP item smart contract
 itxn_begin
 
 int appl
