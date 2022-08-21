@@ -102,23 +102,56 @@ b b_error
 
 // Handles creating a new main AlgoPoaP smart contract
 b_creation:
+byte "algopoap:create:"
+txn Sender
+concat
 b b_log_return
 
 // Handles opting into (onboarding) a main AlgoPoaP smart contract
 b_optin:
+//TODO: Increment counters and update global states
+byte "algopoap:optin:"
+txn Sender
+concat
 b b_log_return
 
 // Handles deletion of a main AlgoPoaP smart contract
 b_deletion:
+txn Sender
+global CreatorAddress
+==
+assert
+byte "algopoap:delete:"
+global CurrentApplicationID
+itob
+concat
 b b_log_return
+
+
 
 // Handles update of a main AlgoPoaP smart contract
 b_update:
+txn Sender
+global CreatorAddress
+==
+assert
+byte "algopoap:update:"
+global CurrentApplicationID
+itob
+concat
 b b_log_return
+
 
 // Handles close out (offboarding) from a main AlgoPoaP smart contract
 b_closeout:
+byte "algopoap:closeout:"
+txn Sender
+concat
 b b_log_return
+
+//Handles NoOp calls and rejects them all (those with args are already routed)
+b_noop:
+b b_error
 
 
 // Handles creation of AlgoPoaP NFT during setup
@@ -126,14 +159,10 @@ sub_nft_create:
 retsub 
 
 // Handles setting up global states and creation of AlgoPoaP NFT
-sub_setup:
+method_setup:
 callsub sub_create_nft
-retsub 
+b b_log_return 
 
-//Handles NoOp calls which here are used solely for setup
-b_noop:
-callsub sub_setup
-b b_log_return
 
 // Handles activate method
 method_activate:
