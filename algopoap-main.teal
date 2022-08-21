@@ -70,13 +70,13 @@ txn ApplicationArgs 0
 bnz method_item_create
 
 // Checking application call's Arg 0 for item_update method signature
-method "item_update(application,byte[],byte[])bool"
+method "item_update(application,byte[],byte[])uint64"
 txn ApplicationArgs 0
 ==
 bnz method_item_update
 
 // Checking application call's Arg 0 for item_delete method signature 
-method "item_delete(application)bool"
+method "item_delete(application)uint64"
 txn ApplicationArgs 0
 ==
 bnz method_item_delete
