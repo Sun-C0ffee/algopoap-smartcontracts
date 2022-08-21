@@ -212,7 +212,7 @@ itxn_submit
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
 
-// Global states setup
+// Global states metrics setup
 byte "poap_item_onboard_count"
 int 0
 app_global_put
@@ -272,6 +272,41 @@ app_global_put
 byte "poap_item_last_txn_issuance"
 byte ""
 app_global_put
+
+// Global states PoaP data
+// appl,pay,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,string,string,string,bool,bool,bool,bool
+byte "poap_name"
+txn ApplicationArgs 8
+app_global_put
+
+byte "poap_desce"
+txn ApplicationArgs 9
+app_global_put
+
+byte "poap_logo"
+txn ApplicationArgs 10
+app_global_put
+
+byte "poap_email"
+txn ApplicationArgs 11
+app_global_put
+
+byte "poap_url"
+txn ApplicationArgs 12
+app_global_put
+
+byte "poap_address"
+txn ApplicationArgs 13
+app_global_put
+
+byte "poap_company_name"
+txn ApplicationArgs 14
+app_global_put
+
+byte "poap_company_logo"
+txn ApplicationArgs 15
+app_global_put
+
 
 
 // ASA Existence check to route to creation or config branches and subs
