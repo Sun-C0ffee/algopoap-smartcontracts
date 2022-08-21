@@ -8,7 +8,7 @@
 
 // AlgoPoaP Item Smart Contract
 // Scratch space schema
-// 0: 
+// 0: Created AlgoPoaP ASA ID
 
 //Starts immidiately by a root main branch
 b b_main
@@ -99,7 +99,9 @@ bnz method_get_metrics
 //If non of method checks matched then error and reject
 b b_error
 
-
+sub_check_author:
+callsub sub_check_author
+retsub
 // Handles creating a new item AlgoPoaP smart contract
 b_creation:
 byte "algopoap:item:create:"
@@ -117,10 +119,7 @@ b b_log_return
 
 // Handles deletion of an item AlgoPoaP smart contract
 b_deletion:
-txn Sender
-global CreatorAddress
-==
-assert
+callsub sub_check_author
 byte "algopoap:item:delete:"
 global CurrentApplicationID
 itob
@@ -131,10 +130,7 @@ b b_log_return
 
 // Handles update of an item AlgoPoaP smart contract
 b_update:
-txn Sender
-global CreatorAddress
-==
-assert
+callsub sub_check_author
 byte "algopoap:update:"
 global CurrentApplicationID
 itob
@@ -155,14 +151,64 @@ b b_error
 
 
 // Handles creation of AlgoPoaP NFT during setup
-sub_nft_create:
+sub_create_nft:
+itxn_begin
+int acfg
+itxn_field TypeEnum
+int 1000
+itxn_field ConfigAssetTotal
+int 0
+itxn_field ConfigAssetDecimals
+byte "PoaP"
+itxn_field ConfigAssetUnitName
+byte "AlgoPoaP"
+itxn_field ConfigAssetName
+byte "https://algopoap.xyz/"
+itxn_field ConfigAssetURL
+global CurrentApplicationAddress
+dup
+dup2
+itxn_field ConfigAssetManager
+itxn_field ConfigAssetReserve
+itxn_field ConfigAssetFreeze
+itxn_field ConfigAssetClawback
+itxn_submit
+byte "poap_asa_id"
+itxn CreatedAssetID
+dup
+store 0
+app_global_put
 retsub 
+
+// Handles config of AlgoPoaP NFT during setup
+b_config_nft:
+itxn_begin
+itxn_field ConfigAsset
+int acfg
+itxn_field TypeEnum
+txn Sender
+itxn_field ConfigAssetFreeze
+txn Sender
+itxn_field ConfigAssetClawback
+global CurrentApplicationAddress
+dup
+itxn_field ConfigAssetManager
+itxn_field ConfigAssetReserve
+
+itxn_submit
+
 
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
+int 0
+byte "poap_asa_id"
+app_global_get_ex
+bnz b_config_nft
 callsub sub_create_nft
-b b_log_return 
-
+byte 0x151f7c7580
+load 0
+concat
+b b_log_return
 
 // Handles activate method
 method_activate:
