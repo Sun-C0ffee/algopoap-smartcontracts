@@ -63,23 +63,23 @@ txn ApplicationArgs 0
 ==
 bnz method_setup
 
-// Checking application call's Arg 0 for c2c_create method signature
-method "c2c_create(pay,byte[],byte[])uint64"
+// Checking application call's Arg 0 for item_create method signature
+method "item_create(pay,byte[],byte[])uint64"
 txn ApplicationArgs 0
 ==
-bnz method_c2c_create
+bnz method_item_create
 
-// Checking application call's Arg 0 for c2c_update method signature
-method "c2c_update(application,byte[],byte[])bool"
+// Checking application call's Arg 0 for item_update method signature
+method "item_update(application,byte[],byte[])bool"
 txn ApplicationArgs 0
 ==
-bnz method_c2c_update
+bnz method_item_update
 
-// Checking application call's Arg 0 for c2c_delete method signature 
-method "c2c_delete(application)bool"
+// Checking application call's Arg 0 for item_delete method signature 
+method "item_delete(application)bool"
 txn ApplicationArgs 0
 ==
-bnz method_c2c_delete
+bnz method_item_delete
 
 // Checking application call's Arg 0 for get_metric method signature 
 method "get_metric(application)string"
@@ -161,17 +161,17 @@ txn ApplicationArgs 1
 b b_log_return
 
 //Handles ABI method call for contract to contract creation of an AlgoPoaP item
-method_c2c_create:
+method_item_create:
 //TODO: creating new AlgoPoaP item by inner transaction
 b b_log_return
 
 //Handles ABI method call for contract to contract update of an AlgoPoaP item
-method_c2c_update:
+method_item_update:
 //TODO: Updating AlgoPoaP item by inner transaction
 b b_log_return
 
 //Handles ABI method call for contract to contract deletion of an AlgoPoaP item
-method_c2c_delete:
+method_item_delete:
 //TODO: deleting AlgoPoaP item by inner transaction
 b b_log_return
 
