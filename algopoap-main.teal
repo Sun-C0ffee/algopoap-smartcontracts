@@ -13,6 +13,10 @@
 b b_main
 //Main ruter branch which checks the call and routes to designated branch
 b_main:
+txn NumAppArgs
+int 0
+==
+bz b_method_check
 
 // Checking Application ID to be zero (app in creation)
 txn ApplicationID
@@ -41,6 +45,22 @@ txn OnCompletion
 int OptIn
 ==
 bnz b_optin
+
+// Checking onCompletion type for noop application call
+txn OnCompletion
+int NoOp
+==
+bnz b_noop
+
+b b_error
+
+// Method signature checks
+b_method_check:
+// Checking application call's Arg 0 for setup method signature
+method "setup(string)string"
+txn ApplicationArgs 0
+==
+bnz method_setup
 
 // Checking application call's Arg 0 for c2c_create method signature
 method "c2c_create(pay,byte[],byte[])uint64"
@@ -72,12 +92,6 @@ txn ApplicationArgs 0
 ==
 bnz method_get_metrics
 
-// Checking onCompletion type for noop application call
-txn OnCompletion
-int NoOp
-==
-bnz b_noop
-
 //If non of checks matched then error and reject
 b b_error
 
@@ -107,25 +121,28 @@ global CreatorAddress
 ==
 byte "algopoap-app-updated"
 bnz b_log_return
-b b_error
+
 
 // Handles close out (offboarding) from a main AlgoPoaP smart contract
 b_closeout:
 b b_log_return
 
 //Handles setup of app (setting global states)
-sub_setup:
+
+
+
+//Handles NoOp calls which here are used solely for setup
+b_noop:
+b b_error
+
+//Handles ABI method call for setup of an AlgoPoaP item
+method_setup:
 txn Sender
 global CreatorAddress
 ==
 assert
 //global states setup here...
-byte "algopoap-app-setup"
-retsub 
-
-//Handles NoOp calls which here are used solely for setup
-b_noop:
-callsub sub_setup
+txn ApplicationArgs 1
 b b_log_return
 
 //Handles ABI method call for contract to contract creation of an AlgoPoaP item
@@ -157,3 +174,4 @@ return
 //Handles rejection with error
 b_error:
 err
+
