@@ -98,10 +98,17 @@ b b_error
 
 // Handles creating a new main AlgoPoaP smart contract
 b_creation:
+byte "algopoap:create:"
+txn Sender
+concat
 b b_log_return
 
 // Handles opting into (onboarding) a main AlgoPoaP smart contract
 b_optin:
+//TODO: Increment counters and update global states
+byte "algopoap:optin:"
+txn Sender
+concat
 b b_log_return
 
 // Handles deletion of a main AlgoPoaP smart contract
@@ -109,9 +116,13 @@ b_deletion:
 txn Sender
 global CreatorAddress
 ==
-byte "algopoap-app-created"
-bnz b_log_return
-b b_error
+assert
+byte "algopoap:delete:"
+global CurrentApplicationID
+itob
+concat
+b b_log_return
+
 
 
 // Handles update of a main AlgoPoaP smart contract
@@ -119,12 +130,19 @@ b_update:
 txn Sender
 global CreatorAddress
 ==
-byte "algopoap-app-updated"
-bnz b_log_return
+assert
+byte "algopoap:update:"
+global CurrentApplicationID
+itob
+concat
+b b_log_return
 
 
 // Handles close out (offboarding) from a main AlgoPoaP smart contract
 b_closeout:
+byte "algopoap:closeout:"
+txn Sender
+concat
 b b_log_return
 
 //Handles setup of app (setting global states)
@@ -141,7 +159,7 @@ txn Sender
 global CreatorAddress
 ==
 assert
-//global states setup here...
+//TODO: global states setup here...
 txn ApplicationArgs 1
 b b_log_return
 
