@@ -145,10 +145,6 @@ txn Sender
 concat
 b b_log_return
 
-//Handles setup of app (setting global states)
-
-
-
 //Handles NoOp calls which here are used solely for setup
 b_noop:
 b b_error
