@@ -37,9 +37,9 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 ```
 ----
 
-
-
 ### UseCase:
+
+**Note: The NoOp calls without args will be rejected with error. This is being examined as a security practice**
 
 ```mermaid
   flowchart TB
