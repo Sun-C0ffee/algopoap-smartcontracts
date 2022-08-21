@@ -107,6 +107,31 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
     [*] --> b_main
    
     b_main --> b_creation
+    b_main --> b_method_check
+
+    b_method_check --> setup
+    setup --> b_log_return
+    
+    b_method_check --> c2c_create
+    c2c_create --> b_log_return
+
+    b_method_check --> c2c_delete
+    c2c_delete --> b_log_return
+
+    b_method_check --> c2c_update
+    c2c_update --> b_log_return
+
+   
+    b_method_check --> get_metrics
+    get_metrics --> sub_metrics_update
+    sub_metrics_update --> get_metrics
+    get_metrics --> b_log_return
+
+    b_method_check --> get_metric
+    get_metric --> sub_metric_update
+    sub_metric_update --> get_metric
+    get_metric --> b_log_return
+
     b_creation --> b_log_return
 
     b_main --> b_optin
@@ -120,30 +145,6 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
 
     b_main --> b_closeout
     b_closeout --> b_log_return
-
-
-    b_main --> setup
-    setup --> b_log_return
-    
-    b_main --> c2c_create
-    c2c_create --> b_log_return
-
-    b_main --> c2c_delete
-    c2c_delete --> b_log_return
-
-    b_main --> c2c_update
-    c2c_update --> b_log_return
-
-   
-    b_main --> get_metrics
-    get_metrics --> sub_metrics_update
-    sub_metrics_update --> get_metrics
-    get_metrics --> b_log_return
-
-    b_main --> get_metric
-    get_metric --> sub_metric_update
-    sub_metric_update --> get_metric
-    get_metric --> b_log_return
 
     b_main --> b_noop
     b_noop --> b_error
