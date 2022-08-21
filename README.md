@@ -60,14 +60,15 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
         id3([create]) 
         id4([update]) 
         id5([delete]) 
-        id6([setup]) 
         id6([optin]) 
         id7([closeout]) 
         end
         subgraph parentMethodCalls
-        id8([create]) 
-        id9([update]) 
-        id10([delete]) 
+        id61([setup]) 
+        id8([c2c_create]) 
+        id9([c2c_update]) 
+        id10([c2c_delete]) 
+        id11([get_metric]) 
         id11([get_metrics]) 
         end
       end
@@ -83,9 +84,11 @@ AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL 
         id17([closeout]) 
         end
         subgraph itemMethodCalls
+        id18([setup]) 
         id18([activate]) 
         id19([claim]) 
         id20([release]) 
+        id21([get_metric]) 
         id21([get_metrics]) 
         end
       end
@@ -400,6 +403,232 @@ Note 1: Data fields are global states of AlgoPoaP item smart contract.
 ----
 
 ### AlgoPoaP ASC ITEM ABI Schema :
+```js
+{
+    "name": "algopoap-item-contract",
+    "desc": "AlgoPoaP Item smart contract",
+    "networks": {
+        "MainNet": {
+            "appID": 0
+        },
+        "TestNet": {
+            "appID": 0
+        }
+    },
+    "methods": [
+      {
+            "name": "setup",
+            "args": [
+                {
+                    "type": "appl",
+                    "name": "parent_call"
+                },
+                {
+                    "type": "pay",
+                    "name": "pay_min_fee"
+                },
+                {
+                    "type": "account",
+                    "name": "author_account"
+                },
+                {
+                    "type": "uint16",
+                    "name": "lat_1"
+                },
+                {
+                    "type": "uint48",
+                    "name": "lat_2"
+                },
+                {
+                    "type": "uint24",
+                    "name": "lng_1"
+                },
+                {
+                    "type": "uint48",
+                    "name": "lng_2"
+                },
+                {
+                    "type": "uint24",
+                    "name": "geo_buffer"
+                },
+                {
+                    "type": "uint64",
+                    "name": "start timestamp"
+                },
+                {
+                    "type": "uint64",
+                    "name": "end timestamp"
+                },
+                {
+                    "type": "string",
+                    "name": "event_name"
+                },
+                {
+                    "type": "string",
+                    "name": "event_logo"
+                },
+                {
+                    "type": "string",
+                    "name": "event_desc"
+                },
+                {
+                    "type": "string",
+                    "name": "company_name"
+                },
+                {
+                    "type": "string",
+                    "name": "company_logo"
+                },
+                {
+                    "type": "bool",
+                    "name": "has_NFT"
+                },
+                {
+                    "type": "bool",
+                    "name": "has_GEO"
+                },
+                {
+                    "type": "bool",
+                    "name": "has_SIG"
+                },
+                {
+                    "type": "bool",
+                    "name": "has_QR"
+                }
+                
+            ],
+            "returns": {
+                "type": "string"
+            },
+            "desc": "Sets up an AlgoPoaP smart contract item"
+        },
+        {
+            "name": "activate",
+            "args": [
+                {
+                    "type": "appl",
+                    "name": "parent_call"
+                },
+                {
+                    "type": "pay",
+                    "name": "pay_min_fees"
+                },
+                {
+                    "type": "axfer",
+                    "name": "optin_algopoap_nft"
+                }
+            ],
+            "returns": {
+                "type": "byte[]"
+            },
+            "desc": "Activates an AlgoPoaP item smart contract and returns all metrics"
+        },
+        {
+            "name": "claim",
+            "args": [
+                {
+                    "type": "appl",
+                    "name": "parent_call"
+                },
+                {
+                    "type": "pay",
+                    "name": "pay_min_fee"
+                },
+                {
+                    "type": "axfer",
+                    "name": "optin_algopoap_nft"
+                },
+                
+                {
+                    "type": "account",
+                    "name": "attendee_account"
+                },
+                {
+                    "type": "uint16",
+                    "name": "lat_1"
+                },
+                {
+                    "type": "uint48",
+                    "name": "lat_2"
+                },
+                {
+                    "type": "uint24",
+                    "name": "lng_1"
+                },
+                {
+                    "type": "uint48",
+                    "name": "lng_2"
+                },
+                {
+                    "type": "uint24",
+                    "name": "geo_buffer"
+                },
+                {
+                    "type": "uint64",
+                    "name": "timestamp"
+                },
+                {
+                    "type": "string",
+                    "name": "qr_secret"
+                }
+                
+            ],
+            "returns": {
+                "type": "string"
+            },
+            "desc": "Claims an AlgoPoaP for an attendee and returns NFT sending inner-transaction hash"
+        },
+        {
+            "name": "release",
+            "args": [
+                {
+                    "type": "appl",
+                    "name": "parent_call"
+                }
+            ],
+            "returns": {
+                "type": "byte[]"
+            },
+            "desc": "Releases AlgoPoaP and allows all AlgoPoaP attendee's to start claiming"
+        },
+        {
+            "name": "get_metric",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "metric_signature"
+                }
+            ],
+            "returns": {
+                "type": "byte[]"
+            },
+            "desc": "Gets an specific metric by signature string"
+        },
+        {
+            "name": "get_metrics",
+            "args": [],
+            "returns": {
+                "type": "byte[]"
+            },
+            "desc": "Gets an specific metric by signature string"
+        }
+    ]
+}
+
+```
+----
+
+
+
+Since AlgoPoaP is totally decentralized, trustless and permission-less: Every AlgoPoaP item author has full authority of the created PoaPs (AlgoPoaP-DAO is coming with dao, voting and governance features in near future, after startup formation. Preferably I will use integration to an already working service with ABI)!
+
+The algopoap_contract.json contains the ABI Schema for parent AlgoPoaP contract and algopoap_item_contract.json is the full ABI Schema of AlgoPoaP item contract which will be created by an C2C call via an inner transaction.
+
+
+
+
+
+
 ```js
 {
     "name": "algopoap-item-contract",
