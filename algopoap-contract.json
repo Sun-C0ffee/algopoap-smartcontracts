@@ -11,7 +11,7 @@
     },
     "methods":[
         {
-            "name": "create",
+            "name": "c2c_create",
             "args": [
               {
                 "type": "pay",
@@ -32,7 +32,7 @@
             "desc": "Creates a new AlgoPoaP item smartcontract and returns the app id"
           },
           {
-            "name": "update",
+            "name": "c2c_update",
             "args": [
               {
                 "type": "application",
@@ -53,7 +53,7 @@
             "desc": "Updates an AlgoPoaP item smartcontract and returns bool (true on success)"
           },
           {
-            "name": "delete",
+            "name": "c2c_delete",
             "args": [
               {
                 "type": "application",
