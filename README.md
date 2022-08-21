@@ -14,9 +14,20 @@
 - [Algorand NFDomain (algopoap.algo)](https://algopoap.algo.xyz)
 
 
-AlgoPoaP ASC System is designed on basis of newest stable TEAL features came with TEAL v 6.0 on AVM V1.1. AlgoPoaP Parent contract is created and thereafter every AlgoPoaP item is created by this parent contract based on configurations needed.
+AlgoPoaP ASC System is designed on basis of newest TEAL features came with TEAL v 6.0 on AVM V1.1. AlgoPoaP Parent contract is created and thereafter every AlgoPoaP item is created by this parent contract based on configurations needed.
 
 
+```mermaid
+  graph TD;
+      AlgoPoaP_Service== manages ==>Parent_AlgoPoaP_ASC;
+      Parent_AlgoPoaP_ASC== manages ==>AlgoPoaP_item_ASC;
+      
+      AlgoPoaP_Attendee== interacts ==>AlgoPoaP_item_ASC;
+      AlgoPoaP_Author== interacts ==>Parent_AlgoPoaP_ASC;
+      AlgoPoaP_Author== interacts ==>AlgoPoaP_item_ASC;
+```
+
+----
 
 
 
