@@ -158,7 +158,63 @@ txn Sender
 global CreatorAddress
 ==
 assert
-//TODO: global states setup here...
+
+byte "poap_onboard_count"
+int 0
+app_global_put
+
+byte "poap_count"
+int 0
+app_global_put
+
+byte "poap_txn_count"
+int 0
+app_global_put
+
+byte "poap_claim_count"
+int 0
+app_global_put
+
+byte "poap_issuance_count"
+int 0
+app_global_put
+
+byte "poap_nft_issuance_count"
+int 0
+app_global_put
+
+byte "poap_geo_check_count"
+int 0
+app_global_put
+
+byte "poap_qr_check_count"
+int 0
+app_global_put
+
+byte "poap_sig_check_count"
+int 0
+app_global_put
+
+byte "poap_author_count"
+int 0
+app_global_put
+
+byte "poap_attendee_count"
+int 0
+app_global_put
+
+byte "poap_last_appid"
+int 0
+app_global_put
+
+byte "poap_last_author"
+byte ""
+app_global_put
+
+byte "poap_last_attendee"
+byte ""
+app_global_put
+
 txn ApplicationArgs 1
 b b_log_return
 
