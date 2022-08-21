@@ -162,12 +162,100 @@ b b_log_return
 
 //Handles ABI method call for contract to contract creation of an AlgoPoaP item
 method_item_create:
-//TODO: creating new AlgoPoaP item by inner transaction
+// Checking the payment transaction with min required fees sum as amount
+txn GroupIndex
+int 1
+-
+dup
+gtxns Receiver
+global CurrentApplicationAddress
+==
+assert
+gtxns Amount
+int 100000
+>=
+assert
+// Inner transaction to create the new AlgoPoaP item smart contract
+
+itxn_begin
+
+int appl
+itxn_field TypeEnum
+
+int NoOp
+itxn_field OnCompletion
+
+// Get the length and extract it, removing the first 2 bytes.
+txn ApplicationArgs 1
+dup
+len
+int 2
+swap
+substring3
+itxn_field ApprovalProgram
+
+// Get the length and extract it, removing the first 2 bytes.
+txn ApplicationArgs 2
+dup
+len
+int 2
+swap
+substring3
+itxn_field ClearStateProgram
+
+int 0
+itxn_field Fee
+
+itxn_submit
+
+// Using the ARC4 return string, concat the newly created appID.
+byte 0x151f7c75
+itxn CreatedApplicationID
+itob
+concat
 b b_log_return
 
 //Handles ABI method call for contract to contract update of an AlgoPoaP item
 method_item_update:
-//TODO: Updating AlgoPoaP item by inner transaction
+itxn_begin
+
+int appl
+itxn_field TypeEnum
+
+int UpdateApplication
+itxn_field OnCompletion
+
+txn ApplicationArgs 1
+btoi
+txnas Applications
+store 1
+itxn_field ApplicationID
+
+txn ApplicationArgs 2
+dup
+len
+int 2
+swap
+substring3
+itxn_field ApprovalProgram
+
+txn ApplicationArgs 3
+dup
+len
+int 2
+swap
+substring3
+itxn_field ClearStateProgram
+
+int 0
+itxn_field Fee
+
+itxn_submit
+
+byte 0x151f7c7580
+load 1
+itob
+concat
 b b_log_return
 
 //Handles ABI method call for contract to contract deletion of an AlgoPoaP item
