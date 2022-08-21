@@ -107,7 +107,7 @@ txn Sender
 concat
 b b_log_return
 
-// Handles opting into (onboarding) a main AlgoPoaP smart contract
+// Handles opting into (onboarding) an item AlgoPoaP smart contract
 b_optin:
 //TODO: Increment counters and update global states
 byte "algopoap:optin:"
@@ -115,7 +115,7 @@ txn Sender
 concat
 b b_log_return
 
-// Handles deletion of a main AlgoPoaP smart contract
+// Handles deletion of an item AlgoPoaP smart contract
 b_deletion:
 txn Sender
 global CreatorAddress
@@ -129,7 +129,7 @@ b b_log_return
 
 
 
-// Handles update of a main AlgoPoaP smart contract
+// Handles update of an item AlgoPoaP smart contract
 b_update:
 txn Sender
 global CreatorAddress
@@ -142,7 +142,7 @@ concat
 b b_log_return
 
 
-// Handles close out (offboarding) from a main AlgoPoaP smart contract
+// Handles close out (offboarding) from an item AlgoPoaP smart contract
 b_closeout:
 byte "algopoap:closeout:"
 txn Sender
