@@ -274,29 +274,57 @@ byte ""
 app_global_put
 
 // Global states PoaP data
-// appl,pay,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,string,string,string,bool,bool,bool,bool
-byte "poap_name"
+
+byte "poap_lat_1"
 txn ApplicationArgs 8
 app_global_put
 
-byte "poap_desce"
-txn ApplicationArgs 9
+byte "poap_lat_2"
+txn ApplicationArgs 8
+app_global_put
+
+byte "poap_lng_1"
+txn ApplicationArgs 8
+app_global_put
+
+byte "poap_lng_2"
+txn ApplicationArgs 8
+app_global_put
+
+byte "poap_geo_buffer"
+txn ApplicationArgs 8
+app_global_put
+
+byte "poap_start_timestamp"
+txn ApplicationArgs 8
+app_global_put
+
+byte "poap_end_timestamp"
+txn ApplicationArgs 8
+app_global_put
+
+byte "poap_name"
+txn ApplicationArgs 8
 app_global_put
 
 byte "poap_logo"
 txn ApplicationArgs 10
 app_global_put
 
-byte "poap_email"
-txn ApplicationArgs 11
+byte "poap_desc"
+txn ApplicationArgs 9
+app_global_put
+
+byte "poap_address"
+txn ApplicationArgs 13
 app_global_put
 
 byte "poap_url"
 txn ApplicationArgs 12
 app_global_put
 
-byte "poap_address"
-txn ApplicationArgs 13
+byte "poap_email"
+txn ApplicationArgs 11
 app_global_put
 
 byte "poap_company_name"
@@ -307,7 +335,21 @@ byte "poap_company_logo"
 txn ApplicationArgs 15
 app_global_put
 
+byte "poap_has_nft"
+txn ApplicationArgs 15
+app_global_put
 
+byte "poap_has_geo"
+txn ApplicationArgs 15
+app_global_put
+
+byte "poap_has_sig"
+txn ApplicationArgs 15
+app_global_put
+
+byte "poap_has_qrcode"
+txn ApplicationArgs 15
+app_global_put
 
 // ASA Existence check to route to creation or config branches and subs
 int 0
