@@ -1,5 +1,6 @@
-![](https://avatars.githubusercontent.com/u/106061767?s=96&v=4)
 # AlgoPoaP Smart Contracts 
+![](https://avatars.githubusercontent.com/u/106061767?s=96&v=4)
+
 **This repository contains SmartContracts for AlgoPoaP dApp on Algorand.**
 
 - [AlgoPoaP's Frontend Repository](https://github.com/AlgoPoaP/algopoap)
