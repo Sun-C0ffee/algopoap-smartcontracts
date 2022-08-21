@@ -145,7 +145,7 @@ txn Sender
 concat
 b b_log_return
 
-//Handles NoOp calls which here are used solely for setup
+//Handles NoOp calls and rejects them all (those with args are already routed)
 b_noop:
 b b_error
 
