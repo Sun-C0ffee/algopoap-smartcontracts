@@ -213,61 +213,66 @@ itxn_submit
 method_setup:
 
 // Global states setup
-byte "poap_onboard_count"
+byte "poap_item_onboard_count"
 int 0
 app_global_put
 
-byte "poap_count"
+byte "poap_item_txn_count"
 int 0
 app_global_put
 
-byte "poap_txn_count"
+byte "poap_item_apply_count"
 int 0
 app_global_put
 
-byte "poap_claim_count"
+byte "poap_item_issuance_count"
 int 0
 app_global_put
 
-byte "poap_issuance_count"
+byte "poap_item_nft_issuance_count"
 int 0
 app_global_put
 
-byte "poap_nft_issuance_count"
+byte "poap_item_txn_issuance_count"
 int 0
 app_global_put
 
-byte "poap_geo_check_count"
+byte "poap_item_geo_check_count"
 int 0
 app_global_put
 
-byte "poap_qr_check_count"
+byte "poap_item_qr_check_count"
 int 0
 app_global_put
 
-byte "poap_sig_check_count"
+byte "poap_item_sig_check_count"
 int 0
 app_global_put
 
-byte "poap_author_count"
+byte "poap_item_attendee_count"
 int 0
 app_global_put
 
-byte "poap_attendee_count"
-int 0
-app_global_put
-
-byte "poap_last_appid"
-int 0
-app_global_put
-
-byte "poap_last_author"
+byte "poap_item_last_attendee"
 byte ""
 app_global_put
 
-byte "poap_last_attendee"
+byte "poap_item_last_apply"
 byte ""
 app_global_put
+
+byte "poap_item_last_issuance"
+byte ""
+app_global_put
+
+byte "poap_item_last_nft_issuance"
+byte ""
+app_global_put
+
+byte "poap_item_last_txn_issuance"
+byte ""
+app_global_put
+
 
 // ASA Existence check to route to creation or config branches and subs
 int 0
