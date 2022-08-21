@@ -10,7 +10,7 @@
         }
     },
     "methods": [
-        {
+      {
             "name": "setup",
             "args": [
                 {
@@ -113,7 +113,7 @@
                 }
             ],
             "returns": {
-                "type": "string[]"
+                "type": "byte[]"
             },
             "desc": "Activates an AlgoPoaP item smart contract and returns all metrics"
         },
@@ -132,6 +132,7 @@
                     "type": "axfer",
                     "name": "optin_algopoap_nft"
                 },
+                
                 {
                     "type": "account",
                     "name": "attendee_account"
@@ -180,7 +181,7 @@
                 }
             ],
             "returns": {
-                "type": "string[]"
+                "type": "byte[]"
             },
             "desc": "Releases AlgoPoaP and allows all AlgoPoaP attendee's to start claiming"
         },
@@ -193,7 +194,7 @@
                 }
             ],
             "returns": {
-                "type": "string[]"
+                "type": "string"
             },
             "desc": "Gets an specific metric by signature string"
         },
