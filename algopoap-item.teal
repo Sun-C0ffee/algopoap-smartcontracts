@@ -100,9 +100,9 @@ bnz method_get_metrics
 b b_error
 
 
-// Handles creating a new main AlgoPoaP smart contract
+// Handles creating a new item AlgoPoaP smart contract
 b_creation:
-byte "algopoap:create:"
+byte "algopoap:item:create:"
 txn Sender
 concat
 b b_log_return
@@ -110,7 +110,7 @@ b b_log_return
 // Handles opting into (onboarding) an item AlgoPoaP smart contract
 b_optin:
 //TODO: Increment counters and update global states
-byte "algopoap:optin:"
+byte "algopoap:item:optin:"
 txn Sender
 concat
 b b_log_return
@@ -121,7 +121,7 @@ txn Sender
 global CreatorAddress
 ==
 assert
-byte "algopoap:delete:"
+byte "algopoap:item:delete:"
 global CurrentApplicationID
 itob
 concat
