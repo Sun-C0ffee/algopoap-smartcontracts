@@ -200,6 +200,9 @@ itxn_submit
 
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
+//TODO: Global states config go here
+
+// ASA Existence check to route to creation or config branches and subs
 int 0
 byte "poap_asa_id"
 app_global_get_ex
