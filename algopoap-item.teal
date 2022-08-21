@@ -281,12 +281,18 @@ b b_log_return
 method_release:
 b b_log_return
 
-// Handles get_metric method
+//Handles ABI method call for getting a single total metric of AlgoPoaP item
 method_get_metric:
+byte 0x151f7c7580
+byte "single metric"
+concat
 b b_log_return
 
-// Handles get_metrics method
+//Handles ABI method call for getting all total metrics of AlgoPoaP item
 method_get_metrics:
+byte 0x151f7c7580
+byte "All metrics"
+concat
 b b_log_return
 
 // Handles logging the last element on the stack then put a 1 on the top and return (log and approve)
