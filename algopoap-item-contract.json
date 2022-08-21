@@ -204,7 +204,7 @@
             "returns": {
                 "type": "string[]"
             },
-            "desc": "Gets an specific metric by signature string"
+            "desc": "Gets all metrics"
         }
     ]
 }
