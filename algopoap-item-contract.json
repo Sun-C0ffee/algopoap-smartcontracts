@@ -116,12 +116,12 @@
                     "name": "pay_min_fees"
                 },
                 {
-                    "type": "application",
-                    "name": "parent_application"
-                },
-                {
                     "type": "axfer",
                     "name": "optin_algopoap_nft"
+                },
+                {
+                    "type": "application",
+                    "name": "parent_application"
                 }
             ],
             "returns": {
@@ -132,14 +132,7 @@
         {
             "name": "claim",
             "args": [
-                {
-                    "type": "appl",
-                    "name": "parent_call"
-                },
-                {
-                    "type": "pay",
-                    "name": "pay_min_fee"
-                },
+            
                 {
                     "type": "axfer",
                     "name": "optin_algopoap_nft"
@@ -148,6 +141,10 @@
                 {
                     "type": "account",
                     "name": "attendee_account"
+                },
+                {
+                    "type": "application",
+                    "name": "parent_application"
                 },
                 {
                     "type": "uint16",
