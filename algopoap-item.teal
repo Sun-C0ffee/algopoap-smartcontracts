@@ -309,15 +309,15 @@ txn ApplicationArgs 8
 app_global_put
 
 byte "poap_logo"
-txn ApplicationArgs 10
-app_global_put
-
-byte "poap_desc"
 txn ApplicationArgs 9
 app_global_put
 
+byte "poap_desc"
+txn ApplicationArgs 10
+app_global_put
+
 byte "poap_address"
-txn ApplicationArgs 13
+txn ApplicationArgs 11
 app_global_put
 
 byte "poap_url"
@@ -325,7 +325,7 @@ txn ApplicationArgs 12
 app_global_put
 
 byte "poap_email"
-txn ApplicationArgs 11
+txn ApplicationArgs 13
 app_global_put
 
 byte "poap_company_name"
@@ -333,23 +333,23 @@ txn ApplicationArgs 14
 app_global_put
 
 byte "poap_company_logo"
-txn ApplicationArgs 15
+txn ApplicationArgs 16
 app_global_put
 
 byte "poap_has_nft"
-txn ApplicationArgs 15
+txn ApplicationArgs 17
 app_global_put
 
 byte "poap_has_geo"
-txn ApplicationArgs 15
+txn ApplicationArgs 18
 app_global_put
 
 byte "poap_has_sig"
-txn ApplicationArgs 15
+txn ApplicationArgs 19
 app_global_put
 
 byte "poap_has_qrcode"
-txn ApplicationArgs 15
+txn ApplicationArgs 20
 app_global_put
 
 // ASA Existence check to route to creation or config branches and subs
