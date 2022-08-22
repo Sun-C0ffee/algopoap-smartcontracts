@@ -273,34 +273,35 @@ byte "poap_item_last_txn_issuance"
 byte ""
 app_global_put
 
-// Global states PoaP data
+// Args to Global states PoaP data
+// setup(pay,account,application,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,string,string,string,bool,bool,bool,bool)byte[]
 
 byte "poap_lat_1"
-txn ApplicationArgs 8
+txn ApplicationArgs 1
 app_global_put
 
 byte "poap_lat_2"
-txn ApplicationArgs 8
+txn ApplicationArgs 2
 app_global_put
 
 byte "poap_lng_1"
-txn ApplicationArgs 8
+txn ApplicationArgs 3
 app_global_put
 
 byte "poap_lng_2"
-txn ApplicationArgs 8
+txn ApplicationArgs 4
 app_global_put
 
 byte "poap_geo_buffer"
-txn ApplicationArgs 8
+txn ApplicationArgs 5
 app_global_put
 
 byte "poap_start_timestamp"
-txn ApplicationArgs 8
+txn ApplicationArgs 6
 app_global_put
 
 byte "poap_end_timestamp"
-txn ApplicationArgs 8
+txn ApplicationArgs 7
 app_global_put
 
 byte "poap_name"

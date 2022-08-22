@@ -14,16 +14,16 @@
             "name": "setup",
             "args": [
                 {
-                    "type": "appl",
-                    "name": "parent_call"
-                },
-                {
                     "type": "pay",
                     "name": "pay_min_fee"
                 },
                 {
                     "type": "account",
                     "name": "author_account"
+                },
+                {
+                    "type": "application",
+                    "name": "parent_application"
                 },
                 {
                     "type": "uint16",
@@ -112,12 +112,12 @@
             "name": "activate",
             "args": [
                 {
-                    "type": "appl",
-                    "name": "parent_call"
-                },
-                {
                     "type": "pay",
                     "name": "pay_min_fees"
+                },
+                {
+                    "type": "application",
+                    "name": "parent_application"
                 },
                 {
                     "type": "axfer",
