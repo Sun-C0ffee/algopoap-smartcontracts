@@ -317,15 +317,6 @@ itob
 concat
 b b_log_return
 
-// Handles claim method
-method_claim:
-byte 0x151f7c7580
-byte "algopoap:item:claimed:"
-concat
-txn Sender
-concat
-b b_log_return
-
 // Handles release method
 method_release:
 byte 0x151f7c7580
@@ -335,6 +326,17 @@ global CurrentApplicationID
 itob
 concat
 b b_log_return
+
+// Handles claim method
+method_claim:
+byte 0x151f7c7580
+byte "algopoap:item:claimed:"
+concat
+txn Sender
+concat
+b b_log_return
+
+
 
 // Handles ABI method call for getting a single total metric of AlgoPoaP item
 method_get_metric:
