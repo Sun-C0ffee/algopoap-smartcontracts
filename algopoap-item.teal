@@ -320,15 +320,6 @@ retsub
 // Handles activate method
 method_activate:
 callsub sub_check_author
-// Uint64 poap_create_time
-// Uint64 poap_setup_time
-// Uint64 poap_activate_time
-// Uint64 poap_release_time
-
-// Byte poap_is_activated
-// Byte poap_is_setup
-// Byte poap_is_released
-// Byte poap_is_closed
 
 byte "poap_is_activated"
 byte "true"
@@ -385,6 +376,12 @@ store 9
 //string QR secret
 txn ApplicationArgs 6
 store 10
+
+callsub check_release
+callsub check_timestamp
+callsub check_geo
+callsub check_qr_secret
+
 
 byte "poap_item_claim_count"
 dup
