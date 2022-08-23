@@ -246,6 +246,8 @@ retsub
 
 // Handles config of AlgoPoaP NFT during setup
 b_config_nft:
+dup
+store 0
 itxn_begin
 itxn_field ConfigAsset
 int acfg
@@ -260,11 +262,14 @@ itxn_field ConfigAssetManager
 itxn_field ConfigAssetReserve
 
 itxn_submit
-
+byte 0x151f7c7580
+load 0
+concat
+b b_log_return
 
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
-
+callsub sub_check_author 
 // Global states metrics setup
 byte "poap_item_onboard_count"
 int 0
@@ -404,6 +409,7 @@ app_global_put
 byte "poap_has_qrcode"
 txn ApplicationArgs 20
 app_global_put
+
 
 // ASA Existence check to route to creation or config branches and subs
 int 0
