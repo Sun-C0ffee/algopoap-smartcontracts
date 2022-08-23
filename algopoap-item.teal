@@ -18,13 +18,13 @@
 // 2: ASA Sender address to use with NFT sender sub
 // 3: ASA Receiver address to use with NFT sender sub
 // 4: ASA Amount to use with NFT sender sub
+
 // 5: latitude integer part (2 digits)
 // 6: latitude decimal part as integer (6 digits)
 // 7: longitude integer part (3 digits)
 // 8: longitude decimal part as integer (6 digits)
-// 9: Geo buffer as integer (10-999 meters)
-// 10: timestamp of claim time
-// 11: The secret Attendee will be presented with in QRCode form to scan during claim and send as string arg.
+// 9: timestamp of claim time
+// 10: The secret Attendee will be presented with in QRCode form to scan during claim and send as string arg.
 
 
 // Local state schema for algopoap author
@@ -328,7 +328,13 @@ concat
 b b_log_return
 
 // Handles claim method
+//uint16,uint48,uint24,uint48,uint24,uint64,string
 method_claim:
+byte "poap_lat_1"
+txn ApplicationArgs 1
+store
+
+
 byte 0x151f7c7580
 byte "algopoap:item:claimed:"
 concat
