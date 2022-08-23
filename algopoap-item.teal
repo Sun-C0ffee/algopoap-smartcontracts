@@ -24,7 +24,7 @@
 // 8: longitude decimal part as integer (6 digits)
 // 9: Geo buffer as integer (10-999 meters)
 // 10: timestamp of claim time
-// 11: The secret sent to Attendee in QRCode form to scan during claim and send as string arg.
+// 11: The secret Attendee will be presented with in QRCode form to scan during claim and send as string arg.
 
 
 // Local state schema for algopoap author
