@@ -43,7 +43,6 @@
 // Uint64 poap_item_sig_check_count
 // Uint64 poap_item_attendee_count
 // Byte poap_item_last_attendee
-// Byte poap_item_last_apply
 // Byte poap_item_last_issuance
 // Byte poap_item_last_nft_issuance
 // Byte poap_item_last_txn_issuance
