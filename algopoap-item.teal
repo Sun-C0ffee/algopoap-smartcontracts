@@ -35,7 +35,6 @@
 
 // Global state schema
 // Uint64 poap_item_onboard_count
-// Uint64 poap_item_apply_count
 // Uint64 poap_item_issuance_count
 // Uint64 poap_item_nft_issuance_count
 // Uint64 poap_item_txn_issuance_count
