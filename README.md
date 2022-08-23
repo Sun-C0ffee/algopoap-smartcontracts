@@ -1,7 +1,7 @@
 # AlgoPoaP Smart Contracts 
 ![](https://avatars.githubusercontent.com/u/106061767?s=96&v=4)
 
-**This repository contains SmartContracts for AlgoPoaP dApp on Algorand.**
+**WIP! WIP! This repository contains SmartContracts for AlgoPoaP dApp on Algorand. Currently under development!!!**
 
 - [AlgoPoaP's Frontend Repository](https://github.com/AlgoPoaP/algopoap)
 
