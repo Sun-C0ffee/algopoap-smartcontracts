@@ -19,25 +19,25 @@
 //TODO local states...
 
 // Global state schema
-//Uint64 poap_onboard_count
-//Uint64 poap_count
-//Uint64 poap_txn_count
-//Uint64 poap_claim_count
-//Uint64 poap_issuance_count
-//Uint64 poap_nft_issuance_count
-//Uint64 poap_txn_issuance_count
-//Uint64 poap_geo_check_count
-//Uint64 poap_qr_check_count
-//Uint64 poap_sig_check_count
-//Uint64 poap_author_count
-//Uint64 poap_attendee_count
-//Byte poap_last_appid
-//Byte poap_last_author
-//Byte poap_last_attendee
+// Uint64 poap_onboard_count
+// Uint64 poap_count
+// Uint64 poap_txn_count
+// Uint64 poap_claim_count
+// Uint64 poap_issuance_count
+// Uint64 poap_nft_issuance_count
+// Uint64 poap_txn_issuance_count
+// Uint64 poap_geo_check_count
+// Uint64 poap_qr_check_count
+// Uint64 poap_sig_check_count
+// Uint64 poap_author_count
+// Uint64 poap_attendee_count
+// Byte poap_last_appid
+// Byte poap_last_author
+// Byte poap_last_attendee
 
-//Starts immidiately by a root main branch
+// Starts immidiately by a root main branch
 b b_main
-//Main ruter branch which checks the call and routes to designated branch
+// Main ruter branch which checks the call and routes to designated branch
 b_main:
 txn NumAppArgs
 int 0
