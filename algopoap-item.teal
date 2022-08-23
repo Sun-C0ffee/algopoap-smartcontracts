@@ -77,13 +77,20 @@
 // Uint64 poap_asa_id
 
 // Uint64 poap_create_time
-// Uint64 poap_modify_time
+// Uint64 poap_setup_time
 // Uint64 poap_activate_time
 // Uint64 poap_release_time
 
+// Byte poap_is_activated
+// Byte poap_is_setup
+// Byte poap_is_released
+// Byte poap_is_closed
+
+//////////////////////////////////////////////////////////////
+
 // Starts immidiately by a root main branch
 b b_main
-// Main ruter branch which checks the call and routes to designated branch
+// Main router branch which checks the call and routes to designated branch
 b_main:
 txn NumAppArgs
 int 0
@@ -333,12 +340,6 @@ concat
 b b_log_return
 
 // Handles claim method
-
-
-
-
-
-
 method_claim:
 //uint16 lat_1
 txn ApplicationArgs 1
@@ -358,6 +359,7 @@ store 9
 //string QR secret
 txn ApplicationArgs 6
 store 10
+
 byte ""
 app_global_get
 
