@@ -386,8 +386,12 @@ store 9
 txn ApplicationArgs 6
 store 10
 
-byte ""
+byte "poap_item_claim_count"
+dup
 app_global_get
+int 1
++
+app_global_put
 
 byte 0x151f7c7580
 byte "algopoap:item:claimed:"
