@@ -18,7 +18,6 @@
 // 2: ASA Sender address to use with NFT sender sub
 // 3: ASA Receiver address to use with NFT sender sub
 // 4: ASA Amount to use with NFT sender sub
-//claim(uint16,uint48,uint24,uint48,uint24,uint64,string) : string
 // 5: latitude integer part (2 digits)
 // 6: latitude decimal part as integer (6 digits)
 // 7: longitude integer part (3 digits)
