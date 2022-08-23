@@ -119,10 +119,10 @@ txn ApplicationArgs 0
 ==
 bnz method_get_metrics
 
-//If non of checks matched then error and reject
+// If non of checks matched then error and reject
 b b_error
 
-//Checks the Sender to be the Creator (AlgoPoaP Author)
+// Checks the Sender to be the Creator (AlgoPoaP Author)
 sub_check_author:
 txn Sender
 global CreatorAddress
@@ -173,11 +173,11 @@ txn Sender
 concat
 b b_log_return
 
-//Handles NoOp calls and rejects them all (those with args are already routed)
+// Handles NoOp calls and rejects them all (those with args are already routed)
 b_noop:
 b b_error
 
-//Handles ABI method call for setup of an AlgoPoaP item
+// Handles ABI method call for setup of an AlgoPoaP item
 method_setup:
 txn Sender
 global CreatorAddress
@@ -243,7 +243,7 @@ app_global_put
 txn ApplicationArgs 1
 b b_log_return
 
-//Handles ABI method call for contract to contract creation of an AlgoPoaP item
+// Handles ABI method call for contract to contract creation of an AlgoPoaP item
 method_item_create:
 // Checking the payment transaction with min required fees sum as amount
 txn GroupIndex
@@ -343,7 +343,7 @@ itob
 concat
 b b_log_return
 
-//Handles ABI method call for contract to contract deletion of an AlgoPoaP item
+// Handles ABI method call for contract to contract deletion of an AlgoPoaP item
 method_item_delete:
 
 // Inner transaction to delete the AlgoPoaP item smart contract
@@ -383,14 +383,14 @@ itxn_submit
 byte 0x151f7c7580
 b b_log_return
 
-//Handles ABI method call for getting a single total metric of AlgoPoaP
+// Handles ABI method call for getting a single total metric of AlgoPoaP
 method_get_metric:
 byte 0x151f7c7580
 byte "single metric"
 concat
 b b_log_return
 
-//Handles ABI method call for getting all total metrics of AlgoPoaP
+// Handles ABI method call for getting all total metrics of AlgoPoaP
 method_get_metrics:
 byte 0x151f7c7580
 byte "All metrics"
@@ -403,7 +403,7 @@ log
 int 1
 return
 
-//Handles rejection with error
+// Handles rejection with error
 b_error:
 err
 

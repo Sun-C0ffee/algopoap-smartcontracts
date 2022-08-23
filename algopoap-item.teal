@@ -60,9 +60,9 @@
 //Byte poap_author_address
 //Uint64 poap_asa_id
 
-//Starts immidiately by a root main branch
+// Starts immidiately by a root main branch
 b b_main
-//Main ruter branch which checks the call and routes to designated branch
+// Main ruter branch which checks the call and routes to designated branch
 b_main:
 txn NumAppArgs
 int 0
@@ -103,7 +103,7 @@ int NoOp
 ==
 bnz b_error
 
-//If non of method checks matched then error and reject (to have no arg , noop calls diverted to error most seems to be a good practice to dedicate noop calls to method calls)
+// If non of method checks matched then error and reject (to have no arg , noop calls diverted to error most seems to be a good practice to dedicate noop calls to method calls)
 b b_error
 
 
@@ -146,7 +146,7 @@ txn ApplicationArgs 0
 ==
 bnz method_get_metrics
 
-//If non of method checks matched then error and reject
+// If non of method checks matched then error and reject
 b b_error
 
 //Checks the Sender to be the Creator (AlgoPoaP Author)
@@ -186,7 +186,6 @@ concat
 b b_log_return
 
 
-
 // Handles update of an item AlgoPoaP smart contract
 b_update:
 callsub sub_check_author
@@ -206,7 +205,7 @@ txn Sender
 concat
 b b_log_return
 
-//Handles NoOp calls and rejects them all (those with args are already routed)
+// Handles NoOp calls and rejects them all (those with args are already routed)
 b_noop:
 b b_error
 
@@ -425,14 +424,14 @@ b b_log_return
 method_release:
 b b_log_return
 
-//Handles ABI method call for getting a single total metric of AlgoPoaP item
+// Handles ABI method call for getting a single total metric of AlgoPoaP item
 method_get_metric:
 byte 0x151f7c7580
 byte "single metric"
 concat
 b b_log_return
 
-//Handles ABI method call for getting all total metrics of AlgoPoaP item
+// Handles ABI method call for getting all total metrics of AlgoPoaP item
 method_get_metrics:
 byte 0x151f7c7580
 byte "All metrics"
@@ -445,7 +444,7 @@ log
 int 1
 return
 
-//Handles rejection with error
+// Handles rejection with error
 b_error:
 err
 
