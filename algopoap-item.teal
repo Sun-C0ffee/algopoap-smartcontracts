@@ -9,7 +9,7 @@
 // AlgoPoaP Item Smart Contract
 
 // Scratch space schema
-// 0: Created AlgoPoaP ASA ID
+// 0: Newly Created AlgoPoaP ASA ID
 
 // Global state schema
 //Uint64 poap_item_onboard_count
@@ -47,6 +47,12 @@
 //Byte poap_has_geo
 //Byte poap_has_sig
 //Byte poap_has_qrcode
+
+
+//Uint64 poap_parent_id
+//Byte poap_parent_address
+//Byte poap_author_address
+//Uint64 poap_asa_id
 
 //Starts immidiately by a root main branch
 b b_main
