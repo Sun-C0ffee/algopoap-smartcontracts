@@ -200,8 +200,8 @@ app_global_get
 int 1
 +
 app_global_put
-byte "poap_setup_time"
-Global LatestTimestamp
+byte "poap_item_last_attendee"
+txn Sender
 app_global_put
 //TODO: Increment counters and update global states
 byte "algopoap:item:optin:"
