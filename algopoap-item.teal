@@ -34,7 +34,22 @@
 //TODO local states...
 
 // Global state schema
+// Uint64 poap_parent_id
+// Byte poap_parent_address
+// Byte poap_author_address
+// Uint64 poap_asa_id
+
+
+// Uint64 poap_setup_time
+// Uint64 poap_activate_time
+// Uint64 poap_release_time
+
+// Byte poap_is_activated
+// Byte poap_is_setup
+// Byte poap_is_released
+
 // Uint64 poap_item_attendee_count
+// Uint64 poap_item_claim_count
 // Uint64 poap_item_issuance_count
 // Uint64 poap_item_nft_issuance_count
 // Uint64 poap_item_txn_issuance_count
@@ -69,19 +84,7 @@
 // Byte poap_has_qrcode
 
 
-// Uint64 poap_parent_id
-// Byte poap_parent_address
-// Byte poap_author_address
-// Uint64 poap_asa_id
 
-
-// Uint64 poap_setup_time
-// Uint64 poap_activate_time
-// Uint64 poap_release_time
-
-// Byte poap_is_activated
-// Byte poap_is_setup
-// Byte poap_is_released
 
 
 //////////////////////////////////////////////////////////////
@@ -334,8 +337,6 @@ byte "poap_activate_time"
 Global LatestTimestamp
 app_global_put
 
-
-//TODO update global and local states
 byte "poap_asa_id"
 app_global_get
 store 1
