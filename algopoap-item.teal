@@ -121,7 +121,7 @@ b_method_check:
 method "setup(appl,pay,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,bool,bool,bool,bool)string"
 txn ApplicationArgs 0
 ==
-bnz method_activate
+bnz method_setup
 
 
 // Checking application call's Arg 0 for activate method signature
@@ -445,7 +445,9 @@ b b_log_return
 // Handles activate method
 method_activate:
 callsub sub_check_author
-//TODO update states
+//TODO update global and local states
+txn Sender
+store
 callsub sub_send_nft
 b b_log_return
 
