@@ -34,14 +34,15 @@
 //TODO local states...
 
 // Global state schema
-// Uint64 poap_item_onboard_count
+// Uint64 poap_item_attendee_count
 // Uint64 poap_item_issuance_count
 // Uint64 poap_item_nft_issuance_count
 // Uint64 poap_item_txn_issuance_count
 // Uint64 poap_item_geo_check_count
 // Uint64 poap_item_qr_check_count
 // Uint64 poap_item_sig_check_count
-// Uint64 poap_item_attendee_count
+
+
 // Byte poap_item_last_attendee
 // Byte poap_item_last_issuance
 // Byte poap_item_last_nft_issuance
@@ -193,7 +194,7 @@ b b_log_return
 
 // Handles opting into (onboarding) an item AlgoPoaP smart contract
 b_optin:
-byte "poap_item_onboard_count"
+byte "poap_item_attendee_count"
 dup
 app_global_get
 int 1
