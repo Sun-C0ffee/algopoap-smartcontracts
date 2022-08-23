@@ -76,6 +76,11 @@
 // Byte poap_author_address
 // Uint64 poap_asa_id
 
+// Uint64 poap_create_time
+// Uint64 poap_modify_time
+// Uint64 poap_activate_time
+// Uint64 poap_release_time
+
 // Starts immidiately by a root main branch
 b b_main
 // Main ruter branch which checks the call and routes to designated branch
@@ -328,12 +333,33 @@ concat
 b b_log_return
 
 // Handles claim method
-//uint16,uint48,uint24,uint48,uint24,uint64,string
-method_claim:
-byte "poap_lat_1"
-txn ApplicationArgs 1
-store
 
+
+
+
+
+
+method_claim:
+//uint16 lat_1
+txn ApplicationArgs 1
+store 5
+//uint48 lat_2
+txn ApplicationArgs 2
+store 6
+//uint24 lng_1
+txn ApplicationArgs 3
+store 7
+//uint48 lng_2
+txn ApplicationArgs 4
+store 8
+//uint64 timestamp
+txn ApplicationArgs 5
+store 9
+//string QR secret
+txn ApplicationArgs 6
+store 10
+byte ""
+app_global_get
 
 byte 0x151f7c7580
 byte "algopoap:item:claimed:"
