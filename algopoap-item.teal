@@ -74,7 +74,7 @@
 // Byte poap_author_address
 // Uint64 poap_asa_id
 
-// Uint64 poap_create_time
+
 // Uint64 poap_setup_time
 // Uint64 poap_activate_time
 // Uint64 poap_release_time
@@ -82,7 +82,7 @@
 // Byte poap_is_activated
 // Byte poap_is_setup
 // Byte poap_is_released
-// Byte poap_is_closed
+
 
 //////////////////////////////////////////////////////////////
 
@@ -203,7 +203,7 @@ app_global_put
 byte "poap_item_last_attendee"
 txn Sender
 app_global_put
-//TODO: Increment counters and update global states
+
 byte "algopoap:item:optin:"
 txn Sender
 concat
