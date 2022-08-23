@@ -35,7 +35,6 @@
 
 // Global state schema
 // Uint64 poap_item_onboard_count
-// Uint64 poap_item_txn_count
 // Uint64 poap_item_apply_count
 // Uint64 poap_item_issuance_count
 // Uint64 poap_item_nft_issuance_count
@@ -196,6 +195,15 @@ b b_log_return
 
 // Handles opting into (onboarding) an item AlgoPoaP smart contract
 b_optin:
+byte "poap_item_onboard_count"
+dup
+app_global_get
+int 1
++
+app_global_put
+byte "poap_setup_time"
+Global LatestTimestamp
+app_global_put
 //TODO: Increment counters and update global states
 byte "algopoap:item:optin:"
 txn Sender
@@ -310,6 +318,24 @@ retsub
 // Handles activate method
 method_activate:
 callsub sub_check_author
+// Uint64 poap_create_time
+// Uint64 poap_setup_time
+// Uint64 poap_activate_time
+// Uint64 poap_release_time
+
+// Byte poap_is_activated
+// Byte poap_is_setup
+// Byte poap_is_released
+// Byte poap_is_closed
+
+byte "poap_is_activated"
+byte "true"
+app_global_put
+byte "poap_activate_time"
+Global LatestTimestamp
+app_global_put
+
+
 //TODO update global and local states
 byte "poap_asa_id"
 app_global_get
