@@ -7,8 +7,46 @@
 // Github: https://github.com/algopoap
 
 // AlgoPoaP Item Smart Contract
+
 // Scratch space schema
 // 0: Created AlgoPoaP ASA ID
+
+// Global state schema
+//Uint64 poap_item_onboard_count
+//Uint64 poap_item_txn_count
+//Uint64 poap_item_apply_count
+//Uint64 poap_item_issuance_count
+//Uint64 poap_item_nft_issuance_count
+//Uint64 poap_item_txn_issuance_count
+//Uint64 poap_item_geo_check_count
+//Uint64 poap_item_qr_check_count
+//Uint64 poap_item_sig_check_count
+//Uint64 poap_item_attendee_count
+//Byte poap_item_last_attendee
+//Byte poap_item_last_apply
+//Byte poap_item_last_issuance
+//Byte poap_item_last_nft_issuance
+//Byte poap_item_last_txn_issuance
+
+//Uint64 poap_lat_1
+//Uint64 poap_lat_2
+//Uint64 poap_lng_1
+//Uint64 poap_lng_2
+//Uint64 poap_geo_buffer
+//Uint64 poap_start_timestamp
+//Uint64 poap_end_timestamp
+//Byte poap_name
+//Byte poap_logo
+//Byte poap_desc
+//Byte poap_address
+//Byte poap_url
+//Byte poap_email
+//Byte poap_company_name
+//Byte poap_company_logo
+//Byte poap_has_nft
+//Byte poap_has_geo
+//Byte poap_has_sig
+//Byte poap_has_qrcode
 
 //Starts immidiately by a root main branch
 b b_main
