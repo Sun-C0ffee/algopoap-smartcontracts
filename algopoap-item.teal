@@ -11,6 +11,12 @@
 // Scratch space schema
 // 0: Newly Created AlgoPoaP ASA ID
 
+// Local state schema for algopoap author
+//TODO local states...
+
+// Local state schema for algopoap attendee
+//TODO local states...
+
 // Global state schema
 //Uint64 poap_item_onboard_count
 //Uint64 poap_item_txn_count
