@@ -379,17 +379,8 @@ async function deployerReport() {
 }
 
 async function deleteApps(walletToDeleteFrom, appsTodelete) {
-    let wallet = walletToDeleteFrom || 'DLTZXEDLXS5V6OQOMX5DBKXBO6E47F4II6ULUXRN6CIXHRMBV2XCAMG42E'
-    let apps = appsTodelete || [75647868,
-        75648024,
-        75654952,
-        75703910,
-        75704539,
-        75704238,
-        75705248,
-        75705111,
-        75490607,
-        75490713]
+    let wallet = walletToDeleteFrom || 'UTI7PAASILRDA3ISHY5M7J7LNRX2AIVQJWI7ZKCCGKVLMFD3VPR5PWSZ4I'
+    let apps = appsTodelete || []
     for (let i = 0; i < apps.length; i++) {
         logger.info('Now deleting APP: %s', appId)
         if (!accountExists) await deployerAccount()
