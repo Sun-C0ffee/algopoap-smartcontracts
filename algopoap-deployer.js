@@ -55,7 +55,7 @@ const importAccount = function () {
         accountAddress = acc.addr
         logger.info("Account Address = %s", acc.addr);
         let acc_mnemonic_check = algosdk.secretKeyToMnemonic(acc.sk);
-        logger.info("Account Mnemonic = %s", acc_mnemonic_check);
+       
         let acc_decoded = algosdk.decodeAddress(acc.addr);
         logger.info("Account Address Decoded Public Key = %s", acc_decoded.publicKey.toString());
         logger.info("Account Address Decoded Checksum = %s", acc_decoded.checksum.toString());
