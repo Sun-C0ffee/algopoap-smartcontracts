@@ -455,4 +455,4 @@ async function runDeployer() {
     process.exit();
 }
 
-runDeployer()
+module.exports = runDeployer
