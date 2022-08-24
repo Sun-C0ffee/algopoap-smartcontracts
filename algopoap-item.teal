@@ -334,17 +334,18 @@ sub_check_geo:
 byte "poap_lat_1"
 app_global_get
 load 5
-//TODO to check
+==
+byte "poap_lng_1"
+app_global_get
+load 7
+==
+&&
+assert
+
 
 byte "poap_lat_2"
 app_global_get
 load 6
-//TODO to check
-
-byte "poap_lng_1"
-app_global_get
-load 7
-//TODO to check
 
 byte "poap_lng_2"
 app_global_get
