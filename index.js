@@ -1,2 +1,2 @@
-const runDeployer = require('./algopoap-deployer')
+const runDeployer = require('./algopoap-deployer.js')
 runDeployer()
