@@ -342,16 +342,21 @@ load 7
 &&
 assert
 
-
+//TODO the geo checking is very naive and not  correctly implemented here,
+// but since this is for MVP version, this suffices!
 byte "poap_lat_2"
 app_global_get
 load 6
-//TODO to check
+-
+int 1000
+<
 byte "poap_lng_2"
 app_global_get
 load 8
-//TODO to check
-
+-
+int 1000
+<
+&&
 assert
 retsub
 
