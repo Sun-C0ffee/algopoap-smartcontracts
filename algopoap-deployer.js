@@ -49,7 +49,7 @@ const accountMnemonic = fs.readFileSync(mnemonic, 'utf8');
 
 
 
-const createAccount = function () {
+const importAccount = function () {
     try {
         const acc = algosdk.mnemonicToSecretKey(accountMnemonic);
         accountAddress = acc.addr
@@ -301,7 +301,7 @@ async function setup() {
 async function deployerAccount() {
 
     try {
-        accountObject = await createAccount();
+        accountObject = await importAccount();
         accountAddress = accountObject.addr;
 
         accountExists = true;
