@@ -32,15 +32,15 @@ let assetsCreatedBalance;
 let trxPayment;
 let trxTransfer;
 
-algodServer = config.algorand.algodRemoteServer;
-algodToken = config.algorand.algodRemoteToken;
-algodPort = config.algorand.algodRemotePort
+algodServer = config.algorand.algod_remote_server;
+algodToken = config.algorand.algod_remote_token;
+algodPort = config.algorand.algod_remote_port
 
 let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 
-indexerServer = config.algorand.indexerRemoteServer;
-algodToken = config.algorand.indexerRemoteToken;
-indexerPort = config.algorand.indexerRemotePort
+indexerServer = config.algorand.indexer_remote_server;
+algodToken = config.algorand.indexer_remote_token;
+indexerPort = config.algorand.indexer_remote_port
 let indexerClient = new algosdk.Indexer(algodToken, indexerServer, indexerPort);
 
 const mnemonic = path.join(__dirname, 'algopoap_mnemonic.txt');
