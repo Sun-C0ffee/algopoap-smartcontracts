@@ -10,6 +10,7 @@ const mode = config.deployer.mode
 const appExists = false
 let accountExists = false;
 
+// Global scope variables
 let algodToken;
 let algodPort;
 let algodServer;
@@ -167,35 +168,6 @@ async function fetchAlgoWalletInfo() {
 
 
     }
-}
-
-async function fetchWalletInfoLocal(addr) {
-    let acc_info = await algodClient.accountInformation(addr).do()
-    accountBalance = acc_info.amount
-
-    assetsHeld = acc_info.assets
-    assetsCreated = acc_info["created-assets"]
-    appsCreated = acc_info["created-apps"]
-    assetsHeldBalance = assetsHeld.length
-    assetsCreatedBalance = assetsCreated.length
-    if (appsCreated) appsCreatedBalance = appsCreated.length
-
-
-    logger.info('------------------------------')
-    logger.info("Account Balance = %s", accountBalance);
-    logger.info('------------------------------')
-    logger.info("Account Created Assets = %s", JSON.stringify(assetsCreated, null, 2));
-    logger.info('------------------------------')
-    logger.info("Account Created Assets Balance= %s", assetsHeldBalance);
-    logger.info('------------------------------')
-    logger.info("Account Held Assets = %s", JSON.stringify(assetsHeld, null, 2));
-    logger.info('------------------------------')
-    logger.info("Account Held Assets Balance= %s", assetsHeldBalance);
-    logger.info('------------------------------')
-    logger.info("Account Created Apps = ", JSON.stringify(appsCreated, null, 2));
-    logger.info('------------------------------')
-    logger.info("Account Created Apps Balance = %s", appsCreatedBalance);
-    logger.info('------------------------------')
 }
 
 async function printCreatedAsset(account, assetid) {
