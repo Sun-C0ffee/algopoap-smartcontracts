@@ -374,6 +374,7 @@ app_global_get
 assert
 retsub
 
+// Handles Release signature constraint check
 b_has_sig:
 callsub sub_check_release
 byte "poap_has_geo"
@@ -389,6 +390,7 @@ byte "true"
 bnz b_has_qr
 b b_finalize_claim
 
+// Handles Geo constraint check
 b_has_geo:
 callsub sub_check_geo
 byte "poap_has_qr"
@@ -398,6 +400,7 @@ byte "true"
 bnz b_has_qr
 b b_finalize_claim
 
+// Handles QR Secret constraint check
 b_has_qr:
 callsub sub_check_qr_secret
 b b_finalize_claim
@@ -421,7 +424,6 @@ app_global_get
 int 1
 +
 app_global_put
-
 
 byte 0x151f7c7580
 byte "algopoap:item:claimed:"
