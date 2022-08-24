@@ -43,7 +43,7 @@ const logger = createLogger({
     new transports.Console(),
     new transports.File({
       filename: 'logs/algopoap.log',
-      maxsize:'5000000', 
+      maxsize:'1000', 
       maxFiles:'1000',
       format: combine(
         label({ label: 'ALGOPOAP:' }),
