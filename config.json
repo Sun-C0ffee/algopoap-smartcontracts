@@ -11,17 +11,9 @@
     "algod_remote_port":"",
     "algod_remote_token":"",
 
-    "algod_local_server":"http://localhost",
-    "algod_local_token":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    "algod_local_port":"4001",
-
     "indexer_remote_server":"https://algoindexer.testnet.algoexplorerapi.io",
     "indexer_remote_token":"",
     "indexer_remote_port":"",
-
-    "indexer_local_server":"http://localhost",
-    "indexer_local_token":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    "indexer_local_port":"8980",
     
     "algo_dispencer":"https://dispenser.testnet.aws.algodev.network/?account=",
     "verbose": false
