@@ -63,7 +63,7 @@ const createAccount = function () {
         logger.info("Account Address Encoded = %s", acc_encoded);
 
 
-        if (mode !== 'local') logger.warn(config.algorand['algo_dispencer'] + acc.addr);
+        logger.warn(config.algorand['algo_dispencer'] + acc.addr);
         return acc;
     }
     catch (err) {
