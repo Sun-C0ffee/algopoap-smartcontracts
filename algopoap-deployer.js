@@ -402,7 +402,7 @@ async function deleteApps(walletToDeleteFrom, appsTodelete) {
 
         let note = algosdk.encodeObj(
             JSON.stringify({
-                system: "Glitter Finance Deleting Test App",
+                system: "Deleting Test App",
                 date: `${new Date()}`,
             })
         );
