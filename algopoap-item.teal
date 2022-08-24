@@ -432,7 +432,7 @@ app_global_get
 assert
 retsub
 
-//check bools and route
+//TODO check bools and route
 callsub sub_check_release
 callsub sub_check_timestamp
 callsub sub_check_geo
