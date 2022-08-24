@@ -1,0 +1,46 @@
+{
+  "algorand": {
+    "host": "",
+    "network":"testnet",
+    "algo_program_id":"",
+    "algo_program_address":"",
+    "algo_wallet_address":"",
+    "asset_id": 0,
+
+    "algod_remote_server":"https://node.testnet.algoexplorerapi.io",
+    "algod_remote_port":"",
+    "algod_remote_token":"",
+
+    "algod_local_server":"http://localhost",
+    "algod_local_token":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "algod_local_port":"4001",
+
+    "indexer_remote_server":"https://algoindexer.testnet.algoexplorerapi.io",
+    "indexer_remote_token":"",
+    "indexer_remote_port":"",
+
+    "indexer_local_server":"http://localhost",
+    "indexer_local_token":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "indexer_local_port":"8980",
+    
+    "algo_dispencer":"https://dispenser.testnet.aws.algodev.network/?account=",
+    "verbose": false
+  },
+  "deployer": {
+    "mode":"remote",
+    "network":"testnet",
+    "deployer_contracts": true,
+    "deployer_report": false,
+    "delete_apps": false,
+    "make_debug_prep": false,
+    "num_local_int":8,
+    "num_local_byte":8,
+    "num_global_int":20,
+    "num_global_byte":20
+  
+  }
+}
+
+
+
+  
