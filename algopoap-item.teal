@@ -402,7 +402,19 @@ b_has_qr:
 callsub sub_check_qr_secret
 b b_finalize_claim
 
+// Handles updating states, logging , sending PoaP and returning the value to method call of method_claim
 b_finalize_claim:
+byte "poap_asa_id"
+app_global_get
+store 1
+txn Sender
+dup
+store 2
+store 3
+int 1
+store 4
+callsub sub_send_nft
+
 byte "poap_item_claim_count"
 dup
 app_global_get
