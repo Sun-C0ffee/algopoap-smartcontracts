@@ -346,7 +346,7 @@ assert
 byte "poap_lat_2"
 app_global_get
 load 6
-
+//TODO to check
 byte "poap_lng_2"
 app_global_get
 load 8
