@@ -319,6 +319,103 @@ itxn_field AssetReceiver
 itxn_submit
 retsub
 
+// Handles the timestamp from args is bigger than timestamp of AlgoPoaP activation
+sub_check_timestamp:
+load 9
+byte "poap_activate_time"
+app_global_get
+>=
+assert
+retsub
+
+// Handles the geo parameters from args is bigger than timestamp of AlgoPoaP activation
+sub_check_geo:
+
+byte "poap_lat_1"
+app_global_get
+load 5
+//TODO to check
+
+byte "poap_lat_2"
+app_global_get
+load 6
+//TODO to check
+
+byte "poap_lng_1"
+app_global_get
+load 7
+//TODO to check
+
+byte "poap_lng_2"
+app_global_get
+load 8
+//TODO to check
+
+assert
+retsub
+
+// Handles checking the signature for release to exist
+sub_check_release:
+byte "poap_is_released"
+app_global_get
+byte "true"
+==
+assert
+retsub
+
+// Handles checking the QR secret from args
+sub_check_qr_secret:
+load 9
+byte "poap_qr_secret"
+app_global_get
+==
+assert
+retsub
+
+b_has_sig:
+callsub sub_check_release
+byte "poap_has_geo"
+app_global_get
+byte "true"
+==
+bnz b_has_geo
+
+byte "poap_has_qr"
+app_global_get
+byte "true"
+==
+bnz b_has_qr
+b b_finalize_claim
+
+b_has_geo:
+callsub sub_check_geo
+byte "poap_has_qr"
+app_global_get
+byte "true"
+==
+bnz b_has_qr
+b b_finalize_claim
+
+b_has_qr:
+callsub sub_check_qr_secret
+b b_finalize_claim
+
+b_finalize_claim:
+byte "poap_item_claim_count"
+dup
+app_global_get
+int 1
++
+app_global_put
+
+
+byte 0x151f7c7580
+byte "algopoap:item:claimed:"
+concat
+txn Sender
+concat
+b b_log_return
+
 // Handles activate method
 method_activate:
 callsub sub_check_author
@@ -379,79 +476,28 @@ store 9
 txn ApplicationArgs 6
 store 10
 
-// Handles the timestamp from args is bigger than timestamp of AlgoPoaP activation
-sub_check_timestamp:
-load 9
-byte "poap_activate_time"
-app_global_get
->=
-assert
-retsub
 
-// Handles the geo parameters from args is bigger than timestamp of AlgoPoaP activation
-sub_check_geo:
+callsub sub_check_timestamp
 
-byte "poap_lat_1"
-app_global_get
-load 5
-//TODO to check
-
-byte "poap_lat_2"
-app_global_get
-load 6
-//TODO to check
-
-byte "poap_lng_1"
-app_global_get
-load 7
-//TODO to check
-
-byte "poap_lng_2"
-app_global_get
-load 8
-//TODO to check
-
-assert
-retsub
-
-// Handles checking the signature for release to exist
-sub_check_release:
-byte "poap_is_released"
+byte "poap_has_sig"
 app_global_get
 byte "true"
 ==
-assert
-retsub
+bnz b_has_sig
 
-// Handles checking the QR secret from args
-sub_check_qr_secret:
-load 9
-byte "poap_qr_secret"
+byte "poap_has_geo"
 app_global_get
+byte "true"
 ==
-assert
-retsub
+bnz b_has_geo
 
-//TODO check bools and route
-callsub sub_check_release
-callsub sub_check_timestamp
-callsub sub_check_geo
-callsub sub_check_qr_secret
-
-
-byte "poap_item_claim_count"
-dup
+byte "poap_has_qr"
 app_global_get
-int 1
-+
-app_global_put
+byte "true"
+==
+bnz b_has_qr
+b b_finalize_claim
 
-byte 0x151f7c7580
-byte "algopoap:item:claimed:"
-concat
-txn Sender
-concat
-b b_log_return
 
 
 
