@@ -447,7 +447,6 @@ async function makeDebugPrep() {
 
 async function runDeployer() {
     await deployerAccount()
-
     if (config.deployer['deployer_contracts']) await deployerContracts()
     if (config.deployer['deployer_report']) await deployerReport()
     if (config.deployer['delete_apps']) await deleteApps(accountAddress)
