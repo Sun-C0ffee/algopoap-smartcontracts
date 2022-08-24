@@ -83,6 +83,8 @@
 // Byte poap_has_sig
 // Byte poap_has_qrcode
 
+// Byte poap_qr_secret
+
 
 
 
@@ -377,10 +379,64 @@ store 9
 txn ApplicationArgs 6
 store 10
 
-callsub check_release
-callsub check_timestamp
-callsub check_geo
-callsub check_qr_secret
+// Handles the timestamp from args is bigger than timestamp of AlgoPoaP activation
+sub_check_timestamp:
+load 9
+byte "poap_activate_time"
+app_global_get
+>=
+assert
+retsub
+
+// Handles the geo parameters from args is bigger than timestamp of AlgoPoaP activation
+sub_check_geo:
+
+byte "poap_lat_1"
+app_global_get
+load 5
+//TODO to check
+
+byte "poap_lat_2"
+app_global_get
+load 6
+//TODO to check
+
+byte "poap_lng_1"
+app_global_get
+load 7
+//TODO to check
+
+byte "poap_lng_2"
+app_global_get
+load 8
+//TODO to check
+
+assert
+retsub
+
+// Handles checking the signature for release to exist
+sub_check_release:
+byte "poap_is_released"
+app_global_get
+byte "true"
+==
+assert
+retsub
+
+// Handles checking the QR secret from args
+sub_check_qr_secret:
+load 9
+byte "poap_qr_secret"
+app_global_get
+==
+assert
+retsub
+
+//check bools and route
+callsub sub_check_release
+callsub sub_check_timestamp
+callsub sub_check_geo
+callsub sub_check_qr_secret
 
 
 byte "poap_item_claim_count"
