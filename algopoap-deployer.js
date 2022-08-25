@@ -7,7 +7,7 @@ const fetch = require('node-fetch');
 const logger = require('./logger');
 const config = require('./config.json');
 const mode = config.deployer.mode
-const appExists = false
+const appExists = true
 let accountExists = false;
 
 // Global scope variables
@@ -16,8 +16,8 @@ let algodPort;
 let algodServer;
 let indexerPort;
 
-let applicationAddr;
-let applicationId;
+let applicationAddr = config.algorand.asc_main_address;
+let applicationId = config.algorand.asc_main_id;
 let accountObject;
 let accountAddress;
 let accountBalance;
@@ -290,12 +290,8 @@ async function deployMainContract(addr, acc) {
     logger.info('------------------------------')
 }
 async function updateMainContract(addr, acc) {
-    localInts = config.deployer['num_local_int'];
-    localBytes = config.deployer['num_local_byte'];
-    globalInts = config.deployer['num_global_int'];
-    globalBytes = config.deployer['num_global_byte'];
     let params = await algodClient.getTransactionParams().do();
-    onComplete = algosdk.OnApplicationComplete.NoOpOC;
+    onComplete = algosdk.OnApplicationComplete.UpdateApplicationOC;
     const filePathApproval = path.join(__dirname, 'algopoap-main.teal');
     const filePathClear = path.join(__dirname, 'algopoap-clear.teal');
     const approvalProgData = await fs.promises.readFile(filePathApproval);
@@ -310,9 +306,9 @@ async function updateMainContract(addr, acc) {
     logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
     logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
     let note = algosdk.encodeObj(
-        `Update AlgoPoaP Application ID: ${appIndex}`
+        `Update AlgoPoaP Application ID: ${applicationId}`
     );
-    let appTxn = algosdk.makeApplicationUpdateTxn(addr, params, appIndex,
+    let appTxn = algosdk.makeApplicationUpdateTxn(addr, params, applicationId,
         compiledResultUint8, compiledClearResultUint8,note);
     let appTxnId = appTxn.txID().toString();
     logger.info('------------------------------')
@@ -323,12 +319,12 @@ async function updateMainContract(addr, acc) {
     let transactionResponse = await algodClient.pendingTransactionInformation(appTxnId).do();
     let appId = transactionResponse['application-index'];
     logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Application ID: %s", appId);
+    logger.info("AlgoPoaP Updated Main Application ID: %s", appId);
     logger.info('------------------------------')
     applicationId = appId
     applicationAddr = algosdk.getApplicationAddress(appId);
     logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Application Address: %s", applicationAddr);
+    logger.info("AlgoPoaP Updated Main Application Address: %s", applicationAddr);
     logger.info('------------------------------')
 }
 
@@ -389,9 +385,10 @@ async function deployerReport() {
 async function deleteApps(walletToDeleteFrom, appsTodelete) {
     let wallet = walletToDeleteFrom || 'UTI7PAASILRDA3ISHY5M7J7LNRX2AIVQJWI7ZKCCGKVLMFD3VPR5PWSZ4I'
     let apps = appsTodelete || []
+    if (!accountExists) await deployerAccount()
     for (let i = 0; i < apps.length; i++) {
-        logger.info('Now deleting APP: %s', appId)
-        if (!accountExists) await deployerAccount()
+        logger.info('Now deleting APP: %s', apps[i])
+       
         let params = await algodClient.getTransactionParams().do();
         params.fee = 1000;
         params.flatFee = true;
