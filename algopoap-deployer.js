@@ -101,9 +101,9 @@ const keypress = async () => {
 }
 
 async function fetchAlgoWalletInfo() {
-    if (algosdk.isValidAddress(accountAddress)) {
-        const url = `https://algoindexer.testnet.algoexplorerapi.io/v2/accounts/${accountAddress}`;
-        const urlTrx = `https://algoindexer.testnet.algoexplorerapi.io/v2/accounts/${accountAddress}/transactions?limit=10`;
+    if (algosdk.isValidAddress(accountObject.addr)) {
+        const url = `https://algoindexer.testnet.algoexplorerapi.io/v2/accounts/${accountObject.addr}`;
+        const urlTrx = `https://algoindexer.testnet.algoexplorerapi.io/v2/accounts/${accountObject.addr}/transactions?limit=10`;
         let res = await fetch(url, {
             method: "GET",
             headers: {
@@ -113,15 +113,15 @@ async function fetchAlgoWalletInfo() {
         let data = await res.json()
         if (data) {
             if (data.account) {
-                if (String(data.account.address) === String(accountAddress)) {
+                if (String(data.account.address) === String(accountObject.addr)) {
 
                     accountBalance = data.account.amount
 
                     assetsHeld = data.account.assets
                     assetsCreated = data.account["created-assets"]
                     appsCreated = data.account["created-apps"]
-                    assetsHeldBalance = assetsHeld.length
-                    assetsCreatedBalance = assetsCreated.length
+                    assetsHeldBalance = !!assetsHeld ? assetsHeld.length : 0
+                    assetsCreatedBalance = !!assetsCreated ? assetsCreated.length : 0
                     if (appsCreated) appsCreatedBalance = appsCreated.length
 
 
@@ -170,42 +170,44 @@ async function fetchAlgoWalletInfo() {
     }
 }
 
-async function printCreatedAsset(account, assetid) {
+async function printCreatedAsset() {
 
-    let accountInfo = await indexerClient.lookupAccountByID(account).do();
+    let accountInfo = await indexerClient.lookupAccountByID(accountObject.addr).do();
 
     accountBalance = accountInfo.account.amount
 
     assetsCreated = accountInfo['account']["created-assets"]
 
 
-    assetsCreatedBalance = assetsCreated.length
+    assetsCreatedBalance = !!assetsCreated ? assetsCreated.length : 0
 
 
 
     logger.info('------------------------------')
     logger.info("Printed Account Balance = %s", accountBalance);
     logger.info('------------------------------')
-    logger.info("Printed Account Created Assets = %s", JSON.stringify(assetsCreated, null, 2));
+    logger.info("Printed Account Created Assets = %s", JSON.stringify(!!assetsCreated ? assetsCreated.length : {}, null, 2));
     logger.info('------------------------------')
     logger.info("Printed Account Created Assets Balance= %s", assetsHeldBalance);
     logger.info('------------------------------')
 
-    for (idx = 0; idx < accountInfo['account']['created-assets'].length; idx++) {
-        let sAsset = accountInfo['account']['created-assets'][idx];
-        if (assetid) {
-            if (sAsset['index'] == assetid) {
+    if (!!assetsCreated) {
+        for (idx = 0; idx < accountInfo['account']['created-assets'].length; idx++) {
+            let sAsset = accountInfo['account']['created-assets'][idx];
+            if (assetid) {
+                if (sAsset['index'] == assetid) {
+                    let params = JSON.stringify(sAsset['params'], null, 2);
+                    logger.info('------------------------------')
+                    logger.info("AssetID = %s", sAsset['index']);
+                    logger.info("Asset params = %s", params);
+                    break;
+                }
+            } else {
                 let params = JSON.stringify(sAsset['params'], null, 2);
                 logger.info('------------------------------')
-                logger.info("AssetID = %s", sAsset['index']);
-                logger.info("Asset params = %s", params);
-                break;
+                logger.info("Created AssetID = %s", sAsset['index']);
+                logger.info("Created Asset Info = %s", params);
             }
-        } else {
-            let params = JSON.stringify(sAsset['params'], null, 2);
-            logger.info('------------------------------')
-            logger.info("Created AssetID = %s", sAsset['index']);
-            logger.info("Created Asset Info = %s", params);
         }
     }
 }
@@ -217,7 +219,7 @@ async function printAssetHolding(account, assetid) {
     assetsHeld = accountInfo.account.assets
 
 
-    assetsHeldBalance = assetsHeld.length
+    assetsHeldBalance = !!assetsHeld ? assetsHeld.length : 0
 
 
 
@@ -226,24 +228,26 @@ async function printAssetHolding(account, assetid) {
     logger.info("Printed Account Balance = %s", accountBalance);
     logger.info('------------------------------')
 
-    logger.info("Printed Account Held Assets = %s", JSON.stringify(assetsHeld, null, 2));
+    logger.info("Printed Account Held Assets = %s", JSON.stringify(!!assetsHeld ? assetsHeld.length : {}, null, 2));
     logger.info('------------------------------')
     logger.info("Printed Account Held Assets Balance= %s", assetsHeldBalance);
     logger.info('------------------------------')
 
-    for (idx = 0; idx < accountInfo['account']['assets'].length; idx++) {
-        let sAsset = accountInfo['account']['assets'][idx];
-        if (assetid) {
-            if (sAsset['asset-id'] == assetid) {
+    if (!!assetsHeld) {
+        for (idx = 0; idx < accountInfo['account']['assets'].length; idx++) {
+            let sAsset = accountInfo['account']['assets'][idx];
+            if (assetid) {
+                if (sAsset['asset-id'] == assetid) {
+                    let assetHoldings = JSON.stringify(sAsset, null, 2);
+                    logger.info("Printed Held Asset Info = %s", assetHoldings);
+                    break;
+                }
+            } else {
                 let assetHoldings = JSON.stringify(sAsset, null, 2);
+                logger.info('------------------------------')
+                logger.info("Printed Held AssetID = %s", sAsset['asset-id']);
                 logger.info("Printed Held Asset Info = %s", assetHoldings);
-                break;
             }
-        } else {
-            let assetHoldings = JSON.stringify(sAsset, null, 2);
-            logger.info('------------------------------')
-            logger.info("Printed Held AssetID = %s", sAsset['asset-id']);
-            logger.info("Printed Held Asset Info = %s", assetHoldings);
         }
     }
 }
@@ -305,10 +309,10 @@ async function updateMainContract(addr, acc) {
     logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
     logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
     logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
-  /*   let note = algosdk.encodeObj(
-        `Update AlgoPoaP Application ID: ${applicationId}`
-    ); */
-    
+    /*   let note = algosdk.encodeObj(
+          `Update AlgoPoaP Application ID: ${applicationId}`
+      ); */
+
 
     let appTxn = algosdk.makeApplicationUpdateTxn(addr, params, Number(applicationId),
         compiledResultUint8, compiledClearResultUint8);
@@ -319,11 +323,11 @@ async function updateMainContract(addr, acc) {
     await algodClient.sendRawTransaction(signedAppTxn).do();
     await waitForConfirmation(appTxnId);
     let transactionResponse = await algodClient.pendingTransactionInformation(appTxnId).do();
-    
+
     logger.info('------------------------------')
     logger.info("AlgoPoaP Updated Main Application ID: %s", applicationId);
     logger.info('------------------------------')
-    
+
     applicationAddr = algosdk.getApplicationAddress(Number(applicationId));
     logger.info('------------------------------')
     logger.info("AlgoPoaP Updated Main Application Address: %s", applicationAddr);
@@ -360,10 +364,9 @@ async function deployerReport() {
 
         await fetchAlgoWalletInfo()
 
-        await printCreatedAsset(accountObject.addr);
+        await printCreatedAsset();
         await printAssetHolding(accountObject.addr);
 
-        await fetchEscrowInfo(accountObject.addr)
 
     }
     catch (err) {
