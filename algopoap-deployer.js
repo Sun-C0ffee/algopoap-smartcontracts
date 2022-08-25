@@ -436,7 +436,7 @@ async function runDeployer() {
     if (config.deployer['deployer_contracts']) await deployerContracts()
     if (config.deployer['deployer_report']) await deployerReport()
     if (config.deployer['delete_apps']) await deleteApps(accountAddress)
-    if (config.deployer['make_debug_prep']) await makeDebugPrep()
+
     process.exit();
 }
 
