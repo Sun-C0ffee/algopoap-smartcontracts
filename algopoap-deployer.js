@@ -269,9 +269,9 @@ async function deployMainContract(addr, acc) {
     const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledClearResult.result, "base64"));
     logger.info('------------------------------')
     logger.info("AlgoPoaP Main Contract Hash = %s", compiledResult.hash);
-    logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
+    //logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
     logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
-    logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
+    //logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
 
     let appTxn = algosdk.makeApplicationCreateTxn(addr, params, onComplete,
         compiledResultUint8, compiledClearResultUint8,
@@ -306,9 +306,9 @@ async function updateMainContract(addr, acc) {
     const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledClearResult.result, "base64"));
     logger.info('------------------------------')
     logger.info("AlgoPoaP Main Contract Hash = %s", compiledResult.hash);
-    logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
+    //logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
     logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
-    logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
+    //logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
     /*   let note = algosdk.encodeObj(
           `Update AlgoPoaP Application ID: ${applicationId}`
       ); */
