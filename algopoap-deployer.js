@@ -288,10 +288,48 @@ async function deployMainContract(addr, acc) {
     logger.info('------------------------------')
     logger.info("AlgoPoaP Main Application Address: %s", applicationAddr);
     logger.info('------------------------------')
-
-
-
-
+}
+async function updateMainContract(addr, acc) {
+    localInts = config.deployer['num_local_int'];
+    localBytes = config.deployer['num_local_byte'];
+    globalInts = config.deployer['num_global_int'];
+    globalBytes = config.deployer['num_global_byte'];
+    let params = await algodClient.getTransactionParams().do();
+    onComplete = algosdk.OnApplicationComplete.NoOpOC;
+    const filePathApproval = path.join(__dirname, 'algopoap-main.teal');
+    const filePathClear = path.join(__dirname, 'algopoap-clear.teal');
+    const approvalProgData = await fs.promises.readFile(filePathApproval);
+    const clearProgData = await fs.promises.readFile(filePathClear);
+    const compiledResult = await algodClient.compile(approvalProgData).do();
+    const compiledClearResult = await algodClient.compile(clearProgData).do();
+    const compiledResultUint8 = new Uint8Array(Buffer.from(compiledResult.result, "base64"));
+    const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledClearResult.result, "base64"));
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Main Contract Hash = %s", compiledResult.hash);
+    logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
+    logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
+    logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
+    let note = algosdk.encodeObj(
+        `Update AlgoPoaP Application ID: ${appIndex}`
+    );
+    let appTxn = algosdk.makeApplicationUpdateTxn(addr, params, appIndex,
+        compiledResultUint8, compiledClearResultUint8,note);
+    let appTxnId = appTxn.txID().toString();
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Main Application Update TXId =  %s", appTxnId);
+    let signedAppTxn = appTxn.signTxn(acc.sk);
+    await algodClient.sendRawTransaction(signedAppTxn).do();
+    await waitForConfirmation(appTxnId);
+    let transactionResponse = await algodClient.pendingTransactionInformation(appTxnId).do();
+    let appId = transactionResponse['application-index'];
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Main Application ID: %s", appId);
+    logger.info('------------------------------')
+    applicationId = appId
+    applicationAddr = algosdk.getApplicationAddress(appId);
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Main Application Address: %s", applicationAddr);
+    logger.info('------------------------------')
 }
 
 async function setup() {
@@ -403,8 +441,8 @@ async function makeDebugPrep() {
     txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
         suggestedParams,
         type: "pay",
-        from: "DLTZXEDLXS5V6OQOMX5DBKXBO6E47F4II6ULUXRN6CIXHRMBV2XCAMG42E",
-        to: "BJATCHES5YJZJ7JITYMVLSSIQAVAWBQRVGPQUDT5AZ2QSLDSXWWM46THOY",
+        from: "",
+        to: "",
         amount: 2,
         note: note,
         closeRemainderTo: undefined,
@@ -414,15 +452,15 @@ async function makeDebugPrep() {
     appcall = algosdk.makeApplicationNoOpTxnFromObject(
         {
             suggestedParams,
-            from: "DLTZXEDLXS5V6OQOMX5DBKXBO6E47F4II6ULUXRN6CIXHRMBV2XCAMG42E",
+            from: "",
 
-            appIndex: Number("75710837"),
+            appIndex: Number(""),
             appArgs: [
-                algosdk.encodeObj("AmMYkM2PBqzm44JJsuufE4FS6rhMMjcAEpmf3VwN9ArF"),
-                algosdk.encodeObj("DLTZXEDLXS5V6OQOMX5DBKXBO6E47F4II6ULUXRN6CIXHRMBV2XCAMG42E"),
-                algosdk.encodeObj("HMx8h6yJf7kEMYzrVcgcvLSihrZkLeoXpX6SKrMaNKVK"),
-                algosdk.encodeObj("75394438"),
-                algosdk.encodeObj("algo-deposit"),
+                algosdk.encodeObj(""),
+                algosdk.encodeObj(""),
+                algosdk.encodeObj(""),
+                algosdk.encodeObj(""),
+                algosdk.encodeObj(""),
                 algosdk.encodeObj(""),
                 algosdk.encodeObj(String(Number(2)))
             ],
