@@ -44,6 +44,8 @@
 b b_main
 // Main ruter branch which checks the call and routes to designated branch
 b_main:
+
+// Checks the number of application args , if 0 then no method it is
 txn NumAppArgs
 int 0
 ==
