@@ -255,8 +255,8 @@ async function deployMainContract(addr, acc) {
     globalBytes = config.deployer['num_global_byte'];
     let params = await algodClient.getTransactionParams().do();
     onComplete = algosdk.OnApplicationComplete.NoOpOC;
-    const filePathApproval = path.join(__dirname, 'smart_contracts/algopoap-main.teal');
-    const filePathClear = path.join(__dirname, 'smart_contracts/algopoap-clear.teal');
+    const filePathApproval = path.join(__dirname, 'algopoap-main.teal');
+    const filePathClear = path.join(__dirname, 'algopoap-clear.teal');
     const approvalProgData = await fs.promises.readFile(filePathApproval);
     const clearProgData = await fs.promises.readFile(filePathClear);
     const compiledResult = await algodClient.compile(approvalProgData).do();
