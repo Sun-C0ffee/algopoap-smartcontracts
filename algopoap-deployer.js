@@ -308,10 +308,10 @@ async function updateMainContract(addr, acc) {
   /*   let note = algosdk.encodeObj(
         `Update AlgoPoaP Application ID: ${applicationId}`
     ); */
-    let appArgs = []
+    
 
     let appTxn = algosdk.makeApplicationUpdateTxn(addr, params, Number(applicationId),
-        compiledResultUint8, compiledClearResultUint8,appArgs);
+        compiledResultUint8, compiledClearResultUint8);
     let appTxnId = appTxn.txID().toString();
     logger.info('------------------------------')
     logger.info("AlgoPoaP Main Application Update TXId =  %s", appTxnId);
@@ -324,7 +324,7 @@ async function updateMainContract(addr, acc) {
     logger.info("AlgoPoaP Updated Main Application ID: %s", applicationId);
     logger.info('------------------------------')
     
-    applicationAddr = algosdk.getApplicationAddress(applicationId);
+    applicationAddr = algosdk.getApplicationAddress(Number(applicationId));
     logger.info('------------------------------')
     logger.info("AlgoPoaP Updated Main Application Address: %s", applicationAddr);
     logger.info('------------------------------')
@@ -397,7 +397,7 @@ async function deleteApps(appsTodelete) {
         let txn = algosdk.makeApplicationDeleteTxnFromObject({
             suggestedParams: params,
             type: "appl",
-            appIndex: appId,
+            appIndex: Number(apps[i]),
             from: sender,
             appOnComplete: 5,
             note: note,

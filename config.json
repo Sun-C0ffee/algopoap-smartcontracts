@@ -2,9 +2,9 @@
   "algorand": {
     "host": "",
     "network":"testnet",
-    "asc_main_id":"106579470",
+    "asc_main_id":"106595642",
     "asc_last_item_id":"",
-    "asc_main_address":"WPRZEPYZ35XSF66IGODR2HA3RX5UDDRDNBYG74LLMH5O4NI4RF6RA3HKMI",
+    "asc_main_address":"EMOT2AW5QFUDR3NUIG4J7OHHTIIB7EHYBMOQLPJGA5QM6OSTZ7WS773DPY",
     "algo_wallet_address":"UTI7PAASILRDA3ISHY5M7J7LNRX2AIVQJWI7ZKCCGKVLMFD3VPR5PWSZ4I",
     "asset_id": 0,
 

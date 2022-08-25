@@ -45,7 +45,7 @@ b_main:
 txn NumAppArgs
 int 0
 ==
-bnz b_method_check
+bz b_method_check
 
 // Checking Application ID to be zero (app in creation)
 txn ApplicationID
