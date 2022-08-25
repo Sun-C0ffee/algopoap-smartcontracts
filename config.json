@@ -24,7 +24,6 @@
     "deployer_contracts": true,
     "deployer_report": false,
     "delete_apps": false,
-    "make_debug_prep": false,
     "num_local_int":8,
     "num_local_byte":8,
     "num_global_int":20,
