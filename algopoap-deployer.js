@@ -401,7 +401,7 @@ async function deleteApps(walletToDeleteFrom, appsTodelete) {
 
         let note = algosdk.encodeObj(
             JSON.stringify({
-                system: "Deleting Test App",
+                system: "Deleting AlgoPoaP App",
                 date: `${new Date()}`,
             })
         );
@@ -425,61 +425,11 @@ async function deleteApps(walletToDeleteFrom, appsTodelete) {
 
         const noteArrayFromTxn = ptx.txn.txn.note;
         const receivedNote = Buffer.from(noteArrayFromTxn).toString('utf8');
-        logger.info("Note from confirmed Delete Transaction: %s", receivedNote);
+        logger.info("Note from confirmed AlgoPoaP Delete TXN: %s", receivedNote);
     }
 
 }
 
-async function makeDebugPrep() {
-    const suggestedParams = await algodClient.getTransactionParams().do();
-    let note = algosdk.encodeObj(
-        JSON.stringify({
-            system: "Depositing Algo token",
-            date: `${new Date()}`,
-        })
-    );
-    txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        suggestedParams,
-        type: "pay",
-        from: "",
-        to: "",
-        amount: 2,
-        note: note,
-        closeRemainderTo: undefined,
-        revocationTarget: undefined,
-        rekeyTo: undefined,
-    });
-    appcall = algosdk.makeApplicationNoOpTxnFromObject(
-        {
-            suggestedParams,
-            from: "",
-
-            appIndex: Number(""),
-            appArgs: [
-                algosdk.encodeObj(""),
-                algosdk.encodeObj(""),
-                algosdk.encodeObj(""),
-                algosdk.encodeObj(""),
-                algosdk.encodeObj(""),
-                algosdk.encodeObj(""),
-                algosdk.encodeObj(String(Number(2)))
-            ],
-            rekeyTo: undefined
-        }
-    );
-    txnsArray = [appcall, txn];
-    const groupID = algosdk.computeGroupID(txnsArray);
-    for (let i = 0; i < 2; i++) txnsArray[i].group = groupID;
-
-    rawSignedTxn =
-        txnsArray.map((txn) => {
-            //txn = txn.toByte()
-            return txn.signTxn(accountObject.sk)
-
-        });
-
-
-}
 
 async function runDeployer() {
     await deployerAccount()
