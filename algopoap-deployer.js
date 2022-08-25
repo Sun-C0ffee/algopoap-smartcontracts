@@ -398,7 +398,7 @@ async function deleteApps(appsTodelete) {
 
         let note = algosdk.encodeObj(
             JSON.stringify({
-                system: "Deleting AlgoPoaP App",
+                system: "Deleting AlgoPoaP main app",
                 date: `${new Date()}`,
             })
         );
@@ -432,7 +432,7 @@ async function runDeployer() {
     await deployerAccount()
     if (config.deployer['deployer_contracts']) await deployerContracts()
     if (config.deployer['deployer_report']) await deployerReport()
-    if (config.deployer['delete_apps']) await deleteApps(accountAddress)
+    if (config.deployer['delete_apps']) await deleteApps(config.deployer.apps_to_delete)
 
     process.exit();
 }

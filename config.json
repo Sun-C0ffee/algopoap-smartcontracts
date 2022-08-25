@@ -26,6 +26,7 @@
     "deployer_update_contracts": true,
     "deployer_report": false,
     "delete_apps": false,
+    "apps_to_delete": [],
     "num_local_int":8,
     "num_local_byte":8,
     "num_global_int":20,
