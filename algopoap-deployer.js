@@ -305,11 +305,14 @@ async function updateMainContract(addr, acc) {
     logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
     logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
     logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
-    let note = algosdk.encodeObj(
+  /*   let note = algosdk.encodeObj(
         `Update AlgoPoaP Application ID: ${applicationId}`
-    );
-    let appTxn = algosdk.makeApplicationUpdateTxn(addr, params, applicationId,
-        compiledResultUint8, compiledClearResultUint8, note);
+    ); */
+    let appArgs = []
+    var enc = new TextEncoder();
+    appArgs.push(enc.encode('v0.002'));
+    let appTxn = algosdk.makeApplicationUpdateTxn(addr, params, Number(applicationId),
+        compiledResultUint8, compiledClearResultUint8,appArgs);
     let appTxnId = appTxn.txID().toString();
     logger.info('------------------------------')
     logger.info("AlgoPoaP Main Application Update TXId =  %s", appTxnId);
