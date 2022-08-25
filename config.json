@@ -2,9 +2,10 @@
   "algorand": {
     "host": "",
     "network":"testnet",
-    "algo_program_id":"",
-    "algo_program_address":"",
-    "algo_wallet_address":"",
+    "asc_main_id":"",
+    "asc_last_item_id":"",
+    "asc_main_address":"",
+    "algo_wallet_address":"UTI7PAASILRDA3ISHY5M7J7LNRX2AIVQJWI7ZKCCGKVLMFD3VPR5PWSZ4I",
     "asset_id": 0,
 
     "algod_remote_server":"https://node.testnet.algoexplorerapi.io",
@@ -21,7 +22,8 @@
   "deployer": {
     "mode":"remote",
     "network":"testnet",
-    "deployer_contracts": true,
+    "deployer_contracts": false,
+    "deployer_update_contracts": true,
     "deployer_report": false,
     "delete_apps": false,
     "num_local_int":8,
