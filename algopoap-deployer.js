@@ -319,10 +319,8 @@ async function deployerContracts() {
 
     try {
         if (!accountExists) await deployerAccount()
-        if (!appExists) {
-            await deployMainContract(accountObject.addr, accountObject)
-            await setup(accountObject.addr, accountObject)
-        }
+        await deployMainContract(accountObject.addr, accountObject)
+        await setup(accountObject.addr, accountObject)
 
     }
     catch (err) {
