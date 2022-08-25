@@ -309,8 +309,7 @@ async function updateMainContract(addr, acc) {
         `Update AlgoPoaP Application ID: ${applicationId}`
     ); */
     let appArgs = []
-    var enc = new TextEncoder();
-    appArgs.push(enc.encode('v0.002'));
+
     let appTxn = algosdk.makeApplicationUpdateTxn(addr, params, Number(applicationId),
         compiledResultUint8, compiledClearResultUint8,appArgs);
     let appTxnId = appTxn.txID().toString();
