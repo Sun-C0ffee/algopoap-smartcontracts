@@ -55,7 +55,7 @@ const importAccount = function () {
         accountAddress = acc.addr
         logger.info("Account Address = %s", acc.addr);
         let acc_mnemonic_check = algosdk.secretKeyToMnemonic(acc.sk);
-       
+
         let acc_decoded = algosdk.decodeAddress(acc.addr);
         logger.info("Account Address Decoded Public Key = %s", acc_decoded.publicKey.toString());
         logger.info("Account Address Decoded Checksum = %s", acc_decoded.checksum.toString());
@@ -309,7 +309,7 @@ async function updateMainContract(addr, acc) {
         `Update AlgoPoaP Application ID: ${applicationId}`
     );
     let appTxn = algosdk.makeApplicationUpdateTxn(addr, params, applicationId,
-        compiledResultUint8, compiledClearResultUint8,note);
+        compiledResultUint8, compiledClearResultUint8, note);
     let appTxnId = appTxn.txID().toString();
     logger.info('------------------------------')
     logger.info("AlgoPoaP Main Application Update TXId =  %s", appTxnId);
@@ -349,19 +349,7 @@ async function deployerAccount() {
 }
 
 
-async function deployerContracts() {
 
-    try {
-        if (!accountExists) await deployerAccount()
-        await deployMainContract(accountObject.addr, accountObject)
-        //await setup(accountObject.addr, accountObject)
-
-    }
-    catch (err) {
-        logger.error(err);
-    }
-
-}
 
 async function deployerReport() {
 
@@ -388,7 +376,7 @@ async function deleteApps(appsTodelete) {
     if (!accountExists) await deployerAccount()
     for (let i = 0; i < apps.length; i++) {
         logger.info('Now deleting AlgoPoaP APP: %s', apps[i])
-       
+
         let params = await algodClient.getTransactionParams().do();
         params.fee = 1000;
         params.flatFee = true;
@@ -429,8 +417,30 @@ async function deleteApps(appsTodelete) {
 
 
 async function runDeployer() {
-    await deployerAccount()
-    if (config.deployer['deployer_contracts']) await deployerContracts()
+    if (!accountExists) await deployerAccount()
+    if (config.deployer['deployer_contracts']) {
+        try {
+
+            await deployMainContract(accountObject.addr, accountObject)
+
+
+        }
+        catch (err) {
+            logger.error(err);
+        }
+    }
+    if (config.deployer['deployer_update_contracts']) {
+        {
+            try {
+
+                await updateMainContract(accountObject.addr, accountObject)
+
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
     if (config.deployer['deployer_report']) await deployerReport()
     if (config.deployer['delete_apps']) await deleteApps(config.deployer.apps_to_delete)
 
