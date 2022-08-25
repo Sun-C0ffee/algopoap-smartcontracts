@@ -382,12 +382,12 @@ async function deployerReport() {
 
 }
 
-async function deleteApps(walletToDeleteFrom, appsTodelete) {
-    let wallet = walletToDeleteFrom || 'UTI7PAASILRDA3ISHY5M7J7LNRX2AIVQJWI7ZKCCGKVLMFD3VPR5PWSZ4I'
+async function deleteApps(appsTodelete) {
+    let wallet = config.algorand.algo_wallet_address
     let apps = appsTodelete || []
     if (!accountExists) await deployerAccount()
     for (let i = 0; i < apps.length; i++) {
-        logger.info('Now deleting APP: %s', apps[i])
+        logger.info('Now deleting AlgoPoaP APP: %s', apps[i])
        
         let params = await algodClient.getTransactionParams().do();
         params.fee = 1000;
