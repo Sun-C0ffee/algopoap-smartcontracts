@@ -319,12 +319,12 @@ async function updateMainContract(addr, acc) {
     await algodClient.sendRawTransaction(signedAppTxn).do();
     await waitForConfirmation(appTxnId);
     let transactionResponse = await algodClient.pendingTransactionInformation(appTxnId).do();
-    let appId = transactionResponse['application-index'];
+    
     logger.info('------------------------------')
-    logger.info("AlgoPoaP Updated Main Application ID: %s", appId);
+    logger.info("AlgoPoaP Updated Main Application ID: %s", applicationId);
     logger.info('------------------------------')
-    applicationId = appId
-    applicationAddr = algosdk.getApplicationAddress(appId);
+    
+    applicationAddr = algosdk.getApplicationAddress(applicationId);
     logger.info('------------------------------')
     logger.info("AlgoPoaP Updated Main Application Address: %s", applicationAddr);
     logger.info('------------------------------')
