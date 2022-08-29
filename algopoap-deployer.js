@@ -281,7 +281,8 @@ async function deployMainContract(addr, acc) {
     logger.info("AlgoPoaP Main Application Creation TXId =  %s", appTxnId);
     let signedAppTxn = appTxn.signTxn(acc.sk);
     await algodClient.sendRawTransaction(signedAppTxn).do();
-    await waitForConfirmation(appTxnId);
+    await algosdk.waitForConfirmation(algodClient, appTxnId, 5)
+    //await waitForConfirmation(appTxnId);
     let transactionResponse = await algodClient.pendingTransactionInformation(appTxnId).do();
     let appId = transactionResponse['application-index'];
     logger.info('------------------------------')
@@ -315,18 +316,18 @@ async function setupMainContract(addr, acc) {
     let method = getMethodByName("setup", contract)
     atc.addMethodCall({
         method: method,
-         methodArgs: ['v0.0.4'],
-          ...commonParams
+        methodArgs: ['v0.0.4'],
+        ...commonParams
     })
     logger.info('------------------------------')
     logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
         let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
-        let res = buff.slice(2,buff.byteLength).toString()
+        let res = buff.slice(2, buff.byteLength).toString()
         logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
-    
-       
+
+
     }
 }
 async function getMainMetrics(addr, acc) {
@@ -345,8 +346,8 @@ async function getMainMetrics(addr, acc) {
     let method = getMethodByName("get_metrics", contract)
     atc.addMethodCall({
         method: method,
-         methodArgs: [],
-          ...commonParams
+        methodArgs: [],
+        ...commonParams
     })
     logger.info('------------------------------')
     logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
@@ -355,8 +356,8 @@ async function getMainMetrics(addr, acc) {
         let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
         let res = buff.toString()
         logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
-    
-       
+
+
     }
 }
 async function getMainMetric(addr, acc) {
@@ -375,8 +376,8 @@ async function getMainMetric(addr, acc) {
     let method = getMethodByName("get_metric", contract)
     atc.addMethodCall({
         method: method,
-         methodArgs: ['poap_count'],
-          ...commonParams
+        methodArgs: ['poap_count'],
+        ...commonParams
     })
     logger.info('------------------------------')
     logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
@@ -385,8 +386,8 @@ async function getMainMetric(addr, acc) {
         let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
         let res = buff.toString()
         logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
-    
-       
+
+
     }
 }
 async function deployItemContract(addr, acc) {
@@ -394,6 +395,18 @@ async function deployItemContract(addr, acc) {
     const atc = new algosdk.AtomicTransactionComposer()
     const signer = algosdk.makeBasicAccountTransactionSigner(acc)
     const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
+    const filePathItemContract = path.join(__dirname, 'algopoap-item.teal');
+    const filePathItemContractClear = path.join(__dirname, 'algopoap-clear.teal');
+    const itemApprovalProgData = await fs.promises.readFile(filePathItemContract);
+    const itemClearProgData = await fs.promises.readFile(filePathItemContractClear);
+    const compiledItemResult = await algodClient.compile(itemApprovalProgData).do();
+    const compiledItemClearResult = await algodClient.compile(itemClearProgData).do();
+    const compiledResultUint8 = new Uint8Array(Buffer.from(compiledItemResult.result, "base64"));
+    const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledItemClearResult.result, "base64"));
+
+
+
+
     const buff = await fs.promises.readFile(filePathContractSchema);
     const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
     const commonParams = {
@@ -402,21 +415,32 @@ async function deployItemContract(addr, acc) {
         suggestedParams: params,
         signer: signer
     }
-    let method = getMethodByName("setup", contract)
+    let method = getMethodByName("item_create", contract)
+    
+    const ptxn = new algosdk.Transaction({
+        from: acc.addr,
+        to: applicationAddr,
+        amount: 100000,
+        ...params
+    })
+
+    const tws = { txn: ptxn, signer: signer }
+
     atc.addMethodCall({
         method: method,
-         methodArgs: ['v0.0.4'],
-          ...commonParams
+        methodArgs: [tws,compiledResultUint8, compiledClearResultUint8],
+        ...commonParams
     })
     logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
+    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
         let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
-        let res = buff.slice(2,buff.byteLength).toString()
+        //slice(2, buff.byteLength)
+        let res = buff.toString()
         logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
-    
-       
+
+
     }
 }
 async function updateMainContract(addr, acc) {
@@ -447,7 +471,8 @@ async function updateMainContract(addr, acc) {
     logger.info("AlgoPoaP Main Application Update TXId =  %s", appTxnId);
     let signedAppTxn = appTxn.signTxn(acc.sk);
     await algodClient.sendRawTransaction(signedAppTxn).do();
-    await waitForConfirmation(appTxnId);
+    await algosdk.waitForConfirmation(algodClient, appTxnId, 5)
+    //await waitForConfirmation(appTxnId);
     let transactionResponse = await algodClient.pendingTransactionInformation(appTxnId).do();
 
     logger.info('------------------------------')
@@ -536,7 +561,8 @@ async function deleteApps(appsTodelete) {
         });
         const signedTxn = txn.signTxn(accountObject.sk);
         const { txId } = await algodClient.sendRawTransaction(signedTxn).do();
-        await waitForConfirmation(txId);
+        await algosdk.waitForConfirmation(algodClient, txId, 5)
+        //await waitForConfirmation(txId);
         let ptx = await algodClient.pendingTransactionInformation(txId).do();
 
         const noteArrayFromTxn = ptx.txn.txn.note;
@@ -577,9 +603,9 @@ async function runDeployer() {
             try {
 
                 await setupMainContract(accountObject.addr, accountObject)
-      
-         
-                
+
+
+
 
             }
             catch (err) {
@@ -591,11 +617,25 @@ async function runDeployer() {
         {
             try {
 
-         
                 await getMainMetrics(accountObject.addr, accountObject)
                 await getMainMetric(accountObject.addr, accountObject)
-         
-                
+
+
+
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_item_create']) {
+        {
+            try {
+
+                await deployItemContract(accountObject.addr, accountObject)
+    
+
+
 
             }
             catch (err) {

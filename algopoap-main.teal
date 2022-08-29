@@ -290,15 +290,24 @@ int 2
 swap
 substring3
 itxn_field ClearStateProgram
-
-int 0
+int 20
+itxn_field GlobalNumByteSlice
+int 20
+itxn_field GlobalNumUint
+int 8
+itxn_field LocalNumUint
+int 8
+itxn_field LocalNumByteSlice
+int 1000
 itxn_field Fee
 
 itxn_submit
-
-byte 0x151f7c75
 itxn CreatedApplicationID
 itob
+dup
+log
+byte 0x151f7c75
+swap
 concat
 b b_log_return
 
@@ -337,7 +346,7 @@ swap
 substring3
 itxn_field ClearStateProgram
 
-int 0
+int 1000
 itxn_field Fee
 
 itxn_submit
@@ -365,7 +374,7 @@ btoi
 txnas Applications
 itxn_field ApplicationID
 
-int 0
+int 1000
 itxn_field Fee
 
 itxn_submit
@@ -380,7 +389,7 @@ itxn_field Receiver
 int 100000
 itxn_field Amount
 
-int 0
+int 1000
 itxn_field Fee
 
 itxn_submit

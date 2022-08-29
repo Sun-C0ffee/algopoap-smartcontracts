@@ -187,9 +187,7 @@ retsub
 // Handles creating a new item AlgoPoaP smart contract
 b_creation:
 byte 0x151f7c75
-byte "algopoap:item:create:"
-concat
-txn Sender
+byte "algopoap_item_create"
 concat
 b b_log_return
 
@@ -440,7 +438,7 @@ byte "poap_is_activated"
 byte "true"
 app_global_put
 byte "poap_activate_time"
-Global LatestTimestamp
+global LatestTimestamp
 app_global_put
 
 byte "poap_asa_id"
