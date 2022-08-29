@@ -295,6 +295,47 @@ async function deployMainContract(addr, acc) {
     logger.info("AlgoPoaP Main Application Address: %s", applicationAddr);
     logger.info('------------------------------')
 }
+async function updateMainContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    onComplete = algosdk.OnApplicationComplete.UpdateApplicationOC;
+    const filePathApproval = path.join(__dirname, 'algopoap-main.teal');
+    const filePathClear = path.join(__dirname, 'algopoap-clear.teal');
+    const approvalProgData = await fs.promises.readFile(filePathApproval);
+    const clearProgData = await fs.promises.readFile(filePathClear);
+    const compiledResult = await algodClient.compile(approvalProgData).do();
+    const compiledClearResult = await algodClient.compile(clearProgData).do();
+    const compiledResultUint8 = new Uint8Array(Buffer.from(compiledResult.result, "base64"));
+    const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledClearResult.result, "base64"));
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Main Contract Hash = %s", compiledResult.hash);
+    //logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
+    logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
+    //logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
+    /*   let note = algosdk.encodeObj(
+          `Update AlgoPoaP Application ID: ${applicationId}`
+      ); */
+
+
+    let appTxn = algosdk.makeApplicationUpdateTxn(addr, params, Number(applicationId),
+        compiledResultUint8, compiledClearResultUint8);
+    let appTxnId = appTxn.txID().toString();
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Main Application Update TXId =  %s", appTxnId);
+    let signedAppTxn = appTxn.signTxn(acc.sk);
+    await algodClient.sendRawTransaction(signedAppTxn).do();
+    await algosdk.waitForConfirmation(algodClient, appTxnId, 5)
+    //await waitForConfirmation(appTxnId);
+    let transactionResponse = await algodClient.pendingTransactionInformation(appTxnId).do();
+
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Updated Main Application ID: %s", applicationId);
+    logger.info('------------------------------')
+
+    applicationAddr = algosdk.getApplicationAddress(Number(applicationId));
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Updated Main Application Address: %s", applicationAddr);
+    logger.info('------------------------------')
+}
 function getMethodByName(name, contract) {
     const m = contract.methods.find((mt) => { return mt.name == name })
     if (m === undefined)
@@ -493,10 +534,6 @@ async function deleteItemContract(addr, acc) {
     const signer = algosdk.makeBasicAccountTransactionSigner(acc)
     const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
 
-
-
-
-
     const buff = await fs.promises.readFile(filePathContractSchema);
     const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
     const commonParams = {
@@ -523,51 +560,6 @@ async function deleteItemContract(addr, acc) {
 
 
     }
-}
-async function updateMainContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    onComplete = algosdk.OnApplicationComplete.UpdateApplicationOC;
-    const filePathApproval = path.join(__dirname, 'algopoap-main.teal');
-    const filePathClear = path.join(__dirname, 'algopoap-clear.teal');
-    const approvalProgData = await fs.promises.readFile(filePathApproval);
-    const clearProgData = await fs.promises.readFile(filePathClear);
-    const compiledResult = await algodClient.compile(approvalProgData).do();
-    const compiledClearResult = await algodClient.compile(clearProgData).do();
-    const compiledResultUint8 = new Uint8Array(Buffer.from(compiledResult.result, "base64"));
-    const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledClearResult.result, "base64"));
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Contract Hash = %s", compiledResult.hash);
-    //logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
-    logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
-    //logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
-    /*   let note = algosdk.encodeObj(
-          `Update AlgoPoaP Application ID: ${applicationId}`
-      ); */
-
-
-    let appTxn = algosdk.makeApplicationUpdateTxn(addr, params, Number(applicationId),
-        compiledResultUint8, compiledClearResultUint8);
-    let appTxnId = appTxn.txID().toString();
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Application Update TXId =  %s", appTxnId);
-    let signedAppTxn = appTxn.signTxn(acc.sk);
-    await algodClient.sendRawTransaction(signedAppTxn).do();
-    await algosdk.waitForConfirmation(algodClient, appTxnId, 5)
-    //await waitForConfirmation(appTxnId);
-    let transactionResponse = await algodClient.pendingTransactionInformation(appTxnId).do();
-
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Updated Main Application ID: %s", applicationId);
-    logger.info('------------------------------')
-
-    applicationAddr = algosdk.getApplicationAddress(Number(applicationId));
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Updated Main Application Address: %s", applicationAddr);
-    logger.info('------------------------------')
-}
-
-async function setup() {
-
 }
 
 async function deployerAccount() {
