@@ -293,6 +293,132 @@ async function deployMainContract(addr, acc) {
     logger.info("AlgoPoaP Main Application Address: %s", applicationAddr);
     logger.info('------------------------------')
 }
+function getMethodByName(name, contract) {
+    const m = contract.methods.find((mt) => { return mt.name == name })
+    if (m === undefined)
+        throw Error("Method undefined: " + name)
+    return m
+}
+async function setupMainContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer()
+    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
+    const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
+    const buff = await fs.promises.readFile(filePathContractSchema);
+    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    const commonParams = {
+        appID: Number(applicationId),
+        sender: acc.addr,
+        suggestedParams: params,
+        signer: signer
+    }
+    let method = getMethodByName("setup", contract)
+    atc.addMethodCall({
+        method: method,
+         methodArgs: ['v0.0.4'],
+          ...commonParams
+    })
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
+    const result = await atc.execute(algodClient, 2)
+    for (const idx in result.methodResults) {
+        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+        let res = buff.slice(2,buff.byteLength).toString()
+        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+    
+       
+    }
+}
+async function getMainMetrics(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer()
+    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
+    const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
+    const buff = await fs.promises.readFile(filePathContractSchema);
+    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    const commonParams = {
+        appID: Number(applicationId),
+        sender: acc.addr,
+        suggestedParams: params,
+        signer: signer
+    }
+    let method = getMethodByName("get_metrics", contract)
+    atc.addMethodCall({
+        method: method,
+         methodArgs: [],
+          ...commonParams
+    })
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
+    const result = await atc.execute(algodClient, 2)
+    for (const idx in result.methodResults) {
+        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+        let res = buff.toString()
+        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+    
+       
+    }
+}
+async function getMainMetric(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer()
+    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
+    const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
+    const buff = await fs.promises.readFile(filePathContractSchema);
+    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    const commonParams = {
+        appID: Number(applicationId),
+        sender: acc.addr,
+        suggestedParams: params,
+        signer: signer
+    }
+    let method = getMethodByName("get_metric", contract)
+    atc.addMethodCall({
+        method: method,
+         methodArgs: ['poap_count'],
+          ...commonParams
+    })
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
+    const result = await atc.execute(algodClient, 2)
+    for (const idx in result.methodResults) {
+        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+        let res = buff.toString()
+        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+    
+       
+    }
+}
+async function deployItemContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer()
+    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
+    const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
+    const buff = await fs.promises.readFile(filePathContractSchema);
+    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    const commonParams = {
+        appID: Number(applicationId),
+        sender: acc.addr,
+        suggestedParams: params,
+        signer: signer
+    }
+    let method = getMethodByName("setup", contract)
+    atc.addMethodCall({
+        method: method,
+         methodArgs: ['v0.0.4'],
+          ...commonParams
+    })
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
+    const result = await atc.execute(algodClient, 2)
+    for (const idx in result.methodResults) {
+        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+        let res = buff.slice(2,buff.byteLength).toString()
+        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+    
+       
+    }
+}
 async function updateMainContract(addr, acc) {
     let params = await algodClient.getTransactionParams().do();
     onComplete = algosdk.OnApplicationComplete.UpdateApplicationOC;
@@ -439,6 +565,37 @@ async function runDeployer() {
             try {
 
                 await updateMainContract(accountObject.addr, accountObject)
+
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['setup_app']) {
+        {
+            try {
+
+                await setupMainContract(accountObject.addr, accountObject)
+      
+         
+                
+
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_metrics']) {
+        {
+            try {
+
+         
+                await getMainMetrics(accountObject.addr, accountObject)
+                await getMainMetric(accountObject.addr, accountObject)
+         
+                
 
             }
             catch (err) {

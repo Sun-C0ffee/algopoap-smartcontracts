@@ -6,7 +6,7 @@
           "appID": 0
       },
       "TestNet":{
-          "appID": 0
+          "appID": 106595642
       }
   },
   "methods":[
@@ -87,7 +87,7 @@
             }
           ],
           "returns": {
-            "type": "byte[]"
+            "type": "string"
           },
           "desc": "Gets an specific metric by signature string"
         },
