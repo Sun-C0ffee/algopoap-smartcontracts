@@ -435,9 +435,8 @@ async function deployItemContract(addr, acc) {
     logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
-        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
-        //slice(2, buff.byteLength)
-        let res = buff.toString()
+      
+        let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
         logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
 
 
