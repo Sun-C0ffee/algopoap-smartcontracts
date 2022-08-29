@@ -561,7 +561,48 @@ async function deleteItemContract(addr, acc) {
 
     }
 }
+async function setupItemContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer()
+    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
+    const filePathContractSchema = path.join(__dirname, 'algopoap-item-contract.json');
 
+
+    const buff = await fs.promises.readFile(filePathContractSchema);
+    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    const commonParams = {
+        appID: Number(Number(applicationItemId)),
+        sender: acc.addr,
+        suggestedParams: params,
+        signer: signer
+    }
+    const ptxn = new algosdk.Transaction({
+        from: acc.addr,
+        to: applicationAddr,
+        amount: 100000,
+        ...params
+    })
+
+    const tws = { txn: ptxn, signer: signer }
+    let method = getMethodByName("setup", contract)
+    
+
+    atc.addMethodCall({
+        method: method,
+        methodArgs: [tws,addr, Number(applicationId), 30,323234,100,234565, 150,11111111,22222222,'poap_name','poap_logo','poap_desc','poap_timezone','poap_address','poap_url','poap_email','poap_company_name','poap_company_logo',true,true,false,false],
+        ...commonParams
+    })
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+    const result = await atc.execute(algodClient, 2)
+    for (const idx in result.methodResults) {
+      
+        let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
+        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+
+
+    }
+}
 async function deployerAccount() {
 
     try {
@@ -736,6 +777,21 @@ async function runDeployer() {
             try {
 
                 await deleteItemContract(accountObject.addr, accountObject)
+    
+
+
+
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_item_setup']) {
+        {
+            try {
+
+                await setupItemContract(accountObject.addr, accountObject)
     
 
 

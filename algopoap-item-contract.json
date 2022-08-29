@@ -67,6 +67,10 @@
                 },
                 {
                     "type": "string",
+                    "name": "poap_timezone"
+                },
+                {
+                    "type": "string",
                     "name": "poap_address"
                 },
                 {

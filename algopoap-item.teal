@@ -137,7 +137,7 @@ b b_error
 b_method_check:
 
 // Checking application call's Arg 0 for activate method signature
-method "setup(appl,pay,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,bool,bool,bool,bool)string"
+method "setup(pay,address,appl,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,string,bool,bool,bool,bool)string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
@@ -679,6 +679,7 @@ bnz b_config_nft
 callsub sub_create_nft
 byte 0x151f7c75
 load 0
+itob
 concat
 b b_log_return
 
