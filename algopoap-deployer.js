@@ -442,6 +442,50 @@ async function deployItemContract(addr, acc) {
 
     }
 }
+async function updateItemContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer()
+    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
+    const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
+    const filePathItemContract = path.join(__dirname, 'algopoap-item.teal');
+    const filePathItemContractClear = path.join(__dirname, 'algopoap-clear.teal');
+    const itemApprovalProgData = await fs.promises.readFile(filePathItemContract);
+    const itemClearProgData = await fs.promises.readFile(filePathItemContractClear);
+    const compiledItemResult = await algodClient.compile(itemApprovalProgData).do();
+    const compiledItemClearResult = await algodClient.compile(itemClearProgData).do();
+    const compiledResultUint8 = new Uint8Array(Buffer.from(compiledItemResult.result, "base64"));
+    const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledItemClearResult.result, "base64"));
+
+
+
+
+    const buff = await fs.promises.readFile(filePathContractSchema);
+    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    const commonParams = {
+        appID: Number(applicationId),
+        sender: acc.addr,
+        suggestedParams: params,
+        signer: signer
+    }
+    let method = getMethodByName("item_update", contract)
+    
+
+    atc.addMethodCall({
+        method: method,
+        methodArgs: [107241789,compiledResultUint8, compiledClearResultUint8],
+        ...commonParams
+    })
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+    const result = await atc.execute(algodClient, 2)
+    for (const idx in result.methodResults) {
+      
+        let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
+        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+
+
+    }
+}
 async function updateMainContract(addr, acc) {
     let params = await algodClient.getTransactionParams().do();
     onComplete = algosdk.OnApplicationComplete.UpdateApplicationOC;
@@ -632,6 +676,21 @@ async function runDeployer() {
             try {
 
                 await deployItemContract(accountObject.addr, accountObject)
+    
+
+
+
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_item_update']) {
+        {
+            try {
+
+                await updateItemContract(accountObject.addr, accountObject)
     
 
 
