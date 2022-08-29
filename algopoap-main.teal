@@ -97,7 +97,7 @@ txn ApplicationArgs 0
 bnz method_setup
 
 // Checking application call's Arg 0 for item_create method signature
-method "item_create(pay,byte[],byte[])uint64"
+method "item_create(pay,byte[],byte[])string"
 txn ApplicationArgs 0
 ==
 bnz method_item_create
@@ -109,7 +109,7 @@ txn ApplicationArgs 0
 bnz method_item_update
 
 // Checking application call's Arg 0 for item_delete method signature 
-method "item_delete(application)uint64"
+method "item_delete(application)void"
 txn ApplicationArgs 0
 ==
 bnz method_item_delete

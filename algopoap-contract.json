@@ -61,7 +61,7 @@
             }
           ],
           "returns": {
-            "type": "uint64"
+            "type": "string"
           },
           "desc": "Updates an AlgoPoaP item smart contract and returns bool (true on success)"
         },
