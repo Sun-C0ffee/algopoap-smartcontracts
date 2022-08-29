@@ -18,6 +18,7 @@ let indexerPort;
 
 let applicationAddr = config.algorand.asc_main_address;
 let applicationId = config.algorand.asc_main_id;
+let applicationItemId = config.deployer.test_item_update_app;
 let accountObject;
 let accountAddress;
 let accountBalance;
@@ -472,7 +473,44 @@ async function updateItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [107241789,compiledResultUint8, compiledClearResultUint8],
+        methodArgs: [applicationItemId,compiledResultUint8, compiledClearResultUint8],
+        ...commonParams
+    })
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+    const result = await atc.execute(algodClient, 2)
+    for (const idx in result.methodResults) {
+      
+        let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
+        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+
+
+    }
+}
+async function deleteItemContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer()
+    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
+    const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
+
+
+
+
+
+    const buff = await fs.promises.readFile(filePathContractSchema);
+    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    const commonParams = {
+        appID: Number(applicationId),
+        sender: acc.addr,
+        suggestedParams: params,
+        signer: signer
+    }
+    let method = getMethodByName("item_delete", contract)
+    
+
+    atc.addMethodCall({
+        method: method,
+        methodArgs: [applicationItemId],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -691,6 +729,21 @@ async function runDeployer() {
             try {
 
                 await updateItemContract(accountObject.addr, accountObject)
+    
+
+
+
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_item_delete']) {
+        {
+            try {
+
+                await deleteItemContract(accountObject.addr, accountObject)
     
 
 
