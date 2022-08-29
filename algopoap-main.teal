@@ -103,7 +103,7 @@ txn ApplicationArgs 0
 bnz method_item_create
 
 // Checking application call's Arg 0 for item_update method signature
-method "item_update(application,byte[],byte[])uint64"
+method "item_update(application,byte[],byte[])string"
 txn ApplicationArgs 0
 ==
 bnz method_item_update
@@ -300,12 +300,11 @@ int 8
 itxn_field LocalNumByteSlice
 int 1000
 itxn_field Fee
-
 itxn_submit
+
+byte 0x151f7c75
 itxn CreatedApplicationID
 itob
-byte 0x151f7c75
-swap
 concat
 b b_log_return
 
