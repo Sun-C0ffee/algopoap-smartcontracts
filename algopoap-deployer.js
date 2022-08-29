@@ -518,8 +518,8 @@ async function deleteItemContract(addr, acc) {
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
       
-        let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
-        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+        
+        logger.info("AlgoPoaP Main Contract ABI Exec method result: void");
 
 
     }
