@@ -40,7 +40,7 @@
             }
           ],
           "returns": {
-            "type": "uint64"
+            "type": "string"
           },
           "desc": "Creates a new AlgoPoaP item smart contract and returns the app id"
         },
