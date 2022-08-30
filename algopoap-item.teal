@@ -150,7 +150,7 @@ txn ApplicationArgs 0
 bnz method_setup
 
 // Checking application call's Arg 0 for activate method signature
-method "activate(appl,pay,axfer)uint64"
+method "activate(pay,axfer, application)uint64"
 txn ApplicationArgs 0
 ==
 bnz method_activate
