@@ -27,7 +27,7 @@
 
 
 // 11: Author Address store
-// 12: Arg 15 for extraction
+// 12: poap_switches for extraction
 
 // Local state schema for algopoap author
 //TODO local states...
@@ -65,26 +65,25 @@
 // Byte poap_item_last_nft_issuance
 // Byte poap_item_last_txn_issuance
 
-// Uint64 poap_lat_1
-// Uint64 poap_lat_2
-// Uint64 poap_lng_1
-// Uint64 poap_lng_2
-// Uint64 poap_geo_buffer
-// Uint64 poap_start_timestamp
-// Uint64 poap_end_timestamp
 // Byte poap_name
 // Byte poap_logo
 // Byte poap_desc
+// Byte poap_timezone
 // Byte poap_address
 // Byte poap_url
 // Byte poap_email
 // Byte poap_company_name
-// Byte poap_company_logo
-// Byte poap_has_nft
-// Byte poap_has_geo
-// Byte poap_has_sig
-// Byte poap_has_qrcode
+// Uint64 poap_start_timestamp
+// Uint64 poap_lat
+// Uint64 poap_lng
+// Uint64 poap_geo_buffer
+// Uint64 poap_attendee_qty
+// Uint64 poap_has_nft
+// Uint64 poap_has_geo
+// Uint64 poap_has_sig
+// Uint64 poap_has_qrcode
 
+// Byte poap_switches
 // Byte poap_qr_secret
 
 //////////////////////////////////////////////////////////////
@@ -592,23 +591,23 @@ int 0
 app_global_put
 
 byte "poap_item_last_attendee"
-byte ""
+byte "-"
 app_global_put
 
 byte "poap_item_last_apply"
-byte ""
+byte "-"
 app_global_put
 
 byte "poap_item_last_issuance"
-byte ""
+byte "-"
 app_global_put
 
 byte "poap_item_last_nft_issuance"
-byte ""
+byte "-"
 app_global_put
 
 byte "poap_item_last_txn_issuance"
-byte ""
+byte "-"
 app_global_put
 
 // Args to Global states PoaP data
@@ -648,33 +647,33 @@ byte "poap_company_name"
 txn ApplicationArgs 8
 app_global_put
 
-byte "poap_company_logo"
-txn ApplicationArgs 9
-app_global_put
-
 
 byte "poap_start_timestamp"
-txn ApplicationArgs 10
+txn ApplicationArgs 9
 app_global_put
 
 
 
 byte "poap_lat"
-txn ApplicationArgs 12
+txn ApplicationArgs 10
 app_global_put
 
 byte "poap_lng"
-txn ApplicationArgs 13
+txn ApplicationArgs 11
 app_global_put
 
 
 byte "poap_geo_buffer"
-txn ApplicationArgs 14
+txn ApplicationArgs 12
 app_global_put
 
+byte "poap_attendee_qty"
+txn ApplicationArgs 13
+app_global_put
 
-txn ApplicationArgs 15
+txn ApplicationArgs 14
 store 12
+
 
 // Implement many args on index 15 with extraction opcodes
 byte "poap_has_nft"
@@ -682,6 +681,8 @@ load 12
 int 0
 int 1
 substring3
+dup
+log
 btoi
 app_global_put
 
@@ -690,6 +691,8 @@ load 12
 int 1
 int 2
 substring3
+dup
+log
 btoi
 app_global_put
 
@@ -698,6 +701,8 @@ load 12
 int 2
 int 3
 substring3
+dup
+log
 btoi
 app_global_put
 
@@ -706,6 +711,8 @@ load 12
 int 3
 int 4
 substring3
+dup
+log
 btoi
 app_global_put
 
@@ -717,8 +724,10 @@ app_global_get_ex
 bnz b_config_nft
 callsub sub_create_nft
 byte 0x151f7c75
+load 12
 load 0
 itob
+concat
 concat
 b b_log_return
 
