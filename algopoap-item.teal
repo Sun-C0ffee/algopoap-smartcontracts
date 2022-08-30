@@ -556,23 +556,9 @@ b b_log_return
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
 callsub sub_check_author 
-byte "poap_item_attendee_count"
-app_global_del
-byte "poap_item_geo_check_count"
-app_global_del
-byte "poap_item_sig_check_count"
-app_global_del
-byte "poap_item_qr_check_count"
-app_global_del
-byte "poap_item_apply_count"
-app_global_del
+//byte "poap_item_attendee_count"
+//app_global_del
 
-byte "poap_item_issuance_count"
-app_global_del
-byte "poap_item_last_apply"
-app_global_del
-byte "poap_item_last_issuance"
-app_global_del
 
 
 
