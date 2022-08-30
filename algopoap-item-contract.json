@@ -10,7 +10,7 @@
         }
     },
     "methods": [
-      {
+        {
             "name": "setup",
             "args": [
                 {
@@ -69,7 +69,6 @@
                     "type": "uint64",
                     "name": "poap_end_timestamp"
                 },
-                
                 {
                     "type": "string",
                     "name": "poap_lat"
@@ -81,7 +80,12 @@
                 {
                     "type": "uint64",
                     "name": "poap_geo_buffer"
-                },      {
+                },
+                {
+                    "type": "uint64",
+                    "name": "poap_attendee_qty"
+                },
+                {
                     "type": "uint8",
                     "name": "poaP_has_nft"
                 },
@@ -97,7 +101,6 @@
                     "type": "uint8",
                     "name": "poap_has_qrcode"
                 }
-                
             ],
             "returns": {
                 "type": "string"
@@ -128,12 +131,10 @@
         {
             "name": "claim",
             "args": [
-            
                 {
                     "type": "axfer",
                     "name": "optin_algopoap_nft"
                 },
-                
                 {
                     "type": "account",
                     "name": "attendee_account"
@@ -170,7 +171,6 @@
                     "type": "string",
                     "name": "qr_secret"
                 }
-                
             ],
             "returns": {
                 "type": "string"
