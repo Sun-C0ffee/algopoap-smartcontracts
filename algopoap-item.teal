@@ -25,7 +25,7 @@
 // 8: longitude decimal part as integer (6 digits)
 // 9: timestamp of claim time
 // 10: The secret Attendee will be presented with in QRCode form to scan during claim and send as string arg.
-
+// 11: Author Address store
 
 // Local state schema for algopoap author
 //TODO local states...
@@ -137,7 +137,7 @@ b b_error
 b_method_check:
 
 // Checking application call's Arg 0 for activate method signature
-method "setup(pay,address,appl,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,string,bool,bool,bool,bool)string"
+method "setup(pay,address,application,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,string,string,string,string,bool,bool,bool,bool)string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
@@ -174,18 +174,30 @@ txn ApplicationArgs 0
 bnz method_get_metrics
 
 // If non of method checks matched then error and reject
-b b_error
+b b_error1
 
 //Checks the Sender to be the Creator (AlgoPoaP Author)
-sub_check_author:
+sub_check_owner:
 txn Sender
 global CreatorAddress
 ==
 assert
 retsub
 
+//Checks the Sender to be the Creator (AlgoPoaP Author)
+sub_check_author:
+txn Sender
+byte "poap_author_address"
+app_global_get
+==
+assert
+retsub
+
 // Handles creating a new item AlgoPoaP smart contract
 b_creation:
+byte "poap_author_address"
+txn Note
+app_global_put
 byte "algopoap_item_create"
 b b_log_return
 
@@ -201,16 +213,16 @@ byte "poap_item_last_attendee"
 txn Sender
 app_global_put
 
-byte "algopoap:item:optin:"
+byte "algopoap_item_optin:"
 txn Sender
 concat
 b b_log_return
 
 // Handles deletion of an item AlgoPoaP smart contract
 b_deletion:
-callsub sub_check_author
+callsub sub_check_owner
 byte 0x151f7c75
-byte "algopoap:item:delete:"
+byte "algopoap_item_delete"
 concat
 global CurrentApplicationID
 itob
@@ -220,9 +232,9 @@ b b_log_return
 
 // Handles update of an item AlgoPoaP smart contract
 b_update:
-callsub sub_check_author
+callsub sub_check_owner
 byte 0x151f7c75
-byte "algopoap:item:update:"
+byte "algopoap_item_update"
 concat
 global CurrentApplicationID
 itob
@@ -232,7 +244,7 @@ b b_log_return
 
 // Handles close out (offboarding) from an item AlgoPoaP smart contract
 b_closeout:
-byte "algopoap:item:closeout:"
+byte "algopoap_item_closeout"
 txn Sender
 concat
 b b_log_return
@@ -693,7 +705,13 @@ return
 b_error:
 err
 
+b_error1:
+int 1
+err
 
+b_error2:
+int 2
+err
 
 
 

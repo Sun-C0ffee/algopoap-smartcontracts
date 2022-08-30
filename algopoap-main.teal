@@ -139,7 +139,7 @@ retsub
 
 // Handles creating a new main AlgoPoaP smart contract
 b_creation:
-byte "algopoap:create:"
+byte "algopoap_create"
 txn Sender
 concat
 b b_log_return
@@ -147,7 +147,7 @@ b b_log_return
 // Handles opting into (onboarding) a main AlgoPoaP smart contract
 b_optin:
 //TODO: Increment counters and update global states
-byte "algopoap:optin:"
+byte "algopoap_optin"
 txn Sender
 concat
 b b_log_return
@@ -155,7 +155,7 @@ b b_log_return
 // Handles deletion of a main AlgoPoaP smart contract
 b_deletion:
 callsub sub_check_author
-byte "algopoap:delete:"
+byte "algopoap_delete"
 global CurrentApplicationID
 itob
 concat
@@ -164,7 +164,7 @@ b b_log_return
 // Handles update of a main AlgoPoaP smart contract
 b_update:
 callsub sub_check_author
-byte "algopoap:update:"
+byte "algopoap_update"
 global CurrentApplicationID
 itob
 concat
@@ -172,7 +172,7 @@ b b_log_return
 
 // Handles close out (offboarding) from a main AlgoPoaP smart contract
 b_closeout:
-byte "algopoap:closeout:"
+byte "algopoap_closeout"
 txn Sender
 concat
 b b_log_return
@@ -273,6 +273,7 @@ itxn_field TypeEnum
 int NoOp
 itxn_field OnCompletion
 
+
 // Get the length and extract it, removing the first 2 bytes.
 txn ApplicationArgs 1
 dup
@@ -300,6 +301,10 @@ int 8
 itxn_field LocalNumByteSlice
 int 1000
 itxn_field Fee
+
+txn Sender
+itxn_field Note
+
 itxn_submit
 
 byte 0x151f7c75
@@ -345,6 +350,10 @@ itxn_field ClearStateProgram
 
 int 1000
 itxn_field Fee
+
+txn Sender
+itxn_field Note
+
 
 itxn_submit
 
