@@ -668,6 +668,7 @@ async function activateItemContract(addr, acc) {
         ...params
     })
     const atxn = new algosdk.Transaction({
+        type: 'axfer',
         from: acc.addr,
         to: acc.addr,
         assetIndex: Number(itemAsaId),
