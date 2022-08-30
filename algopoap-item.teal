@@ -18,13 +18,14 @@
 // 2: ASA Sender address to use with NFT sender sub
 // 3: ASA Receiver address to use with NFT sender sub
 // 4: ASA Amount to use with NFT sender sub
+// 5: latitude
+// 6: longitude
+// 7: timestamp
+// 8: The QR secret
 
-// 5: latitude integer part (2 digits)
-// 6: latitude decimal part as integer (6 digits)
-// 7: longitude integer part (3 digits)
-// 8: longitude decimal part as integer (6 digits)
-// 9: timestamp of claim time
-// 10: The secret Attendee will be presented with in QRCode form to scan during claim and send as string arg.
+
+
+
 // 11: Author Address store
 // 12: Arg 15 for extraction
 
@@ -162,7 +163,7 @@ txn ApplicationArgs 0
 bnz method_release
 
 // Checking application call's Arg 0 for claim method signature
-method "claim(appl,pay,axfer,account,uint16,uint48,uint24,uint48,uint24,uint64,string)bool"
+method "claim(pay,axfer,application,string,string,uint64,string)string"
 txn ApplicationArgs 0
 ==
 bnz method_claim
@@ -336,7 +337,7 @@ retsub
 
 // Handles the timestamp from args is bigger than timestamp of AlgoPoaP activation
 sub_check_timestamp:
-load 9
+load 7
 byte "poap_activate_time"
 app_global_get
 >=
@@ -481,6 +482,9 @@ b b_log_return
 
 // Handles release method
 method_release:
+byte "poap_is_released"
+byte "true"
+app_global_put
 byte 0x151f7c75
 byte "algopoap_item_released"
 concat
@@ -488,24 +492,18 @@ b b_log_return
 
 // Handles claim method
 method_claim:
-//uint16 lat_1
+//string lat
 txn ApplicationArgs 1
 store 5
-//uint48 lat_2
+//string lng
 txn ApplicationArgs 2
 store 6
-//uint24 lng_1
+//uint64 timestamp
 txn ApplicationArgs 3
 store 7
-//uint48 lng_2
+//string secret
 txn ApplicationArgs 4
 store 8
-//uint64 timestamp
-txn ApplicationArgs 5
-store 9
-//string QR secret
-txn ApplicationArgs 6
-store 10
 
 
 callsub sub_check_timestamp

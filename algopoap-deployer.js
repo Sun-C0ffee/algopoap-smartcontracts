@@ -516,7 +516,7 @@ async function updateItemContract(addr, acc) {
     }
     let method = getMethodByName("item_update", contract)
 
-let application = Number(applicationItemId)
+    let application = Number(applicationItemId)
     atc.addMethodCall({
         method: method,
         methodArgs: [application, compiledResultUint8, compiledClearResultUint8],
@@ -687,7 +687,7 @@ async function activateItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws0, tws1, Number(applicationId),Number(itemAsaId)],
+        methodArgs: [tws0, tws1, Number(applicationId), Number(itemAsaId)],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -725,6 +725,58 @@ async function releaseItemContract(addr, acc) {
     atc.addMethodCall({
         method: method,
         methodArgs: [Number(applicationId)],
+        ...commonParams
+    })
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+    const result = await atc.execute(algodClient, 2)
+    for (const idx in result.methodResults) {
+
+        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+        let res = buff.toString()
+        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+
+
+    }
+}
+async function claimItemContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer()
+    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
+    const filePathContractSchema = path.join(__dirname, 'algopoap-item-contract.json');
+
+
+    const buff = await fs.promises.readFile(filePathContractSchema);
+    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    const commonParams = {
+        appID: Number(Number(applicationItemId)),
+        sender: acc.addr,
+        suggestedParams: params,
+        signer: signer
+    }
+    const ptxn = new algosdk.Transaction({
+        type: 'pay',
+        from: acc.addr,
+        to: applicationAddr,
+        amount: 100000,
+        ...params
+    })
+    const atxn = new algosdk.Transaction({
+        type: 'axfer',
+        from: acc.addr,
+        to: acc.addr,
+        assetIndex: Number(itemAsaId),
+        amount: 0,
+        ...params
+    })
+
+    const tws0 = { txn: ptxn, signer: signer }
+    const tws1 = { txn: atxn, signer: signer }
+    let method = getMethodByName("claim", contract)
+
+    atc.addMethodCall({
+        method: method,
+        methodArgs: [tws0, tws1, Number(applicationId), Number(itemAsaId),'30.323234', '100.234565', 1661859876,'0'],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -898,10 +950,6 @@ async function runDeployer() {
             try {
 
                 await updateItemContract(accountObject.addr, accountObject)
-
-
-
-
             }
             catch (err) {
                 logger.error(err);
@@ -958,6 +1006,17 @@ async function runDeployer() {
             try {
 
                 await releaseItemContract(accountObject.addr, accountObject)
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_item_claim']) {
+        {
+            try {
+
+                await claimItemContract(accountObject.addr, accountObject)
             }
             catch (err) {
                 logger.error(err);

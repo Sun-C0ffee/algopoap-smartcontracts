@@ -237,12 +237,12 @@
             "name": "claim",
             "args": [
                 {
-                    "type": "axfer",
-                    "name": "optin_algopoap_nft"
+                    "type": "pay",
+                    "name": "pay_min_fee"
                 },
                 {
-                    "type": "account",
-                    "name": "attendee_account"
+                    "type": "axfer",
+                    "name": "optin_algopoap_nft"
                 },
                 {
                     "type": "application",
@@ -255,10 +255,6 @@
                 {
                     "type": "string",
                     "name": "lng"
-                },
-                {
-                    "type": "uint64",
-                    "name": "geo_buffer"
                 },
                 {
                     "type": "uint64",
