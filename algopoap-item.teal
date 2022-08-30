@@ -50,7 +50,6 @@
 // Byte poap_is_setup
 // Byte poap_is_released
 
-// Uint64 poap_item_attendee_count
 // Uint64 poap_item_claim_count
 // Uint64 poap_item_issuance_count
 // Uint64 poap_item_nft_issuance_count
