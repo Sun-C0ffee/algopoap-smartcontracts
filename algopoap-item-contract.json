@@ -27,6 +27,10 @@
                 },
                 {
                     "type": "string",
+                    "name": "reserved"
+                },
+                {
+                    "type": "string",
                     "name": "poap_name"
                 },
                 {
@@ -78,8 +82,22 @@
                     "name": "poap_attendee_qty"
                 },
                 {
-                    "type": "string",
-                    "name": "poap_switches"
+                    "type": "uint64",
+                    "name": "poap_has_nft"
+                }
+                ,
+                {
+                    "type": "uint64",
+                    "name": "poap_has_geo"
+                }
+                ,
+                {
+                    "type": "uint64",
+                    "name": "poap_has_sig"
+                },
+                {
+                    "type": "uint64",
+                    "name": "poap_has_qrcode"
                 }
             ],
             "returns": {
@@ -134,10 +152,7 @@
                     "type": "string",
                     "name": "poap_email"
                 },
-                {
-                    "type": "string",
-                    "name": "poap_company_name"
-                },
+            
                 {
                     "type": "uint64",
                     "name": "poap_start_timestamp"
@@ -159,21 +174,21 @@
                     "name": "poap_attendee_qty"
                 },
                 {
-                    "type": "uint8",
+                    "type": "uint64",
                     "name": "poap_has_nft"
                 }
                 ,
                 {
-                    "type": "uint8",
+                    "type": "uint64",
                     "name": "poap_has_geo"
                 }
                 ,
                 {
-                    "type": "uint8",
+                    "type": "uint64",
                     "name": "poap_has_sig"
                 },
                 {
-                    "type": "uint8",
+                    "type": "uint64",
                     "name": "poap_has_qrcode"
                 }
               
