@@ -702,6 +702,43 @@ async function activateItemContract(addr, acc) {
 
     }
 }
+async function releaseItemContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer()
+    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
+    const filePathContractSchema = path.join(__dirname, 'algopoap-item-contract.json');
+
+
+    const buff = await fs.promises.readFile(filePathContractSchema);
+    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    const commonParams = {
+        appID: Number(Number(applicationItemId)),
+        sender: acc.addr,
+        suggestedParams: params,
+        signer: signer
+    }
+
+
+
+    let method = getMethodByName("release", contract)
+
+    atc.addMethodCall({
+        method: method,
+        methodArgs: [Number(applicationId)],
+        ...commonParams
+    })
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+    const result = await atc.execute(algodClient, 2)
+    for (const idx in result.methodResults) {
+
+        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+        let res = buff.toString()
+        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+
+
+    }
+}
 async function deployerAccount() {
 
     try {
@@ -910,6 +947,17 @@ async function runDeployer() {
             try {
 
                 await activateItemContract(accountObject.addr, accountObject)
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_item_release']) {
+        {
+            try {
+
+                await releaseItemContract(accountObject.addr, accountObject)
             }
             catch (err) {
                 logger.error(err);

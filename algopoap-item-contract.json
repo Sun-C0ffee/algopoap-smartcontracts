@@ -249,23 +249,15 @@
                     "name": "parent_application"
                 },
                 {
-                    "type": "uint16",
-                    "name": "lat_1"
+                    "type": "string",
+                    "name": "lat"
                 },
                 {
-                    "type": "uint48",
-                    "name": "lat_2"
+                    "type": "string",
+                    "name": "lng"
                 },
                 {
-                    "type": "uint24",
-                    "name": "lng_1"
-                },
-                {
-                    "type": "uint48",
-                    "name": "lng_2"
-                },
-                {
-                    "type": "uint24",
+                    "type": "uint64",
                     "name": "geo_buffer"
                 },
                 {
@@ -286,12 +278,12 @@
             "name": "release",
             "args": [
                 {
-                    "type": "appl",
-                    "name": "parent_call"
+                    "type": "application",
+                    "name": "parent_contract"
                 }
             ],
             "returns": {
-                "type": "byte[]"
+                "type": "string"
             },
             "desc": "Releases AlgoPoaP and allows all AlgoPoaP attendee's to start claiming"
         },

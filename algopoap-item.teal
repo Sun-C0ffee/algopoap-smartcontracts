@@ -156,7 +156,7 @@ txn ApplicationArgs 0
 bnz method_activate
 
 // Checking application call's Arg 0 for release method signature
-method "release(appl)bool"
+method "release(application)string"
 txn ApplicationArgs 0
 ==
 bnz method_release
