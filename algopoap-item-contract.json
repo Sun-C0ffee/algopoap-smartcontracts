@@ -58,10 +58,6 @@
                     "name": "poap_company_name"
                 },
                 {
-                    "type": "string",
-                    "name": "poap_company_logo"
-                },
-                {
                     "type": "uint64",
                     "name": "poap_start_timestamp"
                 },
@@ -141,10 +137,6 @@
                 {
                     "type": "string",
                     "name": "poap_company_name"
-                },
-                {
-                    "type": "string",
-                    "name": "poap_company_logo"
                 },
                 {
                     "type": "uint64",

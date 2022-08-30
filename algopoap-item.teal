@@ -145,7 +145,7 @@ txn ApplicationArgs 0
 bnz method_setup
 
 // Checking application call's Arg 0 for re_setup method signature
-method "re_setup(pay,address,application,asset,string,string,string,string,string,string,string,uint64,string,string,uint64,uint64,string)string"
+method "re_setup(pay,address,application,asset,string,string,string,string,string,string,string,string,uint64,string,string,uint64,uint64,string)string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
