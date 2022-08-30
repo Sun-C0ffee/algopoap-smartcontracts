@@ -38,7 +38,7 @@
     "test_item_activate_app": 107325601,
     "test_item_activate": false,
     "test_item_release_app": 107325601,
-    "test_item_release": false,
+    "test_item_release": true,
     "test_item_claim_app": 107325601,
     "test_item_claim": false,
     "apps_to_delete": [],

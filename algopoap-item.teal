@@ -139,13 +139,13 @@ b b_error
 b_method_check:
 
 // Checking application call's Arg 0 for activate method signature
-method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,uint64,uint8,uint8,uint8,uint8)string"
+method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,uint64,string)string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
 
 // Checking application call's Arg 0 for activate method signature
-method "re_setup(pay,address,application,asset,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,uint64,uint8,uint8,uint8,uint8)string"
+method "re_setup(pay,address,application,asset,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,uint64,string)string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
@@ -403,7 +403,7 @@ byte "true"
 ==
 bnz b_has_geo
 
-byte "poap_has_qr"
+byte "poap_has_qrcode"
 app_global_get
 byte "true"
 ==
@@ -413,7 +413,7 @@ b b_finalize_claim
 // Handles Geo constraint check
 b_has_geo:
 callsub sub_check_geo
-byte "poap_has_qr"
+byte "poap_has_qrcode"
 app_global_get
 byte "true"
 ==
@@ -520,7 +520,7 @@ byte "true"
 ==
 bnz b_has_geo
 
-byte "poap_has_qr"
+byte "poap_has_qrcode"
 app_global_get
 byte "true"
 ==

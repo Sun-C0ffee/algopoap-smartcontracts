@@ -594,7 +594,7 @@ async function setupItemContract(addr, acc) {
     //method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,bool,bool,bool,bool)string"
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws, addr, Number(applicationId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', 'poap_company_name', 'poap_company_logo', 11111111, 22222222, '30.323234', '100.234565', 150, 200, 1, 1, 0, 0],
+        methodArgs: [tws, addr, Number(applicationId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', 'poap_company_name', 'poap_company_logo', 11111111, 22222222, '30.323234', '100.234565', 150, 200, '1100'],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -636,7 +636,7 @@ async function reSetupItemContract(addr, acc) {
     //method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,bool,bool,bool,bool)string"
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', 'poap_company_name', 'poap_company_logo', 11111111, 22222222, '30.323234', '100.234565', 150, 200, 1, 1, 0, 0],
+        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', 'poap_company_name', 'poap_company_logo', 11111111, 22222222, '30.323234', '100.234565', 150, 200, '1100'],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -776,7 +776,7 @@ async function claimItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws0, tws1, Number(applicationId), Number(itemAsaId),'30.323234', '100.234565', 1661859876,'0'],
+        methodArgs: [tws0, tws1, Number(applicationId),'30.323234', '100.234565', 1661859876,'0'],
         ...commonParams
     })
     logger.info('------------------------------')

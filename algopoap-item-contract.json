@@ -86,20 +86,8 @@
                     "name": "poap_attendee_qty"
                 },
                 {
-                    "type": "uint8",
-                    "name": "poaP_has_nft"
-                },
-                {
-                    "type": "uint8",
-                    "name": "poap_has_geo"
-                },
-                {
-                    "type": "uint8",
-                    "name": "poap_has_sig"
-                },
-                {
-                    "type": "uint8",
-                    "name": "poap_has_qrcode"
+                    "type": "string",
+                    "name": "poap_switches"
                 }
             ],
             "returns": {
@@ -187,21 +175,10 @@
                     "name": "poap_attendee_qty"
                 },
                 {
-                    "type": "uint8",
-                    "name": "poaP_has_nft"
-                },
-                {
-                    "type": "uint8",
-                    "name": "poap_has_geo"
-                },
-                {
-                    "type": "uint8",
-                    "name": "poap_has_sig"
-                },
-                {
-                    "type": "uint8",
-                    "name": "poap_has_qrcode"
+                    "type": "string",
+                    "name": "poap_switches"
                 }
+              
             ],
             "returns": {
                 "type": "string"
