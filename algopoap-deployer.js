@@ -687,7 +687,7 @@ async function activateItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws0, tws1, Number(applicationId)],
+        methodArgs: [tws0, tws1, Number(applicationId),Number(itemAsaId)],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -695,7 +695,8 @@ async function activateItemContract(addr, acc) {
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
 
-        let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
+        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+        let res = buff.toString()
         logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
 
 

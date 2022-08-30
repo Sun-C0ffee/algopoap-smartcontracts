@@ -150,7 +150,7 @@ txn ApplicationArgs 0
 bnz method_setup
 
 // Checking application call's Arg 0 for activate method signature
-method "activate(pay,axfer,application)string"
+method "activate(pay,axfer,application,asset)string"
 txn ApplicationArgs 0
 ==
 bnz method_activate
@@ -302,14 +302,15 @@ itxn_begin
 itxn_field ConfigAsset
 int acfg
 itxn_field TypeEnum
-txn Sender
-itxn_field ConfigAssetFreeze
-txn Sender
-itxn_field ConfigAssetClawback
+
+
 global CurrentApplicationAddress
 dup
+dup2
 itxn_field ConfigAssetManager
 itxn_field ConfigAssetReserve
+itxn_field ConfigAssetFreeze
+itxn_field ConfigAssetClawback
 
 itxn_submit
 byte 0x151f7c75
@@ -444,7 +445,7 @@ int 1
 app_global_put
 
 byte 0x151f7c75
-byte "algopoap:item:claimed:"
+byte "algopoap_item_claimed"
 concat
 txn Sender
 concat
@@ -464,28 +465,24 @@ app_global_put
 byte "poap_asa_id"
 app_global_get
 store 1
-txn Sender
-dup
+global CurrentApplicationAddress
 store 2
-store 3
 int 1
+store 3
+byte "poap_author_address"
+app_global_get
 store 4
+
 callsub sub_send_nft
 byte 0x151f7c75
-byte "algopoap:item:activate:"
-concat
-global CurrentApplicationID
-itob
+byte "algopoap_item_activate"
 concat
 b b_log_return
 
 // Handles release method
 method_release:
 byte 0x151f7c75
-byte "algopoap:item:released:"
-concat
-global CurrentApplicationID
-itob
+byte "algopoap_item_released"
 concat
 b b_log_return
 

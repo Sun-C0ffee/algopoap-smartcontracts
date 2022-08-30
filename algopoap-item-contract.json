@@ -222,12 +222,16 @@
                 {
                     "type": "application",
                     "name": "parent_application"
+                },
+                {
+                    "type": "asset",
+                    "name": "nft_asa"
                 }
             ],
             "returns": {
                 "type": "string"
             },
-            "desc": "Activates an AlgoPoaP item smart contract and returns all metrics"
+            "desc": "Activates an AlgoPoaP item smart contract and returns string"
         },
         {
             "name": "claim",
