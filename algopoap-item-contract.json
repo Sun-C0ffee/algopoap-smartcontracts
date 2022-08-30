@@ -18,7 +18,7 @@
                     "name": "pay_min_fee"
                 },
                 {
-                    "type": "address",
+                    "type": "account",
                     "name": "author_account"
                 },
                 {
@@ -113,7 +113,7 @@
                     "name": "pay_min_fee"
                 },
                 {
-                    "type": "address",
+                    "type": "account",
                     "name": "author_account"
                 },
                 {
