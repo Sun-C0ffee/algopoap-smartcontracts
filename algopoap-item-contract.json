@@ -26,34 +26,6 @@
                     "name": "parent_application"
                 },
                 {
-                    "type": "uint16",
-                    "name": "poap_lat_1"
-                },
-                {
-                    "type": "uint48",
-                    "name": "poap_lat_2"
-                },
-                {
-                    "type": "uint24",
-                    "name": "poap_lng_1"
-                },
-                {
-                    "type": "uint48",
-                    "name": "poap_lng_2"
-                },
-                {
-                    "type": "uint24",
-                    "name": "poap_geo_buffer"
-                },
-                {
-                    "type": "uint64",
-                    "name": "poap_start_timestamp"
-                },
-                {
-                    "type": "uint64",
-                    "name": "poap_end_timestamp"
-                },
-                {
                     "type": "string",
                     "name": "poap_name"
                 },
@@ -90,6 +62,26 @@
                     "name": "poap_company_logo"
                 },
                 {
+                    "type": "uint64",
+                    "name": "poap_start_timestamp"
+                },
+                {
+                    "type": "uint64",
+                    "name": "poap_end_timestamp"
+                },
+                
+                {
+                    "type": "string",
+                    "name": "poap_lat"
+                },
+                {
+                    "type": "string",
+                    "name": "poap_lng"
+                },
+                {
+                    "type": "uint64",
+                    "name": "poap_geo_buffer"
+                },      {
                     "type": "bool",
                     "name": "poaP_has_nft"
                 },

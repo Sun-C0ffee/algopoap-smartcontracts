@@ -26,6 +26,7 @@
 // 9: timestamp of claim time
 // 10: The secret Attendee will be presented with in QRCode form to scan during claim and send as string arg.
 // 11: Author Address store
+// 12: Arg 15 for extraction
 
 // Local state schema for algopoap author
 //TODO local states...
@@ -137,7 +138,7 @@ b b_error
 b_method_check:
 
 // Checking application call's Arg 0 for activate method signature
-method "setup(pay,address,application,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,string,string,string,string,bool,bool,bool,bool)string"
+method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,bool,bool,bool,bool)string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
@@ -606,80 +607,93 @@ app_global_put
 // Args to Global states PoaP data
 // setup(pay,account,application,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,string,string,string,bool,bool,bool,bool)byte[]
 
-byte "poap_lat_1"
+
+
+byte "poap_name"
 txn ApplicationArgs 1
 app_global_put
 
-byte "poap_lat_2"
+byte "poap_logo"
 txn ApplicationArgs 2
 app_global_put
 
-byte "poap_lng_1"
+byte "poap_desc"
 txn ApplicationArgs 3
 app_global_put
 
-byte "poap_lng_2"
+byte "poap_timezone"
 txn ApplicationArgs 4
 app_global_put
 
-byte "poap_geo_buffer"
+byte "poap_address"
 txn ApplicationArgs 5
 app_global_put
 
-byte "poap_start_timestamp"
+byte "poap_url"
 txn ApplicationArgs 6
 app_global_put
 
-byte "poap_end_timestamp"
+byte "poap_email"
 txn ApplicationArgs 7
 app_global_put
 
-byte "poap_name"
+byte "poap_company_name"
 txn ApplicationArgs 8
 app_global_put
 
-byte "poap_logo"
+byte "poap_company_logo"
 txn ApplicationArgs 9
 app_global_put
 
-byte "poap_desc"
+
+byte "poap_start_timestamp"
 txn ApplicationArgs 10
 app_global_put
 
-byte "poap_address"
+byte "poap_end_timestamp"
 txn ApplicationArgs 11
 app_global_put
 
-byte "poap_url"
+byte "poap_lat"
 txn ApplicationArgs 12
 app_global_put
 
-byte "poap_email"
+byte "poap_lng"
 txn ApplicationArgs 13
 app_global_put
 
-byte "poap_company_name"
+
+byte "poap_geo_buffer"
 txn ApplicationArgs 14
 app_global_put
 
-byte "poap_company_logo"
-txn ApplicationArgs 16
-app_global_put
 
+txn ApplicationArgs 15
+store 12
+
+// Implement many args on index 15 with extraction opcodes
 byte "poap_has_nft"
-txn ApplicationArgs 17
+load 12
+int 0
+extract_uint64
 app_global_put
 
 byte "poap_has_geo"
-txn ApplicationArgs 18
+load 12
+int 8
+extract_uint64
 app_global_put
 
 byte "poap_has_sig"
-txn ApplicationArgs 19
+load 12
+int 16
+extract_uint64
 app_global_put
 
 byte "poap_has_qrcode"
-txn ApplicationArgs 20
+load 12
+int 24
+extract_uint64
 app_global_put
 
 
