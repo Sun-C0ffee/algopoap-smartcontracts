@@ -564,6 +564,17 @@ byte "poap_item_sig_check_count"
 app_global_del
 byte "poap_item_qr_check_count"
 app_global_del
+byte "poap_item_apply_count"
+app_global_del
+
+byte "poap_item_issuance_count"
+app_global_del
+byte "poap_item_last_apply"
+app_global_del
+byte "poap_item_last_issuance"
+app_global_del
+
+
 
 // Global states metrics setup
 byte "poap_item_onboard_count"
@@ -574,13 +585,8 @@ byte "poap_item_txn_count"
 int 0
 app_global_put
 
-byte "poap_item_apply_count"
-int 0
-app_global_put
 
-byte "poap_item_issuance_count"
-int 0
-app_global_put
+
 
 byte "poap_item_nft_issuance_count"
 int 0
@@ -601,13 +607,9 @@ byte "poap_item_last_attendee"
 byte "-"
 app_global_put
 
-byte "poap_item_last_apply"
-byte "-"
-app_global_put
 
-byte "poap_item_last_issuance"
-byte "-"
-app_global_put
+
+
 
 byte "poap_item_last_nft_issuance"
 byte "-"
@@ -726,6 +728,12 @@ b b_log_return
 // Handles logging the last element on the stack then put a 1 on the top and return (log and approve)
 b_log_return:
 log
+byte "poap_item_txn_count"
+dup
+app_global_get
+int 1
++
+app_global_put
 int 1
 return
 
