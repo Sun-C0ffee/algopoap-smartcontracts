@@ -336,8 +336,7 @@ retsub
 
 // Handles the timestamp from args is bigger than timestamp of AlgoPoaP activation
 sub_check_timestamp:
-int 1661864667
-
+global LatestTimestamp
 byte "poap_activate_time"
 app_global_get
 >=
@@ -461,8 +460,6 @@ byte "true"
 app_global_put
 byte "poap_activate_time"
 global LatestTimestamp
-int 1000
-/
 app_global_put
 
 byte "poap_asa_id"
