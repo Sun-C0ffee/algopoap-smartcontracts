@@ -219,7 +219,14 @@ byte "poap_item_last_attendee"
 txn Sender
 app_global_put
 
-byte "algopoap_item_optin:"
+byte "poap_item_onboard_count"
+dup
+app_global_get
+int 1
++
+app_global_put
+
+byte "algopoap_item_optin"
 txn Sender
 concat
 b b_log_return
@@ -332,6 +339,12 @@ itxn_field AssetAmount
 load 4
 itxn_field AssetReceiver
 itxn_submit
+byte "poap_item_nft_issuance_count"
+dup
+app_global_get
+int 1
++
+app_global_put
 retsub
 
 // Handles the timestamp from args is bigger than timestamp of AlgoPoaP activation
@@ -546,7 +559,8 @@ b b_log_return
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
 callsub sub_check_author 
-
+byte "poap_item_attendee_count"
+app_global_del
 
 // Global states metrics setup
 byte "poap_item_onboard_count"
@@ -585,9 +599,8 @@ byte "poap_item_sig_check_count"
 int 0
 app_global_put
 
-byte "poap_item_attendee_count"
-int 0
-app_global_put
+
+
 
 byte "poap_item_last_attendee"
 byte "-"
@@ -671,6 +684,8 @@ load 12
 int 0
 extract_uint64
 app_global_put
+
+
 
 byte "poap_has_nft"
 load 12
