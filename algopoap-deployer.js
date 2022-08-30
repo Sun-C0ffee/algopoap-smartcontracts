@@ -459,7 +459,7 @@ async function deployItemContract(addr, acc) {
         signer: signer
     }
     let method = getMethodByName("item_create", contract)
-    
+
     const ptxn = new algosdk.Transaction({
         from: acc.addr,
         to: applicationAddr,
@@ -471,14 +471,14 @@ async function deployItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws,compiledResultUint8, compiledClearResultUint8],
+        methodArgs: [tws, compiledResultUint8, compiledClearResultUint8],
         ...commonParams
     })
     logger.info('------------------------------')
     logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
-      
+
         let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
         logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
 
@@ -511,18 +511,18 @@ async function updateItemContract(addr, acc) {
         signer: signer
     }
     let method = getMethodByName("item_update", contract)
-    
+
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [applicationItemId,compiledResultUint8, compiledClearResultUint8],
+        methodArgs: [applicationItemId, compiledResultUint8, compiledClearResultUint8],
         ...commonParams
     })
     logger.info('------------------------------')
     logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
-      
+
         let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
         logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
 
@@ -544,7 +544,7 @@ async function deleteItemContract(addr, acc) {
         signer: signer
     }
     let method = getMethodByName("item_delete", contract)
-    
+
 
     atc.addMethodCall({
         method: method,
@@ -555,8 +555,8 @@ async function deleteItemContract(addr, acc) {
     logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
-      
-        
+
+
         logger.info("AlgoPoaP Main Contract ABI Exec method result: void");
 
 
@@ -586,18 +586,18 @@ async function setupItemContract(addr, acc) {
 
     const tws = { txn: ptxn, signer: signer }
     let method = getMethodByName("setup", contract)
-    
-//method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,bool,bool,bool,bool)string"
+
+    //method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,bool,bool,bool,bool)string"
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws,addr, Number(applicationId),'poap_name','poap_logo','poap_desc','poap_timezone','poap_address','poap_url','poap_email','poap_company_name','poap_company_logo',11111111,22222222, '30.323234','100.234565', 150,200,1,1,0,0],
+        methodArgs: [tws, addr, Number(applicationId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', 'poap_company_name', 'poap_company_logo', 11111111, 22222222, '30.323234', '100.234565', 150, 200, 1, 1, 0, 0],
         ...commonParams
     })
     logger.info('------------------------------')
     logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
-      
+
         let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
         logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
 
@@ -628,18 +628,67 @@ async function reSetupItemContract(addr, acc) {
 
     const tws = { txn: ptxn, signer: signer }
     let method = getMethodByName("re_setup", contract)
-    
-//method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,bool,bool,bool,bool)string"
+
+    //method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,bool,bool,bool,bool)string"
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws,addr, Number(applicationId),Number(itemAsaId),'poap_name','poap_logo','poap_desc','poap_timezone','poap_address','poap_url','poap_email','poap_company_name','poap_company_logo',11111111,22222222, '30.323234','100.234565', 150,200,1,1,0,0],
+        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', 'poap_company_name', 'poap_company_logo', 11111111, 22222222, '30.323234', '100.234565', 150, 200, 1, 1, 0, 0],
         ...commonParams
     })
     logger.info('------------------------------')
     logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
-      
+
+        let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
+        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+
+
+    }
+}
+async function activateItemContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer()
+    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
+    const filePathContractSchema = path.join(__dirname, 'algopoap-item-contract.json');
+
+
+    const buff = await fs.promises.readFile(filePathContractSchema);
+    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    const commonParams = {
+        appID: Number(Number(applicationItemId)),
+        sender: acc.addr,
+        suggestedParams: params,
+        signer: signer
+    }
+    const ptxn = new algosdk.Transaction({
+        from: acc.addr,
+        to: applicationAddr,
+        amount: 100000,
+        ...params
+    })
+    const atxn = new algosdk.Transaction({
+        from: acc.addr,
+        to: acc.addr,
+        assetIndex: itemAsaId,
+        amount: 0,
+        ...params
+    })
+
+    const tws0 = { txn: ptxn, signer: signer }
+    const tws1 = { txn: atxn, signer: signer }
+    let method = getMethodByName("activate", contract)
+
+    atc.addMethodCall({
+        method: method,
+        methodArgs: [tws0, tws1, Number(applicationId)],
+        ...commonParams
+    })
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+    const result = await atc.execute(algodClient, 2)
+    for (const idx in result.methodResults) {
+
         let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
         logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
 
@@ -790,7 +839,7 @@ async function runDeployer() {
             try {
 
                 await deployItemContract(accountObject.addr, accountObject)
-    
+
 
 
 
@@ -805,7 +854,7 @@ async function runDeployer() {
             try {
 
                 await updateItemContract(accountObject.addr, accountObject)
-    
+
 
 
 
@@ -820,7 +869,7 @@ async function runDeployer() {
             try {
 
                 await deleteItemContract(accountObject.addr, accountObject)
-    
+
 
 
 
@@ -834,15 +883,26 @@ async function runDeployer() {
         {
             try {
 
-                if(Number(itemAsaId)>0){
+                if (Number(itemAsaId) > 0) {
                     await reSetupItemContract(accountObject.addr, accountObject)
-                }else{
+                } else {
                     await setupItemContract(accountObject.addr, accountObject)
                 }
-    
 
 
 
+
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_item_activate']) {
+        {
+            try {
+
+                await activateItemContract(accountObject.addr, accountObject)
             }
             catch (err) {
                 logger.error(err);
