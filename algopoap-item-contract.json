@@ -66,10 +66,6 @@
                     "name": "poap_start_timestamp"
                 },
                 {
-                    "type": "uint64",
-                    "name": "poap_end_timestamp"
-                },
-                {
                     "type": "string",
                     "name": "poap_lat"
                 },
@@ -153,10 +149,6 @@
                 {
                     "type": "uint64",
                     "name": "poap_start_timestamp"
-                },
-                {
-                    "type": "uint64",
-                    "name": "poap_end_timestamp"
                 },
                 {
                     "type": "string",

@@ -138,14 +138,14 @@ b b_error
 
 b_method_check:
 
-// Checking application call's Arg 0 for activate method signature
-method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,uint64,string)string"
+// Checking application call's Arg 0 for setup method signature
+method "setup(pay,address,application,string,string,string,string,string,string,string,string,uint64,string,string,uint64,uint64,string)string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
 
-// Checking application call's Arg 0 for activate method signature
-method "re_setup(pay,address,application,asset,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,uint64,string)string"
+// Checking application call's Arg 0 for re_setup method signature
+method "re_setup(pay,address,application,asset,string,string,string,string,string,string,string,uint64,string,string,uint64,uint64,string)string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
