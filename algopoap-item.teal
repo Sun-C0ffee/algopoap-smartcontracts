@@ -654,9 +654,7 @@ byte "poap_start_timestamp"
 txn ApplicationArgs 10
 app_global_put
 
-byte "poap_end_timestamp"
-txn ApplicationArgs 11
-app_global_put
+
 
 byte "poap_lat"
 txn ApplicationArgs 12
@@ -679,25 +677,33 @@ store 12
 byte "poap_has_nft"
 load 12
 int 0
-extract_uint64
+int 1
+substring3
+btoi
 app_global_put
 
 byte "poap_has_geo"
 load 12
-int 8
-extract_uint64
+int 1
+int 2
+substring3
+btoi
 app_global_put
 
 byte "poap_has_sig"
 load 12
-int 16
-extract_uint64
+int 2
+int 3
+substring3
+btoi
 app_global_put
 
 byte "poap_has_qrcode"
 load 12
-int 24
-extract_uint64
+int 3
+int 4
+substring3
+btoi
 app_global_put
 
 
