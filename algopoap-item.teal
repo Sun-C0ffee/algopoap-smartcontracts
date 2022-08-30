@@ -54,9 +54,7 @@
 // Uint64 poap_item_issuance_count
 // Uint64 poap_item_nft_issuance_count
 // Uint64 poap_item_txn_issuance_count
-// Uint64 poap_item_geo_check_count
-// Uint64 poap_item_qr_check_count
-// Uint64 poap_item_sig_check_count
+
 
 
 // Byte poap_item_last_attendee
@@ -560,6 +558,12 @@ method_setup:
 callsub sub_check_author 
 byte "poap_item_attendee_count"
 app_global_del
+byte "poap_item_geo_check_count"
+app_global_del
+byte "poap_item_sig_check_count"
+app_global_del
+byte "poap_item_qr_check_count"
+app_global_del
 
 // Global states metrics setup
 byte "poap_item_onboard_count"
@@ -586,17 +590,9 @@ byte "poap_item_txn_issuance_count"
 int 0
 app_global_put
 
-byte "poap_item_geo_check_count"
-int 0
-app_global_put
 
-byte "poap_item_qr_check_count"
-int 0
-app_global_put
 
-byte "poap_item_sig_check_count"
-int 0
-app_global_put
+
 
 
 
