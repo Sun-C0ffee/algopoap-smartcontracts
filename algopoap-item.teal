@@ -138,13 +138,13 @@ b b_error
 b_method_check:
 
 // Checking application call's Arg 0 for setup method signature
-method "setup(pay,address,application,string,string,string,string,string,string,string,string,uint64,string,string,uint64,uint64,uint64,uint64,uint64,uint64)string"
+method "setup(pay,account,application,string,string,string,string,string,string,string,string,uint64,string,string,uint64,uint64,uint64,uint64,uint64,uint64)string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
 
 // Checking application call's Arg 0 for re_setup method signature
-method "re_setup(pay,address,application,asset,string,string,string,string,string,string,string,uint64,string,string,uint64,uint64,uint64,uint64,uint64,uint64)string"
+method "re_setup(pay,account,application,asset,string,string,string,string,string,string,string,uint64,string,string,uint64,uint64,uint64,uint64,uint64,uint64)string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
@@ -549,6 +549,8 @@ b b_log_return
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
 callsub sub_check_author 
+
+
 // Global states metrics setup
 byte "poap_item_onboard_count"
 int 0
@@ -616,84 +618,86 @@ app_global_put
 
 
 byte "poap_name"
-txn ApplicationArgs 3
-app_global_put
-
-byte "poap_logo"
 txn ApplicationArgs 4
 app_global_put
 
-byte "poap_desc"
+byte "poap_logo"
 txn ApplicationArgs 5
 app_global_put
 
-byte "poap_timezone"
+byte "poap_desc"
 txn ApplicationArgs 6
 app_global_put
 
-byte "poap_address"
+byte "poap_timezone"
 txn ApplicationArgs 7
 app_global_put
 
-byte "poap_url"
+byte "poap_address"
 txn ApplicationArgs 8
 app_global_put
 
-byte "poap_email"
+byte "poap_url"
 txn ApplicationArgs 9
+app_global_put
+
+byte "poap_email"
+txn ApplicationArgs 10
 app_global_put
 
 
 byte "poap_start_timestamp"
-txn ApplicationArgs 10
+txn ApplicationArgs 11
 app_global_put
 
 
 
 byte "poap_lat"
-txn ApplicationArgs 11
+txn ApplicationArgs 12
 app_global_put
 
 byte "poap_lng"
-txn ApplicationArgs 12
+txn ApplicationArgs 13
 app_global_put
 
 
 byte "poap_geo_buffer"
-txn ApplicationArgs 13
-app_global_put
-
-byte "poap_attendee_qty"
 txn ApplicationArgs 14
 app_global_put
+
 
 txn ApplicationArgs 15
 store 12
 
-
-byte "poap_has_nft"
+byte "poap_attendee_qty"
 load 12
 int 0
 extract_uint64
 app_global_put
 
-
-byte "poap_has_geo"
+byte "poap_has_nft"
 load 12
 int 8
 extract_uint64
 app_global_put
 
 
-byte "poap_has_sig"
+byte "poap_has_geo"
 load 12
 int 16
 extract_uint64
 app_global_put
 
-byte "poap_has_qrcode"
+
+byte "poap_has_sig"
 load 12
 int 24
+extract_uint64
+app_global_put
+
+byte "poap_has_qrcode"
+load 12
+int 32
 extract_uint64
 app_global_put
 
