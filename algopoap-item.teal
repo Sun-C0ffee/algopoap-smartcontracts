@@ -143,6 +143,11 @@ txn ApplicationArgs 0
 ==
 bnz method_setup
 
+// Checking application call's Arg 0 for activate method signature
+method "re_setup(pay,address,application,asset,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,uint64,uint8,uint8,uint8,uint8)string"
+txn ApplicationArgs 0
+==
+bnz method_setup
 
 // Checking application call's Arg 0 for activate method signature
 method "activate(appl,pay,axfer)uint64"
@@ -288,6 +293,7 @@ retsub
 // Handles config of AlgoPoaP NFT during setup
 b_config_nft:
 dup
+itob
 store 0
 itxn_begin
 itxn_field ConfigAsset

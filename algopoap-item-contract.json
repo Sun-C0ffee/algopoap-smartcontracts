@@ -105,7 +105,108 @@
             "returns": {
                 "type": "string"
             },
-            "desc": "Sets up an AlgoPoaP smart contract item"
+            "desc": "Sets up an AlgoPoaP smart contract item for the first time"
+        },
+        {
+            "name": "re_setup",
+            "args": [
+                {
+                    "type": "pay",
+                    "name": "pay_min_fee"
+                },
+                {
+                    "type": "address",
+                    "name": "author_account"
+                },
+                {
+                    "type": "application",
+                    "name": "parent_application"
+                },
+                {
+                    "type": "asset",
+                    "name": "item_nft"
+                },
+                {
+                    "type": "string",
+                    "name": "poap_name"
+                },
+                {
+                    "type": "string",
+                    "name": "poap_logo"
+                },
+                {
+                    "type": "string",
+                    "name": "poap_desc"
+                },
+                {
+                    "type": "string",
+                    "name": "poap_timezone"
+                },
+                {
+                    "type": "string",
+                    "name": "poap_address"
+                },
+                {
+                    "type": "string",
+                    "name": "poap_url"
+                },
+                {
+                    "type": "string",
+                    "name": "poap_email"
+                },
+                {
+                    "type": "string",
+                    "name": "poap_company_name"
+                },
+                {
+                    "type": "string",
+                    "name": "poap_company_logo"
+                },
+                {
+                    "type": "uint64",
+                    "name": "poap_start_timestamp"
+                },
+                {
+                    "type": "uint64",
+                    "name": "poap_end_timestamp"
+                },
+                {
+                    "type": "string",
+                    "name": "poap_lat"
+                },
+                {
+                    "type": "string",
+                    "name": "poap_lng"
+                },
+                {
+                    "type": "uint64",
+                    "name": "poap_geo_buffer"
+                },
+                {
+                    "type": "uint64",
+                    "name": "poap_attendee_qty"
+                },
+                {
+                    "type": "uint8",
+                    "name": "poaP_has_nft"
+                },
+                {
+                    "type": "uint8",
+                    "name": "poap_has_geo"
+                },
+                {
+                    "type": "uint8",
+                    "name": "poap_has_sig"
+                },
+                {
+                    "type": "uint8",
+                    "name": "poap_has_qrcode"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            },
+            "desc": "Sets up an AlgoPoaP smart contract item after first setup"
         },
         {
             "name": "activate",

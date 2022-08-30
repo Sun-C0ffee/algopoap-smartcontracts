@@ -27,6 +27,7 @@
     "delete_apps": false,
     "setup_app": false,
     "test_metrics": false,
+    "item_asa_id":"107311388",
     "test_item_create": false,
     "test_item_update_app": 107303112,
     "test_item_update": false,

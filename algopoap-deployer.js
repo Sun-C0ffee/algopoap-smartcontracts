@@ -19,6 +19,7 @@ let indexerPort;
 let applicationAddr = config.algorand.asc_main_address;
 let applicationId = config.algorand.asc_main_id;
 let applicationItemId = config.deployer.test_item_update_app;
+let itemAsaId = config.deployer.item_asa_id;
 let accountObject;
 let accountAddress;
 let accountBalance;
@@ -603,6 +604,48 @@ async function setupItemContract(addr, acc) {
 
     }
 }
+async function reSetupItemContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer()
+    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
+    const filePathContractSchema = path.join(__dirname, 'algopoap-item-contract.json');
+
+
+    const buff = await fs.promises.readFile(filePathContractSchema);
+    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    const commonParams = {
+        appID: Number(Number(applicationItemId)),
+        sender: acc.addr,
+        suggestedParams: params,
+        signer: signer
+    }
+    const ptxn = new algosdk.Transaction({
+        from: acc.addr,
+        to: applicationAddr,
+        amount: 100000,
+        ...params
+    })
+
+    const tws = { txn: ptxn, signer: signer }
+    let method = getMethodByName("re_setup", contract)
+    
+//method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,bool,bool,bool,bool)string"
+    atc.addMethodCall({
+        method: method,
+        methodArgs: [tws,addr, Number(applicationId),Number(itemAsaId),'poap_name','poap_logo','poap_desc','poap_timezone','poap_address','poap_url','poap_email','poap_company_name','poap_company_logo',11111111,22222222, '30.323234','100.234565', 150,200,1,1,0,0],
+        ...commonParams
+    })
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+    const result = await atc.execute(algodClient, 2)
+    for (const idx in result.methodResults) {
+      
+        let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
+        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+
+
+    }
+}
 async function deployerAccount() {
 
     try {
@@ -791,7 +834,11 @@ async function runDeployer() {
         {
             try {
 
-                await setupItemContract(accountObject.addr, accountObject)
+                if(Number(itemAsaId)>0){
+                    await reSetupItemContract(accountObject.addr, accountObject)
+                }else{
+                    await setupItemContract(accountObject.addr, accountObject)
+                }
     
 
 
