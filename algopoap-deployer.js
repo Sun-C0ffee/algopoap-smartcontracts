@@ -486,6 +486,10 @@ async function deployItemContract(addr, acc) {
     }
 }
 async function updateItemContract(addr, acc) {
+    localInts = config.deployer['num_local_int'];
+    localBytes = config.deployer['num_local_byte'];
+    globalInts = config.deployer['num_global_int'];
+    globalBytes = config.deployer['num_global_byte'];
     let params = await algodClient.getTransactionParams().do();
     const atc = new algosdk.AtomicTransactionComposer()
     const signer = algosdk.makeBasicAccountTransactionSigner(acc)
@@ -512,10 +516,10 @@ async function updateItemContract(addr, acc) {
     }
     let method = getMethodByName("item_update", contract)
 
-
+let application = Number(applicationItemId)
     atc.addMethodCall({
         method: method,
-        methodArgs: [applicationItemId, compiledResultUint8, compiledClearResultUint8],
+        methodArgs: [application, compiledResultUint8, compiledClearResultUint8],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -662,6 +666,7 @@ async function activateItemContract(addr, acc) {
         signer: signer
     }
     const ptxn = new algosdk.Transaction({
+        type: 'pay',
         from: acc.addr,
         to: applicationAddr,
         amount: 100000,

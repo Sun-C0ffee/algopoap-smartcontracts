@@ -291,9 +291,9 @@ int 2
 swap
 substring3
 itxn_field ClearStateProgram
-int 20
+int 30
 itxn_field GlobalNumByteSlice
-int 20
+int 30
 itxn_field GlobalNumUint
 int 8
 itxn_field LocalNumUint

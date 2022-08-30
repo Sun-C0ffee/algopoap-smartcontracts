@@ -225,7 +225,7 @@
                 }
             ],
             "returns": {
-                "type": "byte[]"
+                "type": "string"
             },
             "desc": "Activates an AlgoPoaP item smart contract and returns all metrics"
         },

@@ -150,7 +150,7 @@ txn ApplicationArgs 0
 bnz method_setup
 
 // Checking application call's Arg 0 for activate method signature
-method "activate(pay,axfer, application)uint64"
+method "activate(pay,axfer,application)string"
 txn ApplicationArgs 0
 ==
 bnz method_activate
@@ -238,6 +238,7 @@ b b_log_return
 
 // Handles update of an item AlgoPoaP smart contract
 b_update:
+
 callsub sub_check_owner
 byte 0x151f7c75
 byte "algopoap_item_update"

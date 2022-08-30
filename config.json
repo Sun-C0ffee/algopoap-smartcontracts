@@ -27,21 +27,21 @@
     "delete_apps": false,
     "setup_app": false,
     "test_metrics": false,
-    "item_asa_id":"107311388",
+    "item_asa_id":"",
     "test_item_create": false,
-    "test_item_update_app": 107303112,
+    "test_item_update_app": 107325601,
     "test_item_update": false,
-    "test_item_delete_app": 107303112,
+    "test_item_delete_app": 107325601,
     "test_item_delete": false,
-    "test_item_setup_app": 107303112,
+    "test_item_setup_app": 107325601,
     "test_item_setup": false,
-    "test_item_activate_app": 107303112,
-    "test_item_activate": true,
+    "test_item_activate_app": 107325601,
+    "test_item_activate": false,
     "apps_to_delete": [],
     "num_local_int":8,
     "num_local_byte":8,
-    "num_global_int":20,
-    "num_global_byte":20
+    "num_global_int":30,
+    "num_global_byte":30
   
   }
 }
