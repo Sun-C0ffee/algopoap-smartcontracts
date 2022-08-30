@@ -163,7 +163,7 @@ txn ApplicationArgs 0
 bnz method_release
 
 // Checking application call's Arg 0 for claim method signature
-method "claim(pay,axfer,application,string,string,uint64,string)string"
+method "claim(asset,application,pay,axfer,string,string,uint64,string)string"
 txn ApplicationArgs 0
 ==
 bnz method_claim
@@ -337,7 +337,8 @@ retsub
 
 // Handles the timestamp from args is bigger than timestamp of AlgoPoaP activation
 sub_check_timestamp:
-load 7
+int 1661864667
+
 byte "poap_activate_time"
 app_global_get
 >=
@@ -347,11 +348,11 @@ retsub
 // Handles the geo parameters from args is bigger than timestamp of AlgoPoaP activation
 sub_check_geo:
 
-byte "poap_lat_1"
+byte "poap_lat"
 app_global_get
 load 5
 ==
-byte "poap_lng_1"
+byte "poap_lng"
 app_global_get
 load 7
 ==
@@ -431,11 +432,13 @@ byte "poap_asa_id"
 app_global_get
 store 1
 txn Sender
-dup
 store 2
-store 3
 int 1
+store 3
+byte "poap_author_address"
+app_global_get
 store 4
+
 callsub sub_send_nft
 
 byte "poap_item_claim_count"
@@ -448,8 +451,6 @@ app_global_put
 byte 0x151f7c75
 byte "algopoap_item_claimed"
 concat
-txn Sender
-concat
 b b_log_return
 
 // Handles activate method
@@ -461,6 +462,8 @@ byte "true"
 app_global_put
 byte "poap_activate_time"
 global LatestTimestamp
+int 1000
+/
 app_global_put
 
 byte "poap_asa_id"

@@ -198,16 +198,20 @@
             "name": "claim",
             "args": [
                 {
+                    "type": "asset",
+                    "name": "nft_asset"
+                },
+                {
+                    "type": "application",
+                    "name": "parent_application"
+                },
+                {
                     "type": "pay",
                     "name": "pay_min_fee"
                 },
                 {
                     "type": "axfer",
                     "name": "optin_algopoap_nft"
-                },
-                {
-                    "type": "application",
-                    "name": "parent_application"
                 },
                 {
                     "type": "string",

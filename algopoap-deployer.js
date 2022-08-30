@@ -775,7 +775,7 @@ async function claimItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws0, tws1, Number(applicationId),'30.323234', '100.234565', 1661863667,'0'],
+        methodArgs: [Number(itemAsaId),Number(applicationId),tws0, tws1, '30.323234', '100.234565', 1661864667,'0'],
         ...commonParams
     })
     logger.info('------------------------------')
