@@ -589,7 +589,7 @@ async function setupItemContract(addr, acc) {
 //method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,uint64,uint64,string,string,uint64,bool,bool,bool,bool)string"
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws,addr, Number(applicationId),'poap_name','poap_logo','poap_desc','poap_timezone','poap_address','poap_url','poap_email','poap_company_name','poap_company_logo',11111111,22222222, '30.323234','100.234565', 150,true,true,false,false],
+        methodArgs: [tws,addr, Number(applicationId),'poap_name','poap_logo','poap_desc','poap_timezone','poap_address','poap_url','poap_email','poap_company_name','poap_company_logo',11111111,22222222, '30.323234','100.234565', 150,1,1,0,0],
         ...commonParams
     })
     logger.info('------------------------------')

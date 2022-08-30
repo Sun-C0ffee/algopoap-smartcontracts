@@ -82,19 +82,19 @@
                     "type": "uint64",
                     "name": "poap_geo_buffer"
                 },      {
-                    "type": "bool",
+                    "type": "uint8",
                     "name": "poaP_has_nft"
                 },
                 {
-                    "type": "bool",
+                    "type": "uint8",
                     "name": "poap_has_geo"
                 },
                 {
-                    "type": "bool",
+                    "type": "uint8",
                     "name": "poap_has_sig"
                 },
                 {
-                    "type": "bool",
+                    "type": "uint8",
                     "name": "poap_has_qrcode"
                 }
                 
