@@ -670,7 +670,7 @@ async function activateItemContract(addr, acc) {
     const atxn = new algosdk.Transaction({
         from: acc.addr,
         to: acc.addr,
-        assetIndex: itemAsaId,
+        assetIndex: Number(itemAsaId),
         amount: 0,
         ...params
     })
