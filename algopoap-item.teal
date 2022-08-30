@@ -399,13 +399,13 @@ b_has_sig:
 callsub sub_check_release
 byte "poap_has_geo"
 app_global_get
-byte "true"
+int 1
 ==
 bnz b_has_geo
 
 byte "poap_has_qrcode"
 app_global_get
-byte "true"
+int 1
 ==
 bnz b_has_qr
 b b_finalize_claim
@@ -415,7 +415,7 @@ b_has_geo:
 callsub sub_check_geo
 byte "poap_has_qrcode"
 app_global_get
-byte "true"
+int 1
 ==
 bnz b_has_qr
 b b_finalize_claim
@@ -510,19 +510,19 @@ callsub sub_check_timestamp
 
 byte "poap_has_sig"
 app_global_get
-byte "true"
+int 1
 ==
 bnz b_has_sig
 
 byte "poap_has_geo"
 app_global_get
-byte "true"
+int 1
 ==
 bnz b_has_geo
 
 byte "poap_has_qrcode"
 app_global_get
-byte "true"
+int 1
 ==
 bnz b_has_qr
 b b_finalize_claim

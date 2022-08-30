@@ -30,7 +30,7 @@
     "item_asa_id":"107325874",
     "test_item_create": false,
     "test_item_update_app": 107325601,
-    "test_item_update": false,
+    "test_item_update": true,
     "test_item_delete_app": 107325601,
     "test_item_delete": false,
     "test_item_setup_app": 107325601,
