@@ -594,7 +594,7 @@ async function setupItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws,account, Number(applicationId),'-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', 1661863665, '30.323234', '100.234565', 150, 200,1,0,1,0],
+        methodArgs: [tws,account, Number(applicationId),'-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', 1661863665, '30.323234', '100.234565', 150, 200,1,1,1,0],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -635,7 +635,7 @@ async function reSetupItemContract(addr, acc) {
 
    atc.addMethodCall({
         method: method,
-        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', 1661863665, '30.323234', '100.234565', 150, 200,1,0,1,0],
+        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', 1661863665, '30.323234', '100.234565', 150, 200,1,1,1,0],
         ...commonParams
     })
     logger.info('------------------------------')

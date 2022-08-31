@@ -352,34 +352,28 @@ retsub
 // Handles the geo parameters from args is bigger than timestamp of AlgoPoaP activation
 //TODO correct the geo handling and checking
 sub_check_geo:
-
 byte "poap_lat"
 app_global_get
-load 5
-==
-byte "poap_lng"
-app_global_get
-load 6
-==
-&&
-assert
+int 0
+int 2
+substring3
+store 11
+byte "poap_lat_temp"
+load 11
+btoi
+app_global_put
 
-//TODO the geo checking is very naive and not  correctly implemented here,
-// but since this is for MVP version, this suffices!
-byte "poap_lat"
-app_global_get
-load 5
--
-int 1000
-<
 byte "poap_lng"
 app_global_get
-load 6
--
-int 1000
-<
-&&
-assert
+int 0
+int 2
+substring3
+store 12
+byte "poap_lng_temp"
+load 12
+btoi
+app_global_put
+
 retsub
 
 // Handles checking the signature for release to exist
