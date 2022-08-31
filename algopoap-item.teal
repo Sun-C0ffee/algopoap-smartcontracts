@@ -185,7 +185,7 @@ txn ApplicationArgs 0
 bnz method_release
 
 // Checking application call's Arg 0 for claim method signature
-method "claim(asset,application,pay,axfer,string,(uint64,uint64,uint64,uint64,uint64))string"
+method "claim(pay,asset,application,account,string,(uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_claim
@@ -585,8 +585,13 @@ b b_log_return
 
 // Handles claim method
 method_claim:
+int 0
+global CurrentApplicationID
+app_opted_in
+assert
+
 global GroupSize
-int 3
+int 2
 ==
 assert
 
@@ -608,30 +613,6 @@ int pay
 assert
 
 gtxn 0 Fee
-global MinTxnFee
-int 100
-+
-<=
-assert
-
-gtxn 1 RekeyTo
-global ZeroAddress
-==
-assert
-gtxn 1 CloseRemainderTo
-global ZeroAddress
-==
-assert
-gtxn 1 AssetCloseTo
-global ZeroAddress
-==
-assert
-gtxn 1 TypeEnum
-int axfer
-==
-assert
-
-gtxn 1 Fee
 global MinTxnFee
 int 100
 +

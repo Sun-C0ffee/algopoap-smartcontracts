@@ -94,14 +94,6 @@ async function waitForConfirmation(txId) {
     }
 }
 
-const keypress = async () => {
-    process.stdin.setRawMode(true)
-    return new Promise(resolve => process.stdin.once('data', () => {
-        process.stdin.setRawMode(false)
-        resolve()
-    }))
-}
-
 async function fetchAlgoWalletInfo() {
     if (algosdk.isValidAddress(accountObject.addr)) {
         const url = `https://algoindexer.testnet.algoexplorerapi.io/v2/accounts/${accountObject.addr}`;
@@ -738,6 +730,27 @@ async function releaseItemContract(addr, acc) {
 
     }
 }
+async function optinItemContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    let appTxn = algosdk.makeApplicationOptInTxn(addr, params, Number(applicationId));
+    let appTxnItem = algosdk.makeApplicationOptInTxn(addr, params, Number(applicationItemId));
+    let appTxnId = appTxn.txID().toString();
+    let appTxnIdItem = appTxnItem.txID().toString();
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Main Application Optin TXId =  %s", appTxnId);
+    logger.info("AlgoPoaP Item Application Optin TXId =  %s", appTxnIdItem);
+    let signedAppTxn = appTxn.signTxn(acc.sk);
+    let signedAppTxnItem = appTxnItem.signTxn(acc.sk);
+    await algodClient.sendRawTransaction(signedAppTxn).do();
+    await algosdk.waitForConfirmation(algodClient, appTxnId, 5)
+    await algodClient.sendRawTransaction(signedAppTxnItem).do();
+    await algosdk.waitForConfirmation(algodClient, appTxnIdItem, 5)
+    //await waitForConfirmation(appTxnId);
+    //let transactionResponse = await algodClient.pendingTransactionInformation(appTxnId).do();
+    logger.info('------------------------------')
+ 
+
+}
 async function claimItemContract(addr, acc) {
     let params = await algodClient.getTransactionParams().do();
     const atc = new algosdk.AtomicTransactionComposer()
@@ -760,22 +773,22 @@ async function claimItemContract(addr, acc) {
         amount: 100000,
         ...params
     })
-    const atxn = new algosdk.Transaction({
+    /* const atxn = new algosdk.Transaction({
         type: 'axfer',
         from: acc.addr,
         to: acc.addr,
         assetIndex: Number(itemAsaId),
         amount: 0,
         ...params
-    })
+    }) */
 
     const tws0 = { txn: ptxn, signer: signer }
-    const tws1 = { txn: atxn, signer: signer }
+   /*  const tws1 = { txn: atxn, signer: signer } */
     let method = getMethodByName("claim", contract)
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [Number(itemAsaId),Number(applicationId),tws0, tws1,'0', [30,323234,100,234565,1671942604]],
+        methodArgs: [tws0, /* tws1, */ Number(itemAsaId),Number(applicationId),addr,'0', [30,323234,100,234565,1671942604]],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -1005,6 +1018,17 @@ async function runDeployer() {
             try {
 
                 await releaseItemContract(accountObject.addr, accountObject)
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_item_optin']) {
+        {
+            try {
+
+                await optinItemContract(accountObject.addr, accountObject)
             }
             catch (err) {
                 logger.error(err);

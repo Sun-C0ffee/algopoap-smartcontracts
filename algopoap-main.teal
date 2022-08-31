@@ -275,7 +275,11 @@ b b_log_return
 
 // Handles ABI method call for contract to contract creation of an AlgoPoaP item
 method_item_create:
-// Checking the payment transaction with min required fees sum as amount
+int 0
+global CurrentApplicationID
+app_opted_in
+assert
+
 global GroupSize
 int 2
 ==
@@ -369,7 +373,10 @@ b b_log_return
 
 //Handles ABI method call for contract to contract update of an AlgoPoaP item
 method_item_update:
-
+int 0
+global CurrentApplicationID
+app_opted_in
+assert
 // Inner transaction to update the AlgoPoaP item smart contract
 itxn_begin
 
@@ -419,7 +426,10 @@ b b_log_return
 
 // Handles ABI method call for contract to contract deletion of an AlgoPoaP item
 method_item_delete:
-
+int 0
+global CurrentApplicationID
+app_opted_in
+assert
 // Inner transaction to delete the AlgoPoaP item smart contract
 itxn_begin
 

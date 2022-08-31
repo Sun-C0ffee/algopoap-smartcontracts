@@ -159,6 +159,10 @@
             "name": "claim",
             "args": [
                 {
+                    "type": "pay",
+                    "name": "pay_min_fee"
+                },
+                {
                     "type": "asset",
                     "name": "nft_asset"
                 },
@@ -167,12 +171,8 @@
                     "name": "parent_application"
                 },
                 {
-                    "type": "pay",
-                    "name": "pay_min_fee"
-                },
-                {
-                    "type": "axfer",
-                    "name": "optin_algopoap_nft"
+                    "type": "account",
+                    "name": "attendee_account"
                 },
                 {
                     "type": "string",
