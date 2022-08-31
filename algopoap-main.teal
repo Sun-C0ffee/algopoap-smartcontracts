@@ -36,12 +36,6 @@
 b b_main
 // Main ruter branch which checks the call and routes to designated branch
 b_main:
-byte "poap_attendee_count"
-app_global_del
-byte "poap_author_count"
-app_global_del
-
-
 txn RekeyTo
 global ZeroAddress
 ==
