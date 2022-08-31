@@ -13,21 +13,17 @@
 // AlgoPoaP Item Smart Contract
 
 // Scratch space schema
-// 0: Newly Created AlgoPoaP ASA ID
-// 1: ASA ID to use with NFT sender sub
+// 0: Poa P ASA ID (if hasNFT is true)
+// 1: Parent application ID
 // 2: ASA Sender address to use with NFT sender sub
-// 3: ASA Receiver address to use with NFT sender sub
-// 4: ASA Amount to use with NFT sender sub
+// 3: ASA Amount to use with NFT sender sub
+// 4: ASA Receiver address to use with NFT sender sub
 // 5: latitude
 // 6: longitude
 // 7: timestamp
 // 8: The QR secret
-
-
-
-
-// 11: Author Address store
-// 12: poap_switches for extraction
+// 9: Author Address
+// 12: Arg 15 for extraction
 
 // Local state schema for algopoap author
 //TODO local states...
@@ -327,7 +323,7 @@ sub_send_nft:
 itxn_begin
 int axfer
 itxn_field TypeEnum
-load 1
+load 0
 itxn_field XferAsset
 load 2
 itxn_field AssetSender
@@ -363,22 +359,22 @@ load 5
 ==
 byte "poap_lng"
 app_global_get
-load 7
+load 6
 ==
 &&
 assert
 
 //TODO the geo checking is very naive and not  correctly implemented here,
 // but since this is for MVP version, this suffices!
-byte "poap_lat_2"
+byte "poap_lat"
 app_global_get
-load 6
+load 5
 -
 int 1000
 <
-byte "poap_lng_2"
+byte "poap_lng"
 app_global_get
-load 8
+load 6
 -
 int 1000
 <
@@ -397,7 +393,7 @@ retsub
 
 // Handles checking the QR secret from args
 sub_check_qr_secret:
-load 9
+load 8
 byte "poap_qr_secret"
 app_global_get
 ==
@@ -439,7 +435,7 @@ b b_finalize_claim
 b_finalize_claim:
 byte "poap_asa_id"
 app_global_get
-store 1
+store 0
 txn Sender
 store 2
 int 1
@@ -475,7 +471,7 @@ app_global_put
 
 byte "poap_asa_id"
 app_global_get
-store 1
+store 0
 global CurrentApplicationAddress
 store 2
 int 1
@@ -641,35 +637,35 @@ app_global_put
 
 
 txn ApplicationArgs 15
-store 12
+store 10
 
 byte "poap_attendee_qty"
-load 12
+load 10
 int 0
 extract_uint64
 app_global_put
 
 
 byte "poap_has_nft"
-load 12
+load 10
 int 8
 extract_uint64
 app_global_put
 
 byte "poap_has_geo"
-load 12
+load 10
 int 16
 extract_uint64
 app_global_put
 
 byte "poap_has_sig"
-load 12
+load 10
 int 24
 extract_uint64
 app_global_put
 
 byte "poap_has_qrcode"
-load 12
+load 10
 int 32
 extract_uint64
 app_global_put
@@ -681,10 +677,8 @@ app_global_get_ex
 bnz b_config_nft
 callsub sub_create_nft
 byte 0x151f7c75
-load 12
 load 0
 itob
-concat
 concat
 b b_log_return
 
