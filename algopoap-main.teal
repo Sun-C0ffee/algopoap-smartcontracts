@@ -24,14 +24,6 @@
 // Global state schema
 // Uint64 poap_onboard_count
 // Uint64 poap_count
-// Uint64 poap_txn_count
-// Uint64 poap_claim_count
-// Uint64 poap_issuance_count
-// Uint64 poap_nft_issuance_count
-// Uint64 poap_txn_issuance_count
-// Uint64 poap_geo_check_count
-// Uint64 poap_qr_check_count
-// Uint64 poap_sig_check_count
 // Uint64 poap_author_count
 // Uint64 poap_attendee_count
 // Byte poap_last_appid
