@@ -351,7 +351,7 @@ async function setupMainContract(addr, acc) {
     let method = getMethodByName("setup", contract)
     atc.addMethodCall({
         method: method,
-        methodArgs: ['v0.0.4'],
+        methodArgs: ['v0.0.8'],
         ...commonParams
     })
     logger.info('------------------------------')

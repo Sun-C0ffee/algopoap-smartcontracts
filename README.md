@@ -15,9 +15,9 @@
 ----
 
 
-AlgoPoaP is the Proof of Attendance Protocol built on Algorand (AVM V1.1) which aims to be elevated into a Proof Of Anything Protocol in future with use of already in beta state proofs feature on Algorand (Proof of Anything is Parallel WIP in R&D phase using DevNET)
+AlgoPoaP is the Proof of Attendance Protocol built on Algorand (AVM6) which aims to be elevated into a Proof Of Anything Protocol in future with use of already in beta state proofs feature on Algorand (Proof of Anything is Parallel WIP in R&D phase using DevNET)
 
-AlgoPoaP ASC System is designed on basis of TEAL features came with TEAL v 6.0 on AVM V1.1. AlgoPoaP Parent contract is created and thereafter every AlgoPoaP item is created by this parent contract based on configurations needed.
+AlgoPoaP ASC System is designed on basis of TEAL features came with TEAL v 6.0 on AVM6. AlgoPoaP Parent contract is created and thereafter every AlgoPoaP item is created by this parent contract based on configurations needed.
 
 
 ```mermaid

@@ -294,7 +294,10 @@ sub_create_nft:
 itxn_begin
 int acfg
 itxn_field TypeEnum
-int 1000
+byte "poap_attendee_qty"
+app_global_get
+int 10
++
 itxn_field ConfigAssetTotal
 int 0
 itxn_field ConfigAssetDecimals
@@ -302,7 +305,8 @@ byte "PoaP"
 itxn_field ConfigAssetUnitName
 byte "AlgoPoaP"
 itxn_field ConfigAssetName
-byte "https://algopoap.xyz/"
+byte "poap_url"
+app_global_get
 itxn_field ConfigAssetURL
 global CurrentApplicationAddress
 dup
@@ -692,6 +696,7 @@ b b_log_return
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
 callsub sub_check_author 
+
 global GroupSize
 int 2
 ==
