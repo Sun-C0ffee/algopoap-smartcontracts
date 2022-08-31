@@ -499,6 +499,56 @@ b b_log_return
 // Handles activate method
 method_activate:
 callsub sub_check_author
+gtxn 0 RekeyTo
+global ZeroAddress
+==
+assert
+gtxn 0 CloseRemainderTo
+global ZeroAddress
+==
+assert
+gtxn 0 AssetCloseTo
+global ZeroAddress
+==
+assert
+gtxn 0 TypeEnum
+int pay
+==
+assert
+
+gtxn 0 Fee
+global MinTxnFee
+int 100
++
+<=
+assert
+
+gtxn 1 RekeyTo
+global ZeroAddress
+==
+assert
+gtxn 1 CloseRemainderTo
+global ZeroAddress
+==
+assert
+gtxn 1 AssetCloseTo
+global ZeroAddress
+==
+assert
+gtxn 1 TypeEnum
+int axfer
+==
+assert
+
+gtxn 1 Fee
+global MinTxnFee
+int 100
++
+<=
+assert
+
+
+
 
 byte "poap_is_activated"
 byte "true"
@@ -536,6 +586,55 @@ b b_log_return
 
 // Handles claim method
 method_claim:
+
+gtxn 0 RekeyTo
+global ZeroAddress
+==
+assert
+gtxn 0 CloseRemainderTo
+global ZeroAddress
+==
+assert
+gtxn 0 AssetCloseTo
+global ZeroAddress
+==
+assert
+gtxn 0 TypeEnum
+int pay
+==
+assert
+
+gtxn 0 Fee
+global MinTxnFee
+int 100
++
+<=
+assert
+
+gtxn 1 RekeyTo
+global ZeroAddress
+==
+assert
+gtxn 1 CloseRemainderTo
+global ZeroAddress
+==
+assert
+gtxn 1 AssetCloseTo
+global ZeroAddress
+==
+assert
+gtxn 1 TypeEnum
+int axfer
+==
+assert
+
+gtxn 1 Fee
+global MinTxnFee
+int 100
++
+<=
+assert
+
 //string secret
 txn ApplicationArgs 3
 store 8
@@ -620,6 +719,29 @@ b b_log_return
 method_setup:
 callsub sub_check_author 
 
+gtxn 0 RekeyTo
+global ZeroAddress
+==
+assert
+gtxn 0 CloseRemainderTo
+global ZeroAddress
+==
+assert
+gtxn 0 AssetCloseTo
+global ZeroAddress
+==
+assert
+gtxn 0 TypeEnum
+int pay
+==
+assert
+
+gtxn 0 Fee
+global MinTxnFee
+int 100
++
+<=
+assert
 
 // Global states metrics setup
 byte "poap_item_onboard_count"
