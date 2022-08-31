@@ -91,6 +91,10 @@
 
 // Starts immidiately by a root main branch
 b b_main
+
+
+// Main router branch which checks the call and routes to designated branch
+b_main:
 txn RekeyTo
 global ZeroAddress
 ==
@@ -115,8 +119,6 @@ int 100
 <=
 assert
 
-// Main router branch which checks the call and routes to designated branch
-b_main:
 txn NumAppArgs
 int 0
 ==
