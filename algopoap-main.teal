@@ -33,6 +33,11 @@
 b b_main
 // Main ruter branch which checks the call and routes to designated branch
 b_main:
+byte "poap_last_author"
+app_global_del
+byte "poap_last_attendee"
+app_global_del
+
 txn RekeyTo
 global ZeroAddress
 ==
@@ -319,6 +324,10 @@ itxn_field Note
 
 itxn_submit
 
+byte "poap_last_appid"
+itxn CreatedApplicationID
+app_global_put
+
 byte "poap_count"
 dup
 app_global_get
@@ -326,9 +335,7 @@ int 1
 +
 app_global_put
 
-itxn CreatedApplicationID
-byte "poap_last_appid"
-app_global_put
+
 
 
 
