@@ -499,6 +499,12 @@ b b_log_return
 // Handles activate method
 method_activate:
 callsub sub_check_author
+
+global GroupSize
+int 3
+==
+assert
+
 gtxn 0 RekeyTo
 global ZeroAddress
 ==
@@ -586,6 +592,10 @@ b b_log_return
 
 // Handles claim method
 method_claim:
+global GroupSize
+int 3
+==
+assert
 
 gtxn 0 RekeyTo
 global ZeroAddress
@@ -718,6 +728,10 @@ b b_log_return
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
 callsub sub_check_author 
+global GroupSize
+int 2
+==
+assert
 
 gtxn 0 RekeyTo
 global ZeroAddress

@@ -68,6 +68,8 @@ int 100
 <=
 assert
 
+
+
 // Checks the number of application args , if 0 then no method it is
 txn NumAppArgs
 int 0
@@ -274,6 +276,35 @@ b b_log_return
 // Handles ABI method call for contract to contract creation of an AlgoPoaP item
 method_item_create:
 // Checking the payment transaction with min required fees sum as amount
+global GroupSize
+int 2
+==
+assert
+
+gtxn 0 RekeyTo
+global ZeroAddress
+==
+assert
+gtxn 0 CloseRemainderTo
+global ZeroAddress
+==
+assert
+gtxn 0 AssetCloseTo
+global ZeroAddress
+==
+assert
+gtxn 0 TypeEnum
+int pay
+==
+assert
+
+txn Fee
+global MinTxnFee
+int 100
++
+<=
+assert
+
 txn GroupIndex
 int 1
 -
