@@ -395,7 +395,8 @@ byte "poap_lat_dec"
 app_global_get
 load 14
 -
-int 1000
+byte "poap_geo_buffer"
+app_global_get
 <=
 &&
 assert
@@ -408,7 +409,8 @@ byte "poap_lng_dec"
 app_global_get
 load 16
 -
-int 1000
+byte "poap_geo_buffer"
+app_global_get
 <=
 &&
 assert
