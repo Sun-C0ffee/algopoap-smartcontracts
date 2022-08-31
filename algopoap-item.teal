@@ -354,6 +354,7 @@ assert
 retsub
 
 // Handles the geo parameters from args is bigger than timestamp of AlgoPoaP activation
+//TODO correct the geo handling and checking
 sub_check_geo:
 
 byte "poap_lat"
