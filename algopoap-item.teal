@@ -620,10 +620,10 @@ int 100
 assert
 
 //string secret
-txn ApplicationArgs 3
+txn ApplicationArgs 4
 store 8
 
-txn ApplicationArgs 4
+txn ApplicationArgs 5
 store 10
 
 //Uint64 lat
