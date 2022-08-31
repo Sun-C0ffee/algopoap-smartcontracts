@@ -131,13 +131,13 @@ b b_error
 b_method_check:
 
 // Checking application call's Arg 0 for setup method signature
-method "setup(pay,account,application,string,string,string,string,string,string,string,string,uint64,string,string,uint64,uint64,uint64,uint64,uint64,uint64)string"
+method "setup(pay,account,application,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
 
 // Checking application call's Arg 0 for re_setup method signature
-method "re_setup(pay,account,application,asset,string,string,string,string,string,string,string,uint64,string,string,uint64,uint64,uint64,uint64,uint64,uint64)string"
+method "re_setup(pay,account,application,asset,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
@@ -354,24 +354,22 @@ retsub
 sub_check_geo:
 byte "poap_lat"
 app_global_get
-int 0
-int 2
-substring3
+//byte "poap_lat_dec"
+//app_global_get
+
 store 11
 byte "poap_lat_temp"
 load 11
-btoi
 app_global_put
 
 byte "poap_lng"
 app_global_get
-int 0
-int 2
-substring3
+//byte "poap_lng_dec"
+//app_global_get
+
 store 12
 byte "poap_lng_temp"
 load 12
-btoi
 app_global_put
 
 retsub
@@ -613,54 +611,78 @@ byte "poap_email"
 txn ApplicationArgs 10
 app_global_put
 
-byte "poap_start_timestamp"
+
+
+
 txn ApplicationArgs 11
+store 10
+
+byte "poap_start_timestamp"
+load 10
+int 0
+extract_uint64
 app_global_put
 
 byte "poap_lat"
-txn ApplicationArgs 12
+load 10
+int 8
+extract_uint64
+app_global_put
+
+byte "poap_lat_dec"
+load 10
+int 16
+extract_uint64
 app_global_put
 
 byte "poap_lng"
-txn ApplicationArgs 13
+load 10
+int 24
+extract_uint64
+app_global_put
+
+
+
+byte "poap_lng_dec"
+load 10
+int 32
+extract_uint64
 app_global_put
 
 byte "poap_geo_buffer"
-txn ApplicationArgs 14
+load 10
+int 40
+extract_uint64
 app_global_put
-
-
-txn ApplicationArgs 15
-store 10
 
 byte "poap_attendee_qty"
 load 10
-int 0
+int 48
 extract_uint64
 app_global_put
 
 
 byte "poap_has_nft"
 load 10
-int 8
+int 56
 extract_uint64
 app_global_put
 
 byte "poap_has_geo"
 load 10
-int 16
+int 64
 extract_uint64
 app_global_put
 
 byte "poap_has_sig"
 load 10
-int 24
+int 72
 extract_uint64
 app_global_put
 
 byte "poap_has_qrcode"
 load 10
-int 32
+int 80
 extract_uint64
 app_global_put
 

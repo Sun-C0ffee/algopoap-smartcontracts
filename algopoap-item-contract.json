@@ -62,42 +62,8 @@
                     "name": "poap_company_name"
                 },
                 {
-                    "type": "uint64",
-                    "name": "poap_start_timestamp"
-                },
-                {
-                    "type": "string",
-                    "name": "poap_lat"
-                },
-                {
-                    "type": "string",
-                    "name": "poap_lng"
-                },
-                {
-                    "type": "uint64",
-                    "name": "poap_geo_buffer"
-                },
-                {
-                    "type": "uint64",
-                    "name": "poap_attendee_qty"
-                },
-                {
-                    "type": "uint64",
-                    "name": "poap_has_nft"
-                }
-                ,
-                {
-                    "type": "uint64",
-                    "name": "poap_has_geo"
-                }
-                ,
-                {
-                    "type": "uint64",
-                    "name": "poap_has_sig"
-                },
-                {
-                    "type": "uint64",
-                    "name": "poap_has_qrcode"
+                    "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
+                    "name": "poap_uint64_tuple"
                 }
             ],
             "returns": {
@@ -154,42 +120,8 @@
                 },
             
                 {
-                    "type": "uint64",
-                    "name": "poap_start_timestamp"
-                },
-                {
-                    "type": "string",
-                    "name": "poap_lat"
-                },
-                {
-                    "type": "string",
-                    "name": "poap_lng"
-                },
-                {
-                    "type": "uint64",
-                    "name": "poap_geo_buffer"
-                },
-                {
-                    "type": "uint64",
-                    "name": "poap_attendee_qty"
-                },
-                {
-                    "type": "uint64",
-                    "name": "poap_has_nft"
-                }
-                ,
-                {
-                    "type": "uint64",
-                    "name": "poap_has_geo"
-                }
-                ,
-                {
-                    "type": "uint64",
-                    "name": "poap_has_sig"
-                },
-                {
-                    "type": "uint64",
-                    "name": "poap_has_qrcode"
+                    "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
+                    "name": "poap_uint64_tuple"
                 }
               
             ],
