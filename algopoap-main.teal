@@ -213,27 +213,6 @@ byte "poap_count"
 int 0
 app_global_put
 
-byte "poap_txn_count"
-app_global_del
-
-byte "poap_claim_count"
-app_global_del
-
-byte "poap_issuance_count"
-app_global_del
-
-byte "poap_nft_issuance_count"
-app_global_del
-
-byte "poap_geo_check_count"
-app_global_del
-
-byte "poap_qr_check_count"
-app_global_del
-
-byte "poap_sig_check_count"
-app_global_del
-
 byte "poap_author_count"
 int 0
 app_global_put
@@ -253,6 +232,8 @@ app_global_put
 byte "poap_last_attendee"
 byte ""
 app_global_put
+
+
 byte 0x151f7c75
 txn ApplicationArgs 1
 concat
