@@ -593,15 +593,6 @@ b b_log_return
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
 callsub sub_check_author 
-byte "poap_lng_temp"
-app_global_del
-byte "poap_lat_temp"
-app_global_del
-byte "check_incoming_timestamp"
-app_global_del
-
-
-
 
 
 // Global states metrics setup
