@@ -572,8 +572,6 @@ int 0
 app_global_put
 
 
-
-
 byte "poap_item_nft_issuance_count"
 int 0
 app_global_put
@@ -582,20 +580,9 @@ byte "poap_item_txn_issuance_count"
 int 0
 app_global_put
 
-
-
-
-
-
-
-
 byte "poap_item_last_attendee"
 byte "-"
 app_global_put
-
-
-
-
 
 byte "poap_item_last_nft_issuance"
 byte "-"
@@ -606,9 +593,6 @@ byte "-"
 app_global_put
 
 // Args to Global states PoaP data
-// setup(pay,account,application,uint16,uint48,uint24,uint48,uint24,uint64,uint64,string,string,string,string,string,string,string,string,bool,bool,bool,bool)byte[]
-
-
 
 byte "poap_name"
 txn ApplicationArgs 4
@@ -638,12 +622,9 @@ byte "poap_email"
 txn ApplicationArgs 10
 app_global_put
 
-
 byte "poap_start_timestamp"
 txn ApplicationArgs 11
 app_global_put
-
-
 
 byte "poap_lat"
 txn ApplicationArgs 12
@@ -652,7 +633,6 @@ app_global_put
 byte "poap_lng"
 txn ApplicationArgs 13
 app_global_put
-
 
 byte "poap_geo_buffer"
 txn ApplicationArgs 14
@@ -669,20 +649,17 @@ extract_uint64
 app_global_put
 
 
-
 byte "poap_has_nft"
 load 12
 int 8
 extract_uint64
 app_global_put
 
-
 byte "poap_has_geo"
 load 12
 int 16
 extract_uint64
 app_global_put
-
 
 byte "poap_has_sig"
 load 12
@@ -695,7 +672,6 @@ load 12
 int 32
 extract_uint64
 app_global_put
-
 
 // ASA Existence check to route to creation or config branches and subs
 int 0
