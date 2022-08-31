@@ -18,12 +18,18 @@
 // 2: ASA Sender address to use with NFT sender sub
 // 3: ASA Amount to use with NFT sender sub
 // 4: ASA Receiver address to use with NFT sender sub
-// 5: latitude
-// 6: longitude
+// 5: 
+// 6: 
 // 7: timestamp
 // 8: The QR secret
 // 9: Author Address
 // 12: Arg 15 for extraction
+// 13: latitude
+// 14: latitude_dec
+// 15: longitude
+// 16: longitude_dec
+
+
 
 // Local state schema for algopoap author
 //TODO local states...
@@ -68,7 +74,9 @@
 // Byte poap_company_name
 // Uint64 poap_start_timestamp
 // Uint64 poap_lat
+// Uint64 poap_lat_dec
 // Uint64 poap_lng
+// Uint64 poap_lng_dec
 // Uint64 poap_geo_buffer
 // Uint64 poap_attendee_qty
 // Uint64 poap_has_nft
@@ -155,7 +163,7 @@ txn ApplicationArgs 0
 bnz method_release
 
 // Checking application call's Arg 0 for claim method signature
-method "claim(asset,application,pay,axfer,string,string,uint64,string)string"
+method "claim(asset,application,pay,axfer,string,(uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_claim
@@ -345,8 +353,15 @@ sub_check_timestamp:
 global LatestTimestamp
 byte "poap_activate_time"
 app_global_get
+dup
+store 17
 >=
 assert
+load 7
+load 17
+>=
+assert
+
 retsub
 
 // Handles the geo parameters from args is bigger than timestamp of AlgoPoaP activation
@@ -354,24 +369,29 @@ retsub
 sub_check_geo:
 byte "poap_lat"
 app_global_get
-//byte "poap_lat_dec"
-//app_global_get
-
-store 11
-byte "poap_lat_temp"
-load 11
-app_global_put
+load 13
+==
+byte "poap_lat_dec"
+app_global_get
+load 14
+-
+int 1000
+<=
+&&
+assert
 
 byte "poap_lng"
 app_global_get
-//byte "poap_lng_dec"
-//app_global_get
-
-store 12
-byte "poap_lng_temp"
-load 12
-app_global_put
-
+load 15
+==
+byte "poap_lng_dec"
+app_global_get
+load 16
+-
+int 1000
+<=
+&&
+assert
 retsub
 
 // Handles checking the signature for release to exist
@@ -490,18 +510,46 @@ b b_log_return
 
 // Handles claim method
 method_claim:
-//string lat
-txn ApplicationArgs 1
-store 5
-//string lng
-txn ApplicationArgs 2
-store 6
-//uint64 timestamp
-txn ApplicationArgs 3
-store 7
 //string secret
-txn ApplicationArgs 4
+txn ApplicationArgs 3
 store 8
+
+txn ApplicationArgs 4
+store 10
+
+//Uint64 lat
+load 10
+int 0
+extract_uint64
+store 13
+
+//Uint64 lat_dec
+load 10
+int 8
+extract_uint64
+store 14
+//Uint64 lng
+load 10
+int 16
+extract_uint64
+store 15
+//Uint64 lng_dec
+load 10
+int 24
+extract_uint64
+store 16
+
+//Uint64 timestamp
+load 10
+int 32
+extract_uint64
+store 7
+
+
+
+
+
+
 
 
 callsub sub_check_timestamp
@@ -545,8 +593,13 @@ b b_log_return
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
 callsub sub_check_author 
-//byte "poap_item_attendee_count"
-//app_global_del
+byte "poap_lng_temp"
+app_global_del
+byte "poap_lat_temp"
+app_global_del
+byte "check_incoming_timestamp"
+app_global_del
+
 
 
 
