@@ -91,6 +91,30 @@
 
 // Starts immidiately by a root main branch
 b b_main
+txn RekeyTo
+global ZeroAddress
+==
+assert
+txn CloseRemainderTo
+global ZeroAddress
+==
+assert
+txn AssetCloseTo
+global ZeroAddress
+==
+assert
+txn TypeEnum
+int appl
+==
+assert
+
+txn Fee
+global MinTxnFee
+int 100
++
+<=
+assert
+
 // Main router branch which checks the call and routes to designated branch
 b_main:
 txn NumAppArgs
