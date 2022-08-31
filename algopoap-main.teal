@@ -24,11 +24,8 @@
 // Global state schema
 // Uint64 poap_onboard_count
 // Uint64 poap_count
-// Uint64 poap_author_count
-// Uint64 poap_attendee_count
 // Byte poap_last_appid
-// Byte poap_last_author
-// Byte poap_last_attendee
+
 
 //////////////////////////////////////////////////////////////
 
@@ -169,7 +166,8 @@ app_global_get
 int 1
 +
 app_global_put
-byte "algopoap_optin"
+
+byte "algopoap_optin_"
 txn Sender
 concat
 b b_log_return
