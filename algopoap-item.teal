@@ -67,7 +67,6 @@
 // Byte poap_address
 // Byte poap_url
 // Byte poap_email
-// Byte poap_company_name
 // Uint64 poap_start_timestamp
 // Uint64 poap_lat
 // Uint64 poap_lat_dec
@@ -79,6 +78,7 @@
 // Uint64 poap_has_geo
 // Uint64 poap_has_sig
 // Uint64 poap_has_qrcode
+// Uint64 author_pays_fee
 
 // Byte poap_switches
 // Byte poap_qr_secret
