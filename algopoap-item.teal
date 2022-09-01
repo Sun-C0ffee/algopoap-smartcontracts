@@ -51,12 +51,11 @@
 // Byte poap_is_released
 
 // Uint64 poap_item_claim_count
-// Uint64 poap_item_issuance_count
 // Uint64 poap_item_nft_issuance_count
 // Uint64 poap_item_txn_issuance_count
 
 // Byte poap_item_last_attendee
-// Byte poap_item_last_issuance
+// Byte poap_item_last_claim
 // Byte poap_item_last_nft_issuance
 // Byte poap_item_last_txn_issuance
 
