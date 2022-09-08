@@ -336,9 +336,6 @@ int 1
 app_global_put
 
 
-
-
-
 byte 0x151f7c75
 itxn CreatedApplicationID
 itob
