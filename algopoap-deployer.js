@@ -46,7 +46,6 @@ indexerPort = config.algorand.indexer_remote_port
 let indexerClient = new algosdk.Indexer(algodToken, indexerServer, indexerPort);
 
 const mnemonic = path.join(__dirname, 'algopoap_mnemonic.txt');
-const testMnemonic = path.join(__dirname, 'test_mnemonic.txt');
 const accountMnemonic = fs.readFileSync(mnemonic, 'utf8');
 
 
