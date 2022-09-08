@@ -3,8 +3,6 @@
 
 **WIP! WIP! This repository contains SmartContracts for AlgoPoaP dApp on Algorand. Currently under development!!!**
 
-- [AlgoPoaP's Frontend Repository](https://github.com/AlgoPoaP/algopoap)
-
 - [AlgoPoaP Documentation](https://github.com/AlgoPoaP)
 
 - [AlgoPoaP Website (algopoap.com)](https://algopoap.com)
