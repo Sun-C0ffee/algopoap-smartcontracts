@@ -22,32 +22,85 @@
     "mode":"remote",
     "network":"testnet",
     "deployer_contracts": false,
-    "deployer_update_contracts": true,
+    "deployer_update_contracts": false,
     "deployer_report": false,
     "delete_apps": false,
-    "setup_app": true,
+    "setup_app": false,
     "test_metrics": false,
     "item_asa_id":"107325874",
     "test_item_create": false,
     "test_item_update_app": 107325601,
-    "test_item_update": false,
+    "test_item_update": true,
     "test_item_delete_app": 107325601,
     "test_item_delete": false,
     "test_item_setup_app": 107325601,
-    "test_item_setup": false,
+    "test_item_setup": true,
     "test_item_activate_app": 107325601,
-    "test_item_activate": false,
+    "test_item_activate": true,
     "test_item_release_app": 107325601,
-    "test_item_release": false,
+    "test_item_release": true,
     "test_item_optin_app": 107325601,
     "test_item_optin": false,
+    "test_main_optin_app": 107325874,
+    "test_main_optin": false,
     "test_item_claim_app": 107325601,
-    "test_item_claim": false,
+    "test_item_claim": true,
+    "create_geo_index": false,
     "apps_to_delete": [],
     "num_local_int":8,
     "num_local_byte":8,
     "num_global_int":30,
-    "num_global_byte":30
+    "num_global_byte":30,
+    "geo_index": [
+      {
+        "lat": 0,
+        "distance": 11
+      },
+      {
+        "lat": 20,
+        "distance": 10
+      },
+      {
+        "lat": 32,
+        "distance": 9
+      },
+      {
+        "lat": 41,
+        "distance": 8
+      },
+      {
+        "lat": 48,
+        "distance": 7
+      },
+      {
+        "lat": 55,
+        "distance": 6
+      },
+      {
+        "lat": 61,
+        "distance": 5
+      },
+      {
+        "lat": 67,
+        "distance": 4
+      },
+      {
+        "lat": 72,
+        "distance": 3
+      },
+      {
+        "lat": 78,
+        "distance": 2
+      },
+      {
+        "lat": 83,
+        "distance": 1
+      },
+      {
+        "lat": 88,
+        "distance": 0
+      }
+    ]
   
   }
 }

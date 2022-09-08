@@ -1,0 +1,50 @@
+[
+  {
+    "lat": 0,
+    "distance": 11
+  },
+  {
+    "lat": 20,
+    "distance": 10
+  },
+  {
+    "lat": 32,
+    "distance": 9
+  },
+  {
+    "lat": 41,
+    "distance": 8
+  },
+  {
+    "lat": 48,
+    "distance": 7
+  },
+  {
+    "lat": 55,
+    "distance": 6
+  },
+  {
+    "lat": 61,
+    "distance": 5
+  },
+  {
+    "lat": 67,
+    "distance": 4
+  },
+  {
+    "lat": 72,
+    "distance": 3
+  },
+  {
+    "lat": 78,
+    "distance": 2
+  },
+  {
+    "lat": 83,
+    "distance": 1
+  },
+  {
+    "lat": 88,
+    "distance": 0
+  }
+]

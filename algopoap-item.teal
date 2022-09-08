@@ -28,6 +28,12 @@
 // 14: latitude_dec
 // 15: longitude
 // 16: longitude_dec
+// 17: poap_activate_time
+// 18: poap_lng_unit_diff
+// 19: lng_diff
+// 20: lat_diff
+// 21: poap_geo_buffer
+// 22: poap_lng_unit_diff
 
 // Local state schema for algopoap author
 //TODO local states...
@@ -78,6 +84,7 @@
 // Uint64 poap_has_sig
 // Uint64 poap_has_qrcode
 // Uint64 author_pays_fee
+// Uint64 poap_lng_unit_diff
 
 // Byte poap_switches
 // Byte poap_qr_secret
@@ -160,13 +167,13 @@ b b_error
 b_method_check:
 
 // Checking application call's Arg 0 for setup method signature
-method "setup(pay,account,application,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
+method "setup(pay,account,application,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
 
 // Checking application call's Arg 0 for re_setup method signature
-method "re_setup(pay,account,application,asset,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
+method "re_setup(pay,account,application,asset,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
@@ -394,29 +401,86 @@ byte "poap_lat"
 app_global_get
 load 13
 ==
-byte "poap_lat_dec"
-app_global_get
-load 14
--
-byte "poap_geo_buffer"
-app_global_get
-<=
-&&
-assert
-
 byte "poap_lng"
 app_global_get
 load 15
 ==
+&&
+assert
+
+//unit differ
+byte "poap_lng_unit_diff"
+app_global_get
+store 18
+
+//lat diff
+byte "poap_lat_dec"
+app_global_get
+load 14
+-
+store 19
+
+//lng diff
 byte "poap_lng_dec"
 app_global_get
 load 16
 -
+store 20
+
+//geo buffer
 byte "poap_geo_buffer"
 app_global_get
-<=
-&&
+store 21
+
+//poap_lat_unit_diff
+int 11
+store 22
+
+//lat diff by power of 2
+load 19
+load 22
+*
+int 2
+exp
+store 23
+//lng diff by power of 2
+load 20
+load 18
+*
+int 2
+exp
+store 24
+//geo buffer by power of 2
+load 21
+int 2
+exp
+store 25
+
+
+
+
+load 21
+load 19
+load 22
+*
+>
 assert
+
+load 21
+load 20
+load 18
+*
+>
+assert
+
+load 23
+load 24
++
+load 25
+<=
+assert
+
+
 retsub
 
 // Handles checking the signature for release to exist
@@ -850,6 +914,12 @@ app_global_put
 byte "poap_has_qrcode"
 load 10
 int 80
+extract_uint64
+app_global_put
+
+byte "poap_lng_unit_diff"
+load 10
+int 88
 extract_uint64
 app_global_put
 

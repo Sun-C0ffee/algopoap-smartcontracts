@@ -1,7 +1,9 @@
 // A cave man simple deployer to mend the progress with rapid deployment of AlgoPoaP contracts
 
+
 const algosdk = require('algosdk');
 const fs = require('fs')
+const geolib = require('geolib');
 const path = require('path');
 const fetch = require('node-fetch');
 const logger = require('./logger');
@@ -16,6 +18,7 @@ let algodPort;
 let algodServer;
 let indexerPort;
 
+let geoIndex = config.deployer.geo_index
 let applicationAddr = config.algorand.asc_main_address;
 let applicationId = config.algorand.asc_main_id;
 let applicationItemId = config.deployer.test_item_update_app;
@@ -585,7 +588,7 @@ async function setupItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws, addr, Number(applicationId), '-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email',[1661863665,30,323234,100,234565,150,200,1,1,1,0]],
+        methodArgs: [tws, addr, Number(applicationId), '-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 200, 1, 1, 1, 0, 6]],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -624,9 +627,9 @@ async function reSetupItemContract(addr, acc) {
     const tws = { txn: ptxn, signer: signer }
     let method = getMethodByName("re_setup", contract)
 
-   atc.addMethodCall({
+    atc.addMethodCall({
         method: method,
-        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email',[1661863665,30,323234,100,234565,150,200,1,1,1,0]],
+        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 200, 1, 1, 1, 0, 6]],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -729,25 +732,37 @@ async function releaseItemContract(addr, acc) {
 
     }
 }
-async function optinItemContract(addr, acc) {
+async function optinMainContract(addr, acc) {
     let params = await algodClient.getTransactionParams().do();
     let appTxn = algosdk.makeApplicationOptInTxn(addr, params, Number(applicationId));
-    let appTxnItem = algosdk.makeApplicationOptInTxn(addr, params, Number(applicationItemId));
+   
     let appTxnId = appTxn.txID().toString();
-    let appTxnIdItem = appTxnItem.txID().toString();
+
     logger.info('------------------------------')
     logger.info("AlgoPoaP Main Application Optin TXId =  %s", appTxnId);
-    logger.info("AlgoPoaP Item Application Optin TXId =  %s", appTxnIdItem);
     let signedAppTxn = appTxn.signTxn(acc.sk);
-    let signedAppTxnItem = appTxnItem.signTxn(acc.sk);
+
     await algodClient.sendRawTransaction(signedAppTxn).do();
     await algosdk.waitForConfirmation(algodClient, appTxnId, 5)
+    logger.info('------------------------------')
+
+
+}
+async function optinItemContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+
+    let appTxnItem = algosdk.makeApplicationOptInTxn(addr, params, Number(applicationItemId));
+
+    let appTxnIdItem = appTxnItem.txID().toString();
+    logger.info('------------------------------')
+
+    logger.info("AlgoPoaP Item Application Optin TXId =  %s", appTxnIdItem);
+
+    let signedAppTxnItem = appTxnItem.signTxn(acc.sk);
     await algodClient.sendRawTransaction(signedAppTxnItem).do();
     await algosdk.waitForConfirmation(algodClient, appTxnIdItem, 5)
-    //await waitForConfirmation(appTxnId);
-    //let transactionResponse = await algodClient.pendingTransactionInformation(appTxnId).do();
     logger.info('------------------------------')
- 
+
 
 }
 async function claimItemContract(addr, acc) {
@@ -782,12 +797,12 @@ async function claimItemContract(addr, acc) {
     }) */
 
     const tws0 = { txn: ptxn, signer: signer }
-   /*  const tws1 = { txn: atxn, signer: signer } */
+    /*  const tws1 = { txn: atxn, signer: signer } */
     let method = getMethodByName("claim", contract)
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws0, /* tws1, */ Number(itemAsaId),Number(applicationId),addr,'0', [30,323234,100,234565,1671942604]],
+        methodArgs: [tws0, /* tws1, */ Number(itemAsaId), Number(applicationId), addr, '0', [30, 3232, 100, 2345, 1671942604]],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -817,9 +832,6 @@ async function deployerAccount() {
     }
 
 }
-
-
-
 
 async function deployerReport() {
 
@@ -884,7 +896,39 @@ async function deleteApps(appsTodelete) {
     }
 
 }
+async function createGeoIndex() {
+    let geoIndex = []
+    for (i = 0; i < 90; i++) {
+        let lat = i
+        let lng1 = 0
+        let lng2 = 0.0001
+        geoIndex.push({
+            lat,
+            //lng1,
+            //lng2,
+            distance: geolib.getDistance(
+                { latitude: lat, longitude: lng1 },
+                { latitude: lat, longitude: lng2 }
+            ),
 
+        })
+    }
+    let utilArray = [];
+    let geoIndexDistinct = []
+    geoIndex.forEach((item) => {
+        if (utilArray.indexOf(item.distance) === -1) {
+            utilArray.push(item.distance)
+            geoIndexDistinct.push(item)
+        }
+
+
+    })
+
+    const fileContent = JSON.stringify(geoIndexDistinct, null, 2);
+    fs.writeFileSync("geoindex.json", fileContent);
+
+
+}
 
 async function runDeployer() {
     if (!accountExists) await deployerAccount()
@@ -1023,6 +1067,17 @@ async function runDeployer() {
             }
         }
     }
+    if (config.deployer['test_main_optin']) {
+        {
+            try {
+
+                await optinMainContract(accountObject.addr, accountObject)
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
     if (config.deployer['test_item_optin']) {
         {
             try {
@@ -1047,8 +1102,19 @@ async function runDeployer() {
     }
     if (config.deployer['deployer_report']) await deployerReport()
     if (config.deployer['delete_apps']) await deleteApps(config.deployer.apps_to_delete)
+    if (config.deployer['create_geo_index']) {
+        {
+            try {
 
+                await createGeoIndex()
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
     process.exit();
 }
+
 
 module.exports = runDeployer

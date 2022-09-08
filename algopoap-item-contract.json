@@ -58,11 +58,7 @@
                     "name": "poap_email"
                 },
                 {
-                    "type": "string",
-                    "name": "poap_company_name"
-                },
-                {
-                    "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
+                    "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
                     "name": "poap_uint64_tuple"
                 }
             ],
@@ -120,7 +116,7 @@
                 },
             
                 {
-                    "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
+                    "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
                     "name": "poap_uint64_tuple"
                 }
               
