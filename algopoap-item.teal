@@ -586,34 +586,11 @@ assert
 
 gtxn 0 Fee
 global MinTxnFee
-int 100
-+
+int 2
+*
 <=
 assert
 
-gtxn 1 RekeyTo
-global ZeroAddress
-==
-assert
-gtxn 1 CloseRemainderTo
-global ZeroAddress
-==
-assert
-gtxn 1 AssetCloseTo
-global ZeroAddress
-==
-assert
-gtxn 1 TypeEnum
-int axfer
-==
-assert
-
-gtxn 1 Fee
-global MinTxnFee
-int 100
-+
-<=
-assert
 
 byte "poap_is_activated"
 byte "true"
@@ -680,8 +657,8 @@ assert
 
 gtxn 0 Fee
 global MinTxnFee
-int 100
-+
+int 2
+*
 <=
 assert
 
