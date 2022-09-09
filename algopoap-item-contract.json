@@ -58,7 +58,7 @@
                     "name": "poap_email"
                 },
                 {
-                    "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
+                    "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
                     "name": "poap_uint64_tuple"
                 }
             ],
@@ -116,7 +116,7 @@
                 },
             
                 {
-                    "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
+                    "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
                     "name": "poap_uint64_tuple"
                 }
               

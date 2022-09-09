@@ -33,7 +33,7 @@
 // 19: lng_diff
 // 20: lat_diff
 // 21: poap_geo_buffer
-// 22: poap_lng_unit_diff
+// 22: poap_lat_unit_diff
 
 // Local state schema for algopoap author
 //TODO local states...
@@ -83,8 +83,8 @@
 // Uint64 poap_has_geo
 // Uint64 poap_has_sig
 // Uint64 poap_has_qrcode
-// Uint64 author_pays_fee
 // Uint64 poap_lng_unit_diff
+// Uint64 author_pays_fee
 
 // Byte poap_switches
 // Byte poap_qr_secret
@@ -116,8 +116,6 @@ assert
 
 txn Fee
 global MinTxnFee
-int 100
-+
 <=
 assert
 
@@ -167,13 +165,13 @@ b b_error
 b_method_check:
 
 // Checking application call's Arg 0 for setup method signature
-method "setup(pay,account,application,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
+method "setup(pay,account,application,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
 
 // Checking application call's Arg 0 for re_setup method signature
-method "re_setup(pay,account,application,asset,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
+method "re_setup(pay,account,application,asset,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
@@ -209,7 +207,7 @@ txn ApplicationArgs 0
 bnz method_get_metrics
 
 // If non of method checks matched then error and reject
-b b_error1
+b b_error
 
 //Checks the Sender to be the Creator (AlgoPoaP Author)
 sub_check_owner:
@@ -907,6 +905,12 @@ int 88
 extract_uint64
 app_global_put
 
+byte "author_pays_fee"
+load 10
+int 96
+extract_uint64
+app_global_put
+
 // ASA Existence check to route to creation or config branches and subs
 int 0
 byte "poap_asa_id"
@@ -933,14 +937,6 @@ return
 
 // Handles rejection with error
 b_error:
-err
-
-b_error1:
-int 1
-err
-
-b_error2:
-int 2
 err
 
 

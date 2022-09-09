@@ -590,7 +590,7 @@ async function setupItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws, addr, Number(applicationId), '-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 200, 1, 1, 1, 0, 6]],
+        methodArgs: [tws, addr, Number(applicationId), '-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 200, 1, 1, 1, 0, 6,1]],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -632,7 +632,7 @@ async function reSetupItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 200, 1, 1, 1, 0, 6]],
+        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 200, 1, 1, 1, 0, 6,1]],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -760,7 +760,7 @@ async function closeOutItemContract(addr, acc) {
     let appTxnIdItem = appTxnItem.txID().toString();
     logger.info('------------------------------')
 
-    logger.info("AlgoPoaP Item Application Optin TXId =  %s", appTxnIdItem);
+    logger.info("AlgoPoaP Item Application close out TXId =  %s", appTxnIdItem);
 
     let signedAppTxnItem = appTxnItem.signTxn(acc.sk);
     await algodClient.sendRawTransaction(signedAppTxnItem).do();
