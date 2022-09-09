@@ -456,9 +456,7 @@ int 2
 exp
 store 25
 
-
-
-
+//Check lat not to be out of bounds
 load 21
 load 19
 load 22
@@ -466,6 +464,7 @@ load 22
 >
 assert
 
+//Check lng not to be out of bounds
 load 21
 load 20
 load 18
@@ -473,13 +472,13 @@ load 18
 >
 assert
 
+//check pythagorean triple for triangle of lat, lng and geo buffer
 load 23
 load 24
 +
 load 25
 <=
 assert
-
 
 retsub
 
