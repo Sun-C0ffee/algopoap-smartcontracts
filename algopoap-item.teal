@@ -94,9 +94,9 @@
 // Starts immidiately by a root main branch
 b b_main
 
-
 // Main router branch which checks the call and routes to designated branch
 b_main:
+
 txn RekeyTo
 global ZeroAddress
 ==
@@ -273,7 +273,6 @@ b b_log_return
 
 // Handles update of an item AlgoPoaP smart contract
 b_update:
-
 callsub sub_check_owner
 byte 0x151f7c75
 byte "algopoap_item_update"
@@ -618,6 +617,7 @@ b b_log_return
 
 // Handles release method
 method_release:
+callsub sub_check_author
 byte "poap_is_released"
 byte "true"
 app_global_put

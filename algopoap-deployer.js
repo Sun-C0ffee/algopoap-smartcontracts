@@ -736,6 +736,39 @@ async function releaseItemContract(addr, acc) {
 
     }
 }
+async function closeOutMainContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    let appTxn = algosdk.makeApplicationCloseOutTxn(addr, params, Number(applicationId));
+   
+    let appTxnId = appTxn.txID().toString();
+
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Main Application close out TXId =  %s", appTxnId);
+    let signedAppTxn = appTxn.signTxn(acc.sk);
+
+    await algodClient.sendRawTransaction(signedAppTxn).do();
+    await algosdk.waitForConfirmation(algodClient, appTxnId, 5)
+    logger.info('------------------------------')
+
+
+}
+async function closeOutItemContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+
+    let appTxnItem = algosdk.makeApplicationCloseOutTxn(addr, params, Number(applicationItemId));
+
+    let appTxnIdItem = appTxnItem.txID().toString();
+    logger.info('------------------------------')
+
+    logger.info("AlgoPoaP Item Application Optin TXId =  %s", appTxnIdItem);
+
+    let signedAppTxnItem = appTxnItem.signTxn(acc.sk);
+    await algodClient.sendRawTransaction(signedAppTxnItem).do();
+    await algosdk.waitForConfirmation(algodClient, appTxnIdItem, 5)
+    logger.info('------------------------------')
+
+
+}
 async function optinMainContract(addr, acc) {
     let params = await algodClient.getTransactionParams().do();
     let appTxn = algosdk.makeApplicationOptInTxn(addr, params, Number(applicationId));
@@ -1016,6 +1049,50 @@ async function runDeployer() {
             }
         }
     }
+    if (config.deployer['test_main_closeout']) {
+        {
+            try {
+
+                await closeOutMainContract(accountObject.addr, accountObject)
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_item_closeout']) {
+        {
+            try {
+
+                await closeOutItemContract(accountObject.addr, accountObject)
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_main_optin']) {
+        {
+            try {
+
+                await optinMainContract(accountObject.addr, accountObject)
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_item_optin']) {
+        {
+            try {
+
+                await optinItemContract(accountObject.addr, accountObject)
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
     if (config.deployer['test_item_delete']) {
         {
             try {
@@ -1066,28 +1143,6 @@ async function runDeployer() {
             try {
 
                 await releaseItemContract(accountObject.addr, accountObject)
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_main_optin']) {
-        {
-            try {
-
-                await optinMainContract(accountObject.addr, accountObject)
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_item_optin']) {
-        {
-            try {
-
-                await optinItemContract(accountObject.addr, accountObject)
             }
             catch (err) {
                 logger.error(err);
