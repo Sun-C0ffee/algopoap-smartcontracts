@@ -579,8 +579,8 @@ async function setupItemContract(addr, acc) {
     const ptxn = new algosdk.Transaction({
         from: acc.addr,
         to: applicationAddr,
-        amount: 100000,
-        fee: 2 * params.fee,
+        amount: 2 * params.fee,
+       
         ...params
     })
 
@@ -622,8 +622,7 @@ async function reSetupItemContract(addr, acc) {
     const ptxn = new algosdk.Transaction({
         from: acc.addr,
         to: applicationAddr,
-        amount: 100000,
-        fee: 2 * params.fee,
+        amount: 2 * params.fee,
         ...params
     })
 
@@ -665,8 +664,7 @@ async function activateItemContract(addr, acc) {
         type: 'pay',
         from: acc.addr,
         to: applicationAddr,
-        amount: 100000,
-        fee: 2 * params.fee,
+        amount:  2 * params.fee,
         ...params
     })
     const atxn = new algosdk.Transaction({
@@ -821,8 +819,8 @@ async function claimItemContract(addr, acc) {
         type: 'pay',
         from: acc.addr,
         to: applicationAddr,
-        amount: 100000,
-        fee: 2 * params.fee,
+        amount: 2 * params.fee,
+        
         ...params
     })
     /* const atxn = new algosdk.Transaction({

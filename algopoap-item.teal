@@ -583,11 +583,15 @@ assert
 
 gtxn 0 Fee
 global MinTxnFee
+<=
+assert
+
+gtxn 0 Amount
+global MinTxnFee
 int 2
 *
 <=
 assert
-
 
 byte "poap_is_activated"
 byte "true"
@@ -654,6 +658,11 @@ int pay
 assert
 
 gtxn 0 Fee
+global MinTxnFee
+<=
+assert
+
+gtxn 0 Amount
 global MinTxnFee
 int 2
 *
@@ -766,11 +775,15 @@ assert
 // Check first transaction fee to be minimum 2 times minimal fee
 gtxn 0 Fee
 global MinTxnFee
+<=
+assert
+
+gtxn 0 Amount
+global MinTxnFee
 int 2
 *
 <=
 assert
-
 // Global states metrics setup
 byte "poap_item_onboard_count"
 int 0
