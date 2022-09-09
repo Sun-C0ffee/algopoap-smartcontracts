@@ -470,7 +470,7 @@ async function deployItemContract(addr, acc) {
         ...commonParams
     })
     logger.info('------------------------------')
-    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
 
@@ -518,7 +518,7 @@ async function updateItemContract(addr, acc) {
         ...commonParams
     })
     logger.info('------------------------------')
-    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
 
@@ -551,7 +551,7 @@ async function deleteItemContract(addr, acc) {
         ...commonParams
     })
     logger.info('------------------------------')
-    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
 
@@ -599,7 +599,7 @@ async function setupItemContract(addr, acc) {
     for (const idx in result.methodResults) {
 
         let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
-        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+        logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
 
 
     }
@@ -640,7 +640,7 @@ async function reSetupItemContract(addr, acc) {
     for (const idx in result.methodResults) {
 
         let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
-        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+        logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
 
 
     }
@@ -693,7 +693,7 @@ async function activateItemContract(addr, acc) {
 
         let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
         let res = buff.toString()
-        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+        logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
 
 
     }
@@ -730,7 +730,50 @@ async function releaseItemContract(addr, acc) {
 
         let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
         let res = buff.toString()
-        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+        logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
+
+
+    }
+}
+async function claimItemContract(addr, acc) {
+    let params = await algodClient.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer()
+    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
+    const filePathContractSchema = path.join(__dirname, 'algopoap-item-contract.json');
+
+
+    const buff = await fs.promises.readFile(filePathContractSchema);
+    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    const commonParams = {
+        appID: Number(Number(applicationItemId)),
+        sender: acc.addr,
+        suggestedParams: params,
+        signer: signer
+    }
+    const ptxn = new algosdk.Transaction({
+        type: 'pay',
+        from: acc.addr,
+        to: applicationAddr,
+        amount: 0,
+        ...params
+    })
+
+    const tws0 = { txn: ptxn, signer: signer }
+    let method = getMethodByName("claim", contract)
+
+    atc.addMethodCall({
+        method: method,
+        methodArgs: [tws0, /* tws1, */ Number(itemAsaId), Number(applicationId), addr, '0', [30, 3232, 100, 2345, 1671942604]],
+        ...commonParams
+    })
+    logger.info('------------------------------')
+    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+    const result = await atc.execute(algodClient, 2)
+    for (const idx in result.methodResults) {
+
+        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+        let res = buff.toString()
+        logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
 
 
     }
@@ -801,59 +844,7 @@ async function optinItemContract(addr, acc) {
 
 
 }
-async function claimItemContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    const atc = new algosdk.AtomicTransactionComposer()
-    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
-    const filePathContractSchema = path.join(__dirname, 'algopoap-item-contract.json');
 
-
-    const buff = await fs.promises.readFile(filePathContractSchema);
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    const commonParams = {
-        appID: Number(Number(applicationItemId)),
-        sender: acc.addr,
-        suggestedParams: params,
-        signer: signer
-    }
-    const ptxn = new algosdk.Transaction({
-        type: 'pay',
-        from: acc.addr,
-        to: applicationAddr,
-        amount: 2 * params.fee,
-        
-        ...params
-    })
-    /* const atxn = new algosdk.Transaction({
-        type: 'axfer',
-        from: acc.addr,
-        to: acc.addr,
-        assetIndex: Number(itemAsaId),
-        amount: 0,
-        ...params
-    }) */
-
-    const tws0 = { txn: ptxn, signer: signer }
-    /*  const tws1 = { txn: atxn, signer: signer } */
-    let method = getMethodByName("claim", contract)
-
-    atc.addMethodCall({
-        method: method,
-        methodArgs: [tws0, /* tws1, */ Number(itemAsaId), Number(applicationId), addr, '0', [30, 3232, 100, 2345, 1671942604]],
-        ...commonParams
-    })
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
-    const result = await atc.execute(algodClient, 2)
-    for (const idx in result.methodResults) {
-
-        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
-        let res = buff.toString()
-        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
-
-
-    }
-}
 async function deployerAccount() {
 
     try {
