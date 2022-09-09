@@ -590,7 +590,7 @@ async function setupItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws, addr, Number(applicationId), '-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 200, 1, 1, 1, 0, 6,1]],
+        methodArgs: [tws, addr, Number(applicationId), '-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 3, 1, 1, 1, 0, 6,1]],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -631,7 +631,7 @@ async function reSetupItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 200, 1, 1, 1, 0, 6,1]],
+        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 3, 1, 1, 1, 0, 6,1]],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -664,7 +664,8 @@ async function activateItemContract(addr, acc) {
         type: 'pay',
         from: acc.addr,
         to: applicationAddr,
-        amount:  2 * params.fee,
+        amount:  9 * params.fee,
+        fee:  2 * params.fee,
         ...params
     })
     const atxn = new algosdk.Transaction({
