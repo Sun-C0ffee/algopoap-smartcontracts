@@ -457,7 +457,7 @@ async function deployItemContract(addr, acc) {
     const ptxn = new algosdk.Transaction({
         from: acc.addr,
         to: applicationAddr,
-        amount: 100000,
+        amount: params.fee,
         fee: 2 * params.fee,
         ...params
     })
@@ -579,7 +579,7 @@ async function setupItemContract(addr, acc) {
     const ptxn = new algosdk.Transaction({
         from: acc.addr,
         to: applicationAddr,
-        amount: 2 * params.fee,
+        amount: params.fee,
        
         ...params
     })
@@ -622,7 +622,7 @@ async function reSetupItemContract(addr, acc) {
     const ptxn = new algosdk.Transaction({
         from: acc.addr,
         to: applicationAddr,
-        amount: 2 * params.fee,
+        amount: params.fee,
         ...params
     })
 

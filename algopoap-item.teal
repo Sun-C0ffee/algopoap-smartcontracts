@@ -778,10 +778,9 @@ global MinTxnFee
 <=
 assert
 
+// Check first transaction amount to be 2 times minimal fee
 gtxn 0 Amount
 global MinTxnFee
-int 2
-*
 <=
 assert
 // Global states metrics setup

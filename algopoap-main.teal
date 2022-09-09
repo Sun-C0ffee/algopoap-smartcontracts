@@ -57,12 +57,8 @@ assert
 
 txn Fee
 global MinTxnFee
-int 100
-+
 <=
 assert
-
-
 
 // Checks the number of application args , if 0 then no method it is
 txn NumAppArgs
@@ -263,8 +259,13 @@ assert
 
 txn Fee
 global MinTxnFee
-int 100
-+
+int 2
+*
+<=
+assert
+
+txn Amount
+global MinTxnFee
 <=
 assert
 
