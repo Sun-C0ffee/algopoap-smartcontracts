@@ -18,7 +18,7 @@
 // 2: ASA Sender address to use with NFT sender sub
 // 3: ASA Amount to use with NFT sender sub
 // 4: ASA Receiver address to use with NFT sender sub
-// 5: ------
+// 5: Author Address
 // 6: The QR data
 // 7: timestamp
 // 8: The QR secret
@@ -491,8 +491,11 @@ retsub
 
 // Handles checking the QR secret from args
 sub_check_qr_secret:
-byte "poap_qr_secret"
-app_global_del
+load 6
+load 8
+load 5
+//TODO: send up signed txn and stringified version of txn as args of claim txn to test this
+//ed25519verify
 retsub
 
 // Handles Release signature constraint check
@@ -535,9 +538,7 @@ txn Sender
 store 2
 int 1
 store 3
-byte "poap_author_address"
-app_global_get
-store 4
+
 
 callsub sub_send_nft
 
@@ -675,6 +676,10 @@ assert
 b b_claim_check
 
 b_claim_check:
+byte "poap_author_address"
+app_global_get
+store 5
+
 //string qr secret
 txn ApplicationArgs 4
 store 8
