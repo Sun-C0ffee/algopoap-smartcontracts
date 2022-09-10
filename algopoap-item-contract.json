@@ -175,6 +175,10 @@
                     "name": "qr_secret"
                 },
                 {
+                    "type": "string",
+                    "name": "qr_data"
+                },
+                {
                     "type": "(uint64,uint64,uint64,uint64,uint64)",
                     "name": "claim_uint64_tuple"
                 }

@@ -18,11 +18,13 @@
 // 2: ASA Sender address to use with NFT sender sub
 // 3: ASA Amount to use with NFT sender sub
 // 4: ASA Receiver address to use with NFT sender sub
-// 5: 
-// 6: 
+// 5: ------
+// 6: The QR data
 // 7: timestamp
 // 8: The QR secret
 // 9: Author Address
+// 10: Arg 15 for extraction
+// 11: ------
 // 12: Arg 15 for extraction
 // 13: latitude
 // 14: latitude_dec
@@ -88,7 +90,6 @@
 // Uint64 author_pays_fee
 
 // Byte poap_switches
-// Byte poap_qr_secret
 
 //////////////////////////////////////////////////////////////
 
@@ -190,7 +191,7 @@ txn ApplicationArgs 0
 bnz method_release
 
 // Checking application call's Arg 0 for claim method signature
-method "claim(pay,asset,application,account,string,(uint64,uint64,uint64,uint64,uint64))string"
+method "claim(pay,asset,application,account,string,string,(uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_claim
@@ -490,11 +491,8 @@ retsub
 
 // Handles checking the QR secret from args
 sub_check_qr_secret:
-load 8
 byte "poap_qr_secret"
-app_global_get
-==
-assert
+app_global_del
 retsub
 
 // Handles Release signature constraint check
@@ -677,11 +675,15 @@ assert
 b b_claim_check
 
 b_claim_check:
-//string secret
+//string qr secret
 txn ApplicationArgs 4
 store 8
 
+//string qr data
 txn ApplicationArgs 5
+store 6
+
+txn ApplicationArgs 6
 store 10
 
 //Uint64 lat
