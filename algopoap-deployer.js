@@ -457,8 +457,8 @@ async function deployItemContract(addr, acc) {
     const ptxn = new algosdk.Transaction({
         from: acc.addr,
         to: applicationAddr,
-        amount: params.fee,
-        fee: 2 * params.fee,
+        amount: 2 * params.fee,
+        fee: params.fee,
         ...params
     })
 
@@ -580,6 +580,7 @@ async function setupItemContract(addr, acc) {
         from: acc.addr,
         to: applicationAddr,
         amount: params.fee,
+        fee: params.fee,
        
         ...params
     })
@@ -623,6 +624,7 @@ async function reSetupItemContract(addr, acc) {
         from: acc.addr,
         to: applicationAddr,
         amount: params.fee,
+        fee: params.fee,
         ...params
     })
 
@@ -660,12 +662,13 @@ async function activateItemContract(addr, acc) {
         suggestedParams: params,
         signer: signer
     }
+    let attendees_qty = 3
     const ptxn = new algosdk.Transaction({
         type: 'pay',
         from: acc.addr,
         to: applicationAddr,
-        amount:  9 * params.fee,
-        fee:  2 * params.fee,
+        amount:  attendees_qty * 3 * params.fee,
+        fee: params.fee,
         ...params
     })
     const atxn = new algosdk.Transaction({
@@ -674,6 +677,7 @@ async function activateItemContract(addr, acc) {
         to: acc.addr,
         assetIndex: Number(itemAsaId),
         amount: 0,
+        fee:  2 * params.fee,
         ...params
     })
 
@@ -844,7 +848,6 @@ async function optinItemContract(addr, acc) {
 
 
 }
-
 async function deployerAccount() {
 
     try {
@@ -860,7 +863,6 @@ async function deployerAccount() {
     }
 
 }
-
 async function deployerReport() {
 
     try {
@@ -878,7 +880,6 @@ async function deployerReport() {
     }
 
 }
-
 async function deleteApps(appsTodelete) {
     let wallet = config.algorand.algo_wallet_address
     let apps = appsTodelete || []
@@ -957,7 +958,6 @@ async function createGeoIndex() {
 
 
 }
-
 async function runDeployer() {
     if (!accountExists) await deployerAccount()
     if (config.deployer['deployer_contracts']) {

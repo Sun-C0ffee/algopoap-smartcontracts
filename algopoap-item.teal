@@ -346,7 +346,6 @@ itxn_field ConfigAssetManager
 itxn_field ConfigAssetReserve
 itxn_field ConfigAssetFreeze
 itxn_field ConfigAssetClawback
-
 itxn_submit
 byte 0x151f7c75
 load 0
