@@ -765,7 +765,9 @@ async function claimItemContract(addr, acc) {
 
     const tws0 = { txn: ptxn, signer: signer }
     let method = getMethodByName("claim", contract)
-    let method_budget = getMethodByName("budget_increase_call", contract)
+    let method_budget_1 = getMethodByName("budget_increase_call_1", contract)
+    let method_budget_2 = getMethodByName("budget_increase_call_2", contract)
+    let method_budget_3 = getMethodByName("budget_increase_call_3", contract)
     let note_claim = algosdk.encodeObj(
         "AlgoPoaP Claim Transaction"
     );
@@ -781,14 +783,23 @@ async function claimItemContract(addr, acc) {
     }) */
     //const tws1 = { txn: sigTxn, signer: signer }
     atc.addMethodCall({
-        method: method_budget,
+        method: method_budget_1,
         methodArgs: [],
         ...commonParams
     })
-      
+    atc.addMethodCall({
+        method: method_budget_2,
+        methodArgs: [],
+        ...commonParams
+    }) 
+    atc.addMethodCall({
+        method: method_budget_3,
+        methodArgs: [],
+        ...commonParams
+    }) 
     let txn0 = atc.transactions[0].txn
     let sigData = algosdk.encodeUnsignedTransaction(txn0)
-    let sig = algosdk.tealSign(acc.sk, sigData, applicationAddr)
+    let sig = algosdk.tealSign(acc.sk, sigData, algosdk.getApplicationAddress(applicationItemId))
     atc.addMethodCall({
         method: method,
         note: note_claim,

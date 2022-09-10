@@ -167,11 +167,21 @@ b b_error
 b_method_check:
 
 // Checking application call's Arg 0 for budget/qr method signature
-method "budget_increase_call()void"
+method "budget_increase_call_1()void"
 txn ApplicationArgs 0
 ==
 bnz method_budget_increase_call
 
+// Checking application call's Arg 0 for budget/qr method signature
+method "budget_increase_call_2()void"
+txn ApplicationArgs 0
+==
+bnz method_budget_increase_call
+
+method "budget_increase_call_3()void"
+txn ApplicationArgs 0
+==
+bnz method_budget_increase_call
 // Checking application call's Arg 0 for setup method signature
 method "setup(pay,account,application,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
@@ -611,17 +621,13 @@ b b_log_return
 // Handles budget/qr method
 method_budget_increase_call:
 global GroupSize
-int 3
+int 5
 ==
-txn GroupIndex
-int 0
-==
-&&
 assert
-gtxn 2 TypeEnum
+gtxn 4 TypeEnum
 int appl
 ==
-gtxn 2 ApplicationID
+gtxn 4 ApplicationID
 global CurrentApplicationID
 ==
 &&
@@ -688,18 +694,18 @@ concat
 b b_log_return
 
 b_claim_author_pays:
-gtxn 0 Amount
+gtxn 3 Amount
 int 0
 ==
 assert
-gtxn 0 Fee
+gtxn 3 Fee
 store 23
 b b_claim_check
 
 
 
 b_claim_default:
-gtxn 0 Fee
+gtxn 3 Fee
 global MinTxnFee
 int 2
 *
@@ -780,28 +786,28 @@ app_opted_in
 assert
 
 global GroupSize
-int 3
+int 5
 ==
 assert
 
-gtxn 1 RekeyTo
+gtxn 3 RekeyTo
 global ZeroAddress
 ==
 assert
-gtxn 1 CloseRemainderTo
+gtxn 3 CloseRemainderTo
 global ZeroAddress
 ==
 assert
-gtxn 1 AssetCloseTo
+gtxn 3 AssetCloseTo
 global ZeroAddress
 ==
 assert
-gtxn 1 TypeEnum
+gtxn 3 TypeEnum
 int pay
 ==
 assert
 
-gtxn 1 Amount
+gtxn 3 Amount
 int 0
 ==
 assert

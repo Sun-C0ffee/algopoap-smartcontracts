@@ -224,7 +224,25 @@
         },
         {
             
-            "name": "budget_increase_call",
+            "name": "budget_increase_call_1",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "AlgoPoaP Claim QRCode Data TXN and budget increasing application call"
+        }, 
+        {
+            
+            "name": "budget_increase_call_2",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "AlgoPoaP Claim QRCode Data TXN and budget increasing application call"
+        }, 
+        {
+            
+            "name": "budget_increase_call_3",
             "args": [],
             "returns": {
                 "type": "void"
