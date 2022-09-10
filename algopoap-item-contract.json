@@ -221,6 +221,15 @@
                 "type": "string"
             },
             "desc": "Gets all metrics"
+        },
+        {
+            
+            "name": "budget_increase_call",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "AlgoPoaP Claim QRCode Data TXN and budget increasing application call"
         }
     ]
 }

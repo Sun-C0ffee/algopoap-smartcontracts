@@ -581,7 +581,7 @@ async function setupItemContract(addr, acc) {
         to: applicationAddr,
         amount: params.fee,
         fee: params.fee,
-       
+
         ...params
     })
 
@@ -591,7 +591,7 @@ async function setupItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws, addr, Number(applicationId), '-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 3, 1, 1, 1, 1, 6,1]],
+        methodArgs: [tws, addr, Number(applicationId), '-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 3, 1, 1, 1, 1, 6, 1]],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -633,7 +633,7 @@ async function reSetupItemContract(addr, acc) {
 
     atc.addMethodCall({
         method: method,
-        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 3, 1, 1, 1, 1, 6,1]],
+        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 3, 1, 1, 1, 1, 6, 1]],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -667,7 +667,7 @@ async function activateItemContract(addr, acc) {
         type: 'pay',
         from: acc.addr,
         to: applicationAddr,
-        amount:  attendees_qty * 3 * params.fee,
+        amount: attendees_qty * 4 * params.fee,
         fee: params.fee,
         ...params
     })
@@ -677,7 +677,7 @@ async function activateItemContract(addr, acc) {
         to: acc.addr,
         assetIndex: Number(itemAsaId),
         amount: 0,
-        fee:  2 * params.fee,
+        fee: 2 * params.fee,
         ...params
     })
 
@@ -759,19 +759,47 @@ async function claimItemContract(addr, acc) {
         from: acc.addr,
         to: applicationAddr,
         amount: 0,
+        fee: params.fee,
         ...params
     })
 
     const tws0 = { txn: ptxn, signer: signer }
     let method = getMethodByName("claim", contract)
-
+    let method_budget = getMethodByName("budget_increase_call", contract)
+    let note_claim = algosdk.encodeObj(
+        "AlgoPoaP Claim Transaction"
+    );
+ 
+    //let oncomplete = algosdk.OnApplicationComplete.NoOpOC
+/*     let sigTxn = algosdk.makeApplicationCallTxnFromObject({
+        appIndex:Number(applicationItemId),
+        suggestedParams: params,
+        from: acc.addr,
+        fee: params.fee,
+        note: note,
+        onComplete: oncomplete,
+    }) */
+    //const tws1 = { txn: sigTxn, signer: signer }
     atc.addMethodCall({
-        method: method,
-        methodArgs: [tws0, /* tws1, */ Number(itemAsaId), Number(applicationId), addr, '0','0', [30, 3232, 100, 2345, 1671942604]],
+        method: method_budget,
+        methodArgs: [],
         ...commonParams
     })
+      
+    let txn0 = atc.transactions[0].txn
+    let sigData = algosdk.encodeUnsignedTransaction(txn0)
+    let sig = algosdk.tealSign(acc.sk, sigData, applicationAddr)
+    atc.addMethodCall({
+        method: method,
+        note: note_claim,
+        methodArgs: [tws0, Number(itemAsaId), Number(applicationId), addr, sig, sigData, [30, 3232, 100, 2345, 1671942604]],
+        ...commonParams
+    })
+    
     logger.info('------------------------------')
     logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+
+
     const result = await atc.execute(algodClient, 2)
     for (const idx in result.methodResults) {
 
@@ -785,7 +813,7 @@ async function claimItemContract(addr, acc) {
 async function closeOutMainContract(addr, acc) {
     let params = await algodClient.getTransactionParams().do();
     let appTxn = algosdk.makeApplicationCloseOutTxn(addr, params, Number(applicationId));
-   
+
     let appTxnId = appTxn.txID().toString();
 
     logger.info('------------------------------')
@@ -818,7 +846,7 @@ async function closeOutItemContract(addr, acc) {
 async function optinMainContract(addr, acc) {
     let params = await algodClient.getTransactionParams().do();
     let appTxn = algosdk.makeApplicationOptInTxn(addr, params, Number(applicationId));
-   
+
     let appTxnId = appTxn.txID().toString();
 
     logger.info('------------------------------')

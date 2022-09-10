@@ -166,6 +166,12 @@ b b_error
 
 b_method_check:
 
+// Checking application call's Arg 0 for budget/qr method signature
+method "budget_increase_call()void"
+txn ApplicationArgs 0
+==
+bnz method_budget_increase_call
+
 // Checking application call's Arg 0 for setup method signature
 method "setup(pay,account,application,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
@@ -493,9 +499,9 @@ retsub
 sub_check_qr_secret:
 load 6
 load 8
-load 5
-//TODO: send up signed txn and stringified version of txn as args of claim txn to test this
-//ed25519verify
+load 4
+ed25519verify
+assert
 retsub
 
 // Handles Release signature constraint check
@@ -595,11 +601,37 @@ byte "poap_author_address"
 app_global_get
 store 4
 
+// Handles sending NFT
 callsub sub_send_nft
 byte 0x151f7c75
 byte "algopoap_item_activate"
 concat
 b b_log_return
+
+// Handles budget/qr method
+method_budget_increase_call:
+global GroupSize
+int 3
+==
+txn GroupIndex
+int 0
+==
+&&
+assert
+gtxn 2 TypeEnum
+int appl
+==
+gtxn 2 ApplicationID
+global CurrentApplicationID
+==
+&&
+assert
+byte 0x151f7c75
+byte "budget_increase_call"
+concat
+log
+int 1
+return
 
 
 // Handles activate method
@@ -748,31 +780,32 @@ app_opted_in
 assert
 
 global GroupSize
-int 2
+int 3
 ==
 assert
 
-gtxn 0 RekeyTo
+gtxn 1 RekeyTo
 global ZeroAddress
 ==
 assert
-gtxn 0 CloseRemainderTo
+gtxn 1 CloseRemainderTo
 global ZeroAddress
 ==
 assert
-gtxn 0 AssetCloseTo
+gtxn 1 AssetCloseTo
 global ZeroAddress
 ==
 assert
-gtxn 0 TypeEnum
+gtxn 1 TypeEnum
 int pay
 ==
 assert
 
-gtxn 0 Amount
+gtxn 1 Amount
 int 0
 ==
 assert
+
 
 byte "author_pays_fee"
 app_global_get
