@@ -365,7 +365,7 @@ load 2
 itxn_field AssetSender
 load 3
 itxn_field AssetAmount
-load 4
+load 5
 itxn_field AssetReceiver
 itxn_submit
 byte "poap_item_nft_issuance_count"
