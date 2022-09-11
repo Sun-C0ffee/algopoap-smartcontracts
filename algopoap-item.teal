@@ -59,10 +59,12 @@
     // Byte poap_is_setup
     // Byte poap_is_released
 
-    // Uint64 poap_item_onboard_attendees_count
+
+    // Uint64 poap_item_onboard_count
+    // Uint64 poap_item_txn_count
     // Uint64 poap_item_claim_count
     // Uint64 poap_item_nft_issuance_count
-    //// Uint64 poap_item_txn_issuance_count
+    // Uint64 poap_item_txn_issuance_count
 
     // Byte poap_item_last_attendee
     // Byte poap_item_last_claim
@@ -270,7 +272,7 @@ int 1
 +
 app_global_put
 
-byte "algopoap_item_optin"
+byte "algopoap_item_optin_"
 txn Sender
 concat
 b b_log_return
@@ -388,6 +390,9 @@ dup
 app_global_get
 int 1
 +
+app_global_put
+byte "poap_item_last_nft_issuance"
+txn Sender
 app_global_put
 retsub
 
@@ -881,11 +886,16 @@ global MinTxnFee
 <=
 assert
 // Global states metrics setup
+
 byte "poap_item_onboard_count"
 int 0
 app_global_put
 
 byte "poap_item_txn_count"
+int 0
+app_global_put
+
+byte "poap_item_claim_count"
 int 0
 app_global_put
 
