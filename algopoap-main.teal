@@ -25,6 +25,7 @@
     // Uint64 poap_onboard_count
     // Uint64 poap_count
     // Byte poap_last_appid
+    // Byte poap_last_author
 
 
 //////////////////////////////////////////////////////////////
@@ -33,10 +34,6 @@
 b b_main
 // Main ruter branch which checks the call and routes to designated branch
 b_main:
-byte "poap_last_author"
-app_global_del
-byte "poap_last_attendee"
-app_global_del
 
 txn RekeyTo
 global ZeroAddress
@@ -221,7 +218,9 @@ byte "poap_last_appid"
 int 0
 app_global_put
 
-
+byte "poap_last_author"
+byte "-"
+app_global_put
 
 byte 0x151f7c75
 txn ApplicationArgs 1
