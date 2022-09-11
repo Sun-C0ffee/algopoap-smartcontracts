@@ -74,7 +74,6 @@ const importAccount = function () {
         logger.error(err);
     }
 };
-
 async function waitForConfirmation(txId) {
     logger.info("waiting for transaction: %s", txId)
     let response = await algodClient.status().do();
@@ -95,7 +94,6 @@ async function waitForConfirmation(txId) {
         await algodClient.statusAfterBlock(lastround).do();
     }
 }
-
 async function fetchAlgoWalletInfo() {
     if (algosdk.isValidAddress(accountObject.addr)) {
         const url = `https://algoindexer.testnet.algoexplorerapi.io/v2/accounts/${accountObject.addr}`;
@@ -165,7 +163,6 @@ async function fetchAlgoWalletInfo() {
 
     }
 }
-
 async function printCreatedAsset() {
 
     let accountInfo = await indexerClient.lookupAccountByID(accountObject.addr).do();
@@ -207,7 +204,6 @@ async function printCreatedAsset() {
         }
     }
 }
-
 async function printAssetHolding(account, assetid) {
     let accountInfo = await indexerClient.lookupAccountByID(account).do();
     accountBalance = accountInfo.account.amount
@@ -247,7 +243,6 @@ async function printAssetHolding(account, assetid) {
         }
     }
 }
-
 async function deployMainContract(addr, acc) {
     localInts = config.deployer['num_local_int'];
     localBytes = config.deployer['num_local_byte'];
@@ -806,7 +801,7 @@ async function claimItemContract(addr, acc) {
     let signedBytes = algosdk.signBytes(rawData, acc.sk )
     let verify = algosdk.verifyBytes(rawData,signedBytes, acc.addr) 
     console.log(verify)
-    
+
     atc.addMethodCall({
         method: method,
         note: note_claim,

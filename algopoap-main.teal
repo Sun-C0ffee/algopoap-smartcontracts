@@ -313,13 +313,14 @@ int 30
 itxn_field GlobalNumByteSlice
 int 30
 itxn_field GlobalNumUint
-int 8
+int 0
 itxn_field LocalNumUint
-int 8
+int 16
 itxn_field LocalNumByteSlice
 int 1000
 itxn_field Fee
-
+int 1
+itxn_field ExtraProgramPages
 txn Sender
 itxn_field Note
 
