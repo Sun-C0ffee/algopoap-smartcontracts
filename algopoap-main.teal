@@ -13,18 +13,18 @@
 // AlgoPoaP Smart Contract
 
 // Scratch space schema
-// 1: Application ID
+    // 1: Application ID
 
 // Local state schema for algopoap author
-//TODO local states...
+    // 0-15 Uint64 PoaP item app ids
 
 // Local state schema for algopoap attendee
-//TODO local states...
+    // 0-15 Uint64 PoaP item app ids
 
 // Global state schema
-// Uint64 poap_onboard_count
-// Uint64 poap_count
-// Byte poap_last_appid
+    // Uint64 poap_onboard_count
+    // Uint64 poap_count
+    // Byte poap_last_appid
 
 
 //////////////////////////////////////////////////////////////

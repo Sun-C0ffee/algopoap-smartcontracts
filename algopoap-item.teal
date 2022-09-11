@@ -13,83 +13,82 @@
 // AlgoPoaP Item Smart Contract
 
 // Scratch space schema
-// 0: Poa P ASA ID (if hasNFT is true)
-// 1: Parent application ID
-// 2: ASA Sender address to use with NFT sender sub
-// 3: ASA Amount to use with NFT sender sub
-// 4: ASA Receiver address to use with NFT sender sub
-// 5: ----------
-// 6: The QR data
-// 7: timestamp
-// 8: The QR secret
-// 9: Author Address
-// 10: Arg 15 for extraction
-// 11: ------
-// 12: Arg 15 for extraction
-// 13: latitude
-// 14: latitude_dec
-// 15: longitude
-// 16: longitude_dec
-// 17: poap_activate_time
-// 18: poap_lng_unit_diff
-// 19: lng_diff
-// 20: lat_diff
-// 21: poap_geo_buffer
-// 22: poap_lat_unit_diff
-// 23: fee_to_refund
+    // 0: Poa P ASA ID (if hasNFT is true)
+    // 1: Parent application ID
+    // 2: ASA Sender address to use with NFT sender sub
+    // 3: ASA Amount to use with NFT sender sub
+    // 4: ASA Receiver address to use with NFT sender sub
+    // 5: ----------
+    // 6: The QR data
+    // 7: timestamp
+    // 8: The QR secret
+    // 9: Author Address
+    // 10: Arg 15 for extraction
+    // 11: ------
+    // 12: Arg 15 for extraction
+    // 13: latitude
+    // 14: latitude_dec
+    // 15: longitude
+    // 16: longitude_dec
+    // 17: poap_activate_time
+    // 18: poap_lng_unit_diff
+    // 19: lng_diff
+    // 20: lat_diff
+    // 21: poap_geo_buffer
+    // 22: poap_lat_unit_diff
+    // 23: fee_to_refund
 
 // Local state schema for algopoap author
-//TODO local states...
+
 
 // Local state schema for algopoap attendee
-//TODO local states...
+
 
 // Global state schema
-// Uint64 poap_parent_id
-// Byte poap_parent_address
-// Byte poap_author_address
-// Uint64 poap_asa_id
+    // Uint64 poap_parent_id
+    // Byte poap_parent_address
+    // Byte poap_author_address
+    // Uint64 poap_asa_id
 
 
-// Uint64 poap_setup_time
-// Uint64 poap_activate_time
-// Uint64 poap_release_time
+    // Uint64 poap_setup_time
+    // Uint64 poap_activate_time
+    // Uint64 poap_release_time
 
-// Byte poap_is_activated
-// Byte poap_is_setup
-// Byte poap_is_released
+    // Byte poap_is_activated
+    // Byte poap_is_setup
+    // Byte poap_is_released
 
-// Uint64 poap_item_claim_count
-// Uint64 poap_item_nft_issuance_count
-// Uint64 poap_item_txn_issuance_count
+    // Uint64 poap_item_onboard_attendees_count
+    // Uint64 poap_item_claim_count
+    // Uint64 poap_item_nft_issuance_count
+    //// Uint64 poap_item_txn_issuance_count
 
-// Byte poap_item_last_attendee
-// Byte poap_item_last_claim
-// Byte poap_item_last_nft_issuance
-// Byte poap_item_last_txn_issuance
+    // Byte poap_item_last_attendee
+    // Byte poap_item_last_claim
+    // Byte poap_item_last_nft_issuance
+    // Byte poap_item_last_txn_issuance
 
-// Byte poap_name
-// Byte poap_logo
-// Byte poap_desc
-// Byte poap_timezone
-// Byte poap_address
-// Byte poap_url
-// Byte poap_email
-// Uint64 poap_start_timestamp
-// Uint64 poap_lat
-// Uint64 poap_lat_dec
-// Uint64 poap_lng
-// Uint64 poap_lng_dec
-// Uint64 poap_geo_buffer
-// Uint64 poap_attendee_qty
-// Uint64 poap_has_nft
-// Uint64 poap_has_geo
-// Uint64 poap_has_sig
-// Uint64 poap_has_qrcode
-// Uint64 poap_lng_unit_diff
-// Uint64 author_pays_fee
-
-// Byte poap_switches
+    // Byte poap_name
+    // Byte poap_logo
+    // Byte poap_desc
+    // Byte poap_timezone
+    // Byte poap_address
+    // Byte poap_url
+    // Byte poap_email
+    // Uint64 poap_start_timestamp
+    // Uint64 poap_lat
+    // Uint64 poap_lat_dec
+    // Uint64 poap_lng
+    // Uint64 poap_lng_dec
+    // Uint64 poap_geo_buffer
+    // Uint64 poap_attendee_qty
+    // Uint64 poap_has_nft
+    // Uint64 poap_has_geo
+    // Uint64 poap_has_sig
+    // Uint64 poap_has_qrcode
+    // Uint64 poap_lng_unit_diff
+    // Uint64 author_pays_fee
 
 //////////////////////////////////////////////////////////////
 
