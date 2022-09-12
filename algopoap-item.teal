@@ -38,12 +38,6 @@
     // 22: poap_lat_unit_diff
     // 23: fee_to_refund
 
-// Local state schema for algopoap author
-
-
-// Local state schema for algopoap attendee
-
-
 // Global state schema
     // Uint64 poap_parent_id
     // Byte poap_parent_address
@@ -356,7 +350,6 @@ itxn_begin
 itxn_field ConfigAsset
 int acfg
 itxn_field TypeEnum
-
 
 global CurrentApplicationAddress
 dup

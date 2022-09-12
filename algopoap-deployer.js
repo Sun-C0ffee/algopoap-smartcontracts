@@ -263,10 +263,11 @@ async function deployMainContract(addr, acc) {
     //logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
     logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
     //logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
-
-    let appTxn = algosdk.makeApplicationCreateTxn(addr, params, onComplete,
-        compiledResultUint8, compiledClearResultUint8,
-        localInts, localBytes, globalInts, globalBytes);
+    
+    let extraPages = 1
+    let appTxn = algosdk.makeApplicationCreateTxnFromObject({from: addr, suggestedParams:params, onComplete,
+        approvalProgram: compiledResultUint8, clearProgram:compiledClearResultUint8,
+        numLocalInts:localInts, numLocalByteSlices:localBytes, numGlobalInts:globalInts, numGlobalByteSlices:globalBytes, extraPages});
     let appTxnId = appTxn.txID().toString();
     logger.info('------------------------------')
     logger.info("AlgoPoaP Main Application Creation TXId =  %s", appTxnId);
@@ -348,7 +349,7 @@ async function setupMainContract(addr, acc) {
     let method = getMethodByName("setup", contract)
     atc.addMethodCall({
         method: method,
-        methodArgs: ['v0.0.8'],
+        methodArgs: ['v0.0.9'],
         ...commonParams
     })
     logger.info('------------------------------')
@@ -445,7 +446,8 @@ async function deployItemContract(addr, acc) {
         appID: Number(applicationId),
         sender: acc.addr,
         suggestedParams: params,
-        signer: signer
+        signer: signer,
+        extraPages:1
     }
     let method = getMethodByName("item_create", contract)
 
@@ -502,7 +504,7 @@ async function updateItemContract(addr, acc) {
         appID: Number(applicationId),
         sender: acc.addr,
         suggestedParams: params,
-        signer: signer
+        signer: signer,
     }
     let method = getMethodByName("item_update", contract)
 
@@ -574,8 +576,8 @@ async function setupItemContract(addr, acc) {
     const ptxn = new algosdk.Transaction({
         from: acc.addr,
         to: applicationAddr,
-        amount: params.fee,
-        fee: params.fee,
+        amount: 3 * params.fee,
+        fee: 2 * params.fee,
 
         ...params
     })

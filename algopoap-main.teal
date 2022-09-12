@@ -14,6 +14,7 @@
 
 // Scratch space schema
     // 1: Application ID
+    // 2: PoaP item newly created Application ID
 
 // Local state schema for algopoap author
     // 0-15 Uint64 PoaP item app ids
@@ -276,9 +277,12 @@ gtxns Receiver
 global CurrentApplicationAddress
 ==
 assert
+
 gtxns Amount
-int 100000
->=
+global MinTxnFee
+int 2
+*
+<=
 assert
 // Inner transaction to create the new AlgoPoaP item smart contract
 
@@ -291,7 +295,7 @@ int NoOp
 itxn_field OnCompletion
 
 
-// Get the length and extract it, removing the first 2 bytes.
+
 txn ApplicationArgs 1
 dup
 len
@@ -300,7 +304,7 @@ swap
 substring3
 itxn_field ApprovalProgram
 
-// Get the length and extract it, removing the first 2 bytes.
+
 txn ApplicationArgs 2
 dup
 len
@@ -316,17 +320,21 @@ int 0
 itxn_field LocalNumUint
 int 16
 itxn_field LocalNumByteSlice
-int 1000
-itxn_field Fee
 int 1
 itxn_field ExtraProgramPages
 txn Sender
 itxn_field Note
 
 itxn_submit
+itxn CreatedApplicationID
+store 2
 
 byte "poap_last_appid"
-itxn CreatedApplicationID
+load 2
+app_global_put
+
+byte "poap_last_author"
+txn Sender
 app_global_put
 
 byte "poap_count"
@@ -336,9 +344,13 @@ int 1
 +
 app_global_put
 
+txn Sender
+itxn TxID
+load 2
+app_local_put
 
 byte 0x151f7c75
-itxn CreatedApplicationID
+load 2
 itob
 concat
 b b_log_return
@@ -381,8 +393,10 @@ swap
 substring3
 itxn_field ClearStateProgram
 
-int 1000
-itxn_field Fee
+//int 1000
+//itxn_field Fee
+int 1
+itxn_field ExtraProgramPages
 
 txn Sender
 itxn_field Note
@@ -416,23 +430,8 @@ btoi
 txnas Applications
 itxn_field ApplicationID
 
-int 1000
-itxn_field Fee
-
-itxn_submit
-itxn_begin
-
-int pay
-itxn_field TypeEnum
-
-txn Sender
-itxn_field Receiver
-
-int 100000
-itxn_field Amount
-
-int 1000
-itxn_field Fee
+//int 1000
+//itxn_field Fee
 
 itxn_submit
 
