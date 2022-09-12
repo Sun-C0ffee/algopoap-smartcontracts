@@ -23,7 +23,7 @@ let applicationAddr = config.algorand.asc_main_address;
 let applicationItemAddr = config.algorand.asc_item_address;
 let applicationId = config.algorand.asc_main_id;
 let applicationItemId = config.algorand.asc_last_item_id;
-let itemAsaId = config.deployer.item_asa_id;
+let itemAsaId = config.algorand.item_asa_id;
 let accountObject;
 let accountAddress;
 let accountBalance;

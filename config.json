@@ -4,6 +4,7 @@
     "network":"testnet",
     "asc_main_id":109449086,
     "asc_last_item_id":109494035,
+    "item_asa_id":109496213,
     "asc_main_address":"GIJSZ6JLQQ5LDTQUPCD2WIEWYMFE3KO37HMWYMVC43ZDNMYX2MNCFJX73A",
     "asc_item_address":"QMCMPNQHJCID3WZ3ACAI6U7PG6KVVBQ4MRRPBLHFGPNLPMXBL5TAM23ZGU",
     "algo_wallet_address":"UTI7PAASILRDA3ISHY5M7J7LNRX2AIVQJWI7ZKCCGKVLMFD3VPR5PWSZ4I",
@@ -30,7 +31,7 @@
     "test_metrics": false,
     "test_main_closeout": false,
     "test_main_optin": false,
-    "item_asa_id":109496213,
+   
     "test_item_create": false,
     "test_item_closeout": false,
     "test_item_optin": false,
