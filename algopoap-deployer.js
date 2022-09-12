@@ -20,8 +20,9 @@ let indexerPort;
 
 let geoIndex = config.deployer.geo_index
 let applicationAddr = config.algorand.asc_main_address;
+let applicationItemAddr = config.algorand.asc_item_address;
 let applicationId = config.algorand.asc_main_id;
-let applicationItemId = config.deployer.test_item_update_app;
+let applicationItemId = config.algorand.asc_last_item_id;
 let itemAsaId = config.deployer.item_asa_id;
 let accountObject;
 let accountAddress;
@@ -447,7 +448,6 @@ async function deployItemContract(addr, acc) {
         sender: acc.addr,
         suggestedParams: params,
         signer: signer,
-        extraPages:1
     }
     let method = getMethodByName("item_create", contract)
 
@@ -1056,6 +1056,28 @@ async function runDeployer() {
             }
         }
     }
+    if (config.deployer['test_item_closeout']) {
+        {
+            try {
+
+                await closeOutItemContract(accountObject.addr, accountObject)
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
+    if (config.deployer['test_main_optin']) {
+        {
+            try {
+
+                await optinMainContract(accountObject.addr, accountObject)
+            }
+            catch (err) {
+                logger.error(err);
+            }
+        }
+    }
     if (config.deployer['test_item_create']) {
         {
             try {
@@ -1093,28 +1115,7 @@ async function runDeployer() {
             }
         }
     }
-    if (config.deployer['test_item_closeout']) {
-        {
-            try {
-
-                await closeOutItemContract(accountObject.addr, accountObject)
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_main_optin']) {
-        {
-            try {
-
-                await optinMainContract(accountObject.addr, accountObject)
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
+ 
     if (config.deployer['test_item_optin']) {
         {
             try {
