@@ -326,11 +326,9 @@ app_global_get
 itxn_field ConfigAssetURL
 global CurrentApplicationAddress
 dup
+dup2
 itxn_field ConfigAssetManager
 itxn_field ConfigAssetReserve
-byte "poap_author_address"
-app_global_get
-dup
 itxn_field ConfigAssetFreeze
 itxn_field ConfigAssetClawback
 itxn_submit

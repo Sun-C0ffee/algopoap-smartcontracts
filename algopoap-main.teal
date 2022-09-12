@@ -395,8 +395,7 @@ itxn_field ClearStateProgram
 
 //int 1000
 //itxn_field Fee
-int 1
-itxn_field ExtraProgramPages
+
 
 txn Sender
 itxn_field Note
