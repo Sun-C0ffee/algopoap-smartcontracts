@@ -46,21 +46,16 @@ const AlgoPoapDeployer = class {
 
     }
     importAccount() {
-        try {
-            const acc = this.algosdk.mnemonicToSecretKey(this.mnemonic);
-            this.logger.info("Account Address = %s", acc.addr);
-            let acc_mnemonic_check = this.algosdk.secretKeyToMnemonic(acc.sk);
-            let acc_decoded = this.algosdk.decodeAddress(acc.addr);
-            this.logger.info("Account Address Decoded Public Key = %s", acc_decoded.publicKey.toString());
-            this.logger.info("Account Address Decoded Checksum = %s", acc_decoded.checksum.toString());
-            let acc_encoded = this.algosdk.encodeAddress(acc_decoded.publicKey);
-            this.logger.info("Account Address Encoded = %s", acc_encoded);
-            this.logger.warn(this.config.algorand['algo_dispencer'] + acc.addr);
-            return acc;
-        }
-        catch (err) {
-            this.logger.error(err);
-        }
+        const acc = this.algosdk.mnemonicToSecretKey(this.mnemonic);
+        this.logger.info("Account Address = %s", acc.addr);
+        let acc_mnemonic_check = this.algosdk.secretKeyToMnemonic(acc.sk);
+        let acc_decoded = this.algosdk.decodeAddress(acc.addr);
+        this.logger.info("Account Address Decoded Public Key = %s", acc_decoded.publicKey.toString());
+        this.logger.info("Account Address Decoded Checksum = %s", acc_decoded.checksum.toString());
+        let acc_encoded = this.algosdk.encodeAddress(acc_decoded.publicKey);
+        this.logger.info("Account Address Encoded = %s", acc_encoded);
+        this.logger.warn(this.config.algorand['algo_dispencer'] + acc.addr);
+        return acc;
     };
     async waitForConfirmation(txId) {
         this.logger.info("waiting for transaction: %s", txId)
