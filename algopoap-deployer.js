@@ -6,13 +6,11 @@
 const geolib = require('geolib');
 const fetch = require('node-fetch');
 
-
 const AlgoPoapDeployer = class {
     constructor(props) {
         this.config = props.config
         this.logger = props.logger
         this.algosdk = props.algosdk
-
         this.mode = props.config.deployer.mode
         this.geoIndex = props.config.deployer.geo_index
         this.applicationAddr = props.config.algorand.asc_main_address
@@ -20,7 +18,6 @@ const AlgoPoapDeployer = class {
         this.applicationId = props.config.algorand.asc_main_id
         this.applicationItemId = props.config.algorand.asc_last_item_id
         this.itemAsaId = props.config.algorand.item_asa_id
-
         this.algodServer = props.config.algorand.algod_remote_server
         this.algodToken = props.config.algorand.algod_remote_token
         this.algodPort = props.config.algorand.algod_remote_port
@@ -217,7 +214,6 @@ const AlgoPoapDeployer = class {
             }
         }
     }
-
     async deployMainContract(addr, acc) {
         let localInts = this.config.deployer['num_local_int'];
         let localBytes = this.config.deployer['num_local_byte'];
