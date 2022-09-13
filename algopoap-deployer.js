@@ -48,12 +48,6 @@ const AlgoPoapDeployer = class {
         this.trxTransfer = null
 
     }
-    client() {
-        return this.algodClient
-    }
-    indexerClient() {
-        return this.indexerClient
-    }
     importAccount() {
         try {
             const acc = this.algosdk.mnemonicToSecretKey(this.mnemonic);
