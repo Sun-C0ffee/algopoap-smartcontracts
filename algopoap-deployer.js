@@ -1070,14 +1070,4 @@ const AlgoPoapDeployer = class {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 module.exports = AlgoPoapDeployer
