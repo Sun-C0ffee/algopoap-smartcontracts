@@ -9,11 +9,11 @@ props.mnemonic = fs.readFileSync(path.join(__dirname, 'algopoap_mnemonic.txt'), 
 props.config = config
 props.algosdk = algosdk
 props.logger = logger
-props.approvalProgData =  fs.readFileSync(path.join(__dirname, 'algopoap-main.teal'))
-props.clearProgData =  fs.readFileSync(path.join(__dirname, 'algopoap-clear.teal'))
-props.itemApprovalProgData =  fs.readFileSync(path.join(__dirname, 'algopoap-item.teal'));
-props.itemClearProgData =  fs.readFileSync(path.join(__dirname, 'algopoap-clear.teal'));
-props.contract =  fs.readFileSync(path.join(__dirname, 'algopoap-contract.json'));
-props.itemContract =  fs.readFileSync(path.join(__dirname, 'algopoap-item-contract.json'));
+props.approvalProgData = fs.readFileSync(path.join(__dirname, 'algopoap-main.teal'))
+props.clearProgData = fs.readFileSync(path.join(__dirname, 'algopoap-clear.teal'))
+props.itemApprovalProgData = fs.readFileSync(path.join(__dirname, 'algopoap-item.teal'));
+props.itemClearProgData = fs.readFileSync(path.join(__dirname, 'algopoap-clear.teal'));
+props.contract = fs.readFileSync(path.join(__dirname, 'algopoap-contract.json'));
+props.itemContract = fs.readFileSync(path.join(__dirname, 'algopoap-item-contract.json'));
 const algoPoapDeployer = new AlgoPoapDeployer(props)
 algoPoapDeployer.runDeployer()

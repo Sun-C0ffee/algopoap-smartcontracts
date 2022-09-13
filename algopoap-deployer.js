@@ -268,7 +268,7 @@ const AlgoPoapDeployer = class {
     async updateMainContract(addr, acc) {
         let params = await this.algodClient.getTransactionParams().do();
         let onComplete = this.algosdk.OnApplicationComplete.UpdateApplicationOC;
-  
+
         const compiledResult = await this.algodClient.compile(this.approvalProgData).do();
         const compiledClearResult = await this.algodClient.compile(this.clearProgData).do();
         const compiledResultUint8 = new Uint8Array(Buffer.from(compiledResult.result, "base64"));
@@ -278,7 +278,7 @@ const AlgoPoapDeployer = class {
         //this.logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
         this.logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
         //this.logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
-        /*   let note = this.algosdk.encodeObj(
+        /* let note = this.algosdk.encodeObj(
               `Update AlgoPoaP Application ID: ${this.applicationId}`
           ); */
 
@@ -341,7 +341,7 @@ const AlgoPoapDeployer = class {
         let params = await this.algodClient.getTransactionParams().do();
         const atc = new this.algosdk.AtomicTransactionComposer()
         const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
-   
+
         const contract = new this.algosdk.ABIContract(JSON.parse(this.contract.toString()))
         const commonParams = {
             appID: Number(this.applicationId),
@@ -370,7 +370,7 @@ const AlgoPoapDeployer = class {
         let params = await this.algodClient.getTransactionParams().do();
         const atc = new this.algosdk.AtomicTransactionComposer()
         const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
-    
+
         const contract = new this.algosdk.ABIContract(JSON.parse(this.contract.toString()))
         const commonParams = {
             appID: Number(this.applicationId),
@@ -399,7 +399,7 @@ const AlgoPoapDeployer = class {
         let params = await this.algodClient.getTransactionParams().do();
         const atc = new this.algosdk.AtomicTransactionComposer()
         const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
- 
+
 
         const compiledItemResult = await this.algodClient.compile(this.itemApprovalProgData).do();
         const compiledItemClearResult = await this.algodClient.compile(this.itemClearProgData).do();
@@ -444,8 +444,8 @@ const AlgoPoapDeployer = class {
         let params = await this.algodClient.getTransactionParams().do();
         const atc = new this.algosdk.AtomicTransactionComposer()
         const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
-    
-   
+
+
         const compiledItemResult = await this.algodClient.compile(this.itemApprovalProgData).do();
         const compiledItemClearResult = await this.algodClient.compile(this.itemClearProgData).do();
         const compiledResultUint8 = new Uint8Array(Buffer.from(compiledItemResult.result, "base64"));
@@ -480,9 +480,9 @@ const AlgoPoapDeployer = class {
         let params = await this.algodClient.getTransactionParams().do();
         const atc = new this.algosdk.AtomicTransactionComposer()
         const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
-    
 
-      
+
+
         const contract = new this.algosdk.ABIContract(JSON.parse(this.contract.toString()))
         const commonParams = {
             appID: Number(this.applicationId),
@@ -592,7 +592,7 @@ const AlgoPoapDeployer = class {
         let params = await this.algodClient.getTransactionParams().do();
         const atc = new this.algosdk.AtomicTransactionComposer()
         const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
-   
+
         const contract = new this.algosdk.ABIContract(JSON.parse(this.itemContract.toString()))
         const commonParams = {
             appID: Number(Number(this.applicationItemId)),
@@ -903,11 +903,9 @@ const AlgoPoapDeployer = class {
 
 
         })
-
         const fileContent = JSON.stringify(geoIndexDistinct, null, 2);
         fs.writeFileSync("geoindex.json", fileContent);
         this.geoIndex = geoIndexDistinct;
-
 
     }
     async runDeployer() {
