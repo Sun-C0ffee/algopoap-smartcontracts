@@ -242,10 +242,10 @@ const AlgoPoapDeployer = class {
     }
 
     async deployMainContract(addr, acc) {
-        localInts = this.config.deployer['num_local_int'];
-        localBytes = this.config.deployer['num_local_byte'];
-        globalInts = this.config.deployer['num_global_int'];
-        globalBytes = this.config.deployer['num_global_byte'];
+        let localInts = this.config.deployer['num_local_int'];
+        let localBytes = this.config.deployer['num_local_byte'];
+        let globalInts = this.config.deployer['num_global_int'];
+        let globalBytes = this.config.deployer['num_global_byte'];
         let params = await this.algodClient.getTransactionParams().do();
         let onComplete = this.algosdk.OnApplicationComplete.NoOpOC;
 
@@ -464,10 +464,6 @@ const AlgoPoapDeployer = class {
         }
     }
     async updateItemContract(addr, acc) {
-        localInts = this.config.deployer['num_local_int'];
-        localBytes = this.config.deployer['num_local_byte'];
-        globalInts = this.config.deployer['num_global_int'];
-        globalBytes = this.config.deployer['num_global_byte'];
         let params = await this.algodClient.getTransactionParams().do();
         const atc = new this.algosdk.AtomicTransactionComposer()
         const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)

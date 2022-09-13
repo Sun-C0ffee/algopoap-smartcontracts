@@ -6,8 +6,6 @@ const logger = require('./logger');
 const AlgoPoapDeployer = require('./algopoap-deployer')
 let props = {}
 props.mnemonic = fs.readFileSync(path.join(__dirname, 'algopoap_mnemonic.txt'), 'utf8')
-
-
 props.config = config
 props.algosdk = algosdk
 props.logger = logger
