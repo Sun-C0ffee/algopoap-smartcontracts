@@ -105,16 +105,13 @@ const AlgoPoapDeployer = class {
             if (data) {
                 if (data.account) {
                     if (String(data.account.address) === String(this.accountObject.addr)) {
-
                         this.accountBalance = data.account.amount
-
                         this.assetsHeld = data.account.assets
                         this.assetsCreated = data.account["created-assets"]
                         this.appsCreated = data.account["created-apps"]
                         this.assetsHeldBalance = !!this.assetsHeld ? this.assetsHeld.length : 0
                         this.assetsCreatedBalance = !!this.assetsCreated ? this.assetsCreated.length : 0
                         if (this.appsCreated) this.appsCreatedBalance = this.appsCreated.length
-
 
                         this.logger.info('------------------------------')
                         this.logger.info("Account Balance = %s", this.accountBalance);
@@ -144,7 +141,6 @@ const AlgoPoapDeployer = class {
             let dataTrx = await resTrx.json()
             if (dataTrx) {
                 if (dataTrx.transactions) {
-
                     this.trxPayment = dataTrx.transactions.filter(
                         (trx) => !!trx["payment-transaction"]
                     )
@@ -161,17 +157,10 @@ const AlgoPoapDeployer = class {
         }
     }
     async printCreatedAsset() {
-
         let accountInfo = await this.indexerClient.lookupAccountByID(this.accountObject.addr).do();
-
         this.accountBalance = accountInfo.account.amount
-
         this.assetsCreated = accountInfo['account']["created-assets"]
-
-
         this.assetsCreatedBalance = !!this.assetsCreated ? this.assetsCreated.length : 0
-
-
 
         this.logger.info('------------------------------')
         this.logger.info("Printed Account Balance = %s", this.accountBalance);
@@ -204,14 +193,8 @@ const AlgoPoapDeployer = class {
     async printAssetHolding(account, assetid) {
         let accountInfo = await this.indexerClient.lookupAccountByID(account).do();
         this.accountBalance = accountInfo.account.amount
-
         this.assetsHeld = accountInfo.account.assets
-
-
         this.assetsHeldBalance = !!this.assetsHeld ? this.assetsHeld.length : 0
-
-
-
 
         this.logger.info('------------------------------')
         this.logger.info("Printed Account Balance = %s", this.accountBalance);
@@ -299,7 +282,6 @@ const AlgoPoapDeployer = class {
               `Update AlgoPoaP Application ID: ${this.applicationId}`
           ); */
 
-
         let appTxn = this.algosdk.makeApplicationUpdateTxn(addr, params, Number(this.applicationId),
             compiledResultUint8, compiledClearResultUint8);
         let appTxnId = appTxn.txID().toString();
@@ -341,7 +323,7 @@ const AlgoPoapDeployer = class {
         let method = this.getMethodByName("setup", contract)
         atc.addMethodCall({
             method: method,
-            methodArgs: ['v0.0.9'],
+            methodArgs: [this.config.deployer.version],
             ...commonParams
         })
         this.logger.info('------------------------------')
@@ -423,11 +405,6 @@ const AlgoPoapDeployer = class {
         const compiledItemClearResult = await this.algodClient.compile(this.itemClearProgData).do();
         const compiledResultUint8 = new Uint8Array(Buffer.from(compiledItemResult.result, "base64"));
         const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledItemClearResult.result, "base64"));
-
-
-
-
-    
         const contract = new this.algosdk.ABIContract(JSON.parse(this.contract.toString()))
         const commonParams = {
             appID: Number(this.applicationId),
@@ -473,11 +450,6 @@ const AlgoPoapDeployer = class {
         const compiledItemClearResult = await this.algodClient.compile(itemClearProgData).do();
         const compiledResultUint8 = new Uint8Array(Buffer.from(compiledItemResult.result, "base64"));
         const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledItemClearResult.result, "base64"));
-
-
-
-
-        
         const contract = new this.algosdk.ABIContract(JSON.parse(buff.toString()))
         const commonParams = {
             appID: Number(this.applicationId),
@@ -541,10 +513,6 @@ const AlgoPoapDeployer = class {
         let params = await this.algodClient.getTransactionParams().do();
         const atc = new this.algosdk.AtomicTransactionComposer()
         const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
-
-
-
-
         const contract = new this.algosdk.ABIContract(JSON.parse(this.itemContract.toString()))
         const commonParams = {
             appID: Number(Number(this.applicationItemId)),
@@ -795,13 +763,10 @@ const AlgoPoapDeployer = class {
     async closeOutMainContract(addr, acc) {
         let params = await this.algodClient.getTransactionParams().do();
         let appTxn = this.algosdk.makeApplicationCloseOutTxn(addr, params, Number(this.applicationId));
-
         let appTxnId = appTxn.txID().toString();
-
         this.logger.info('------------------------------')
         this.logger.info("AlgoPoaP Main Application close out TXId =  %s", appTxnId);
         let signedAppTxn = appTxn.signTxn(acc.sk);
-
         await this.algodClient.sendRawTransaction(signedAppTxn).do();
         await this.algosdk.waitForConfirmation(this.algodClient, appTxnId, 5)
         this.logger.info('------------------------------')
@@ -810,14 +775,10 @@ const AlgoPoapDeployer = class {
     }
     async closeOutItemContract(addr, acc) {
         let params = await this.algodClient.getTransactionParams().do();
-
         let appTxnItem = this.algosdk.makeApplicationCloseOutTxn(addr, params, Number(this.applicationItemId));
-
         let appTxnIdItem = appTxnItem.txID().toString();
         this.logger.info('------------------------------')
-
         this.logger.info("AlgoPoaP Item Application close out TXId =  %s", appTxnIdItem);
-
         let signedAppTxnItem = appTxnItem.signTxn(acc.sk);
         await this.algodClient.sendRawTransaction(signedAppTxnItem).do();
         await this.algosdk.waitForConfirmation(this.algodClient, appTxnIdItem, 5)
@@ -828,13 +789,10 @@ const AlgoPoapDeployer = class {
     async optinMainContract(addr, acc) {
         let params = await this.algodClient.getTransactionParams().do();
         let appTxn = this.algosdk.makeApplicationOptInTxn(addr, params, Number(this.applicationId));
-
         let appTxnId = appTxn.txID().toString();
-
         this.logger.info('------------------------------')
         this.logger.info("AlgoPoaP Main Application Optin TXId =  %s", appTxnId);
         let signedAppTxn = appTxn.signTxn(acc.sk);
-
         await this.algodClient.sendRawTransaction(signedAppTxn).do();
         await this.algosdk.waitForConfirmation(this.algodClient, appTxnId, 5)
         this.logger.info('------------------------------')
@@ -843,14 +801,10 @@ const AlgoPoapDeployer = class {
     }
     async optinItemContract(addr, acc) {
         let params = await this.algodClient.getTransactionParams().do();
-
         let appTxnItem = this.algosdk.makeApplicationOptInTxn(addr, params, Number(this.applicationItemId));
-
         let appTxnIdItem = appTxnItem.txID().toString();
         this.logger.info('------------------------------')
-
         this.logger.info("AlgoPoaP Item Application Optin TXId =  %s", appTxnIdItem);
-
         let signedAppTxnItem = appTxnItem.signTxn(acc.sk);
         await this.algodClient.sendRawTransaction(signedAppTxnItem).do();
         await this.algosdk.waitForConfirmation(this.algodClient, appTxnIdItem, 5)
@@ -873,14 +827,9 @@ const AlgoPoapDeployer = class {
     async deployerReport() {
 
         try {
-
-
-            await this.fetchAlgoWalletInfo()
-
+            await this.fetchAlgoWalletInfo();
             await this.printCreatedAsset();
             await this.printAssetHolding(this.accountObject.addr);
-
-
         }
         catch (err) {
             this.logger.error(err);
@@ -892,7 +841,6 @@ const AlgoPoapDeployer = class {
         let apps = appsTodelete || []
         for (let i = 0; i < apps.length; i++) {
             this.logger.info('Now deleting AlgoPoaP APP: %s', apps[i])
-
             let params = await this.algodClient.getTransactionParams().do();
             params.fee = 1000;
             params.flatFee = true;
@@ -906,8 +854,6 @@ const AlgoPoapDeployer = class {
                     date: `${new Date()}`,
                 })
             );
-
-
             let txn = this.algosdk.makeApplicationDeleteTxnFromObject({
                 suggestedParams: params,
                 type: "appl",
@@ -924,7 +870,6 @@ const AlgoPoapDeployer = class {
             await this.algosdk.waitForConfirmation(this.algodClient, txId, 5)
             //await waitForConfirmation(txId);
             let ptx = await this.algodClient.pendingTransactionInformation(txId).do();
-
             const noteArrayFromTxn = ptx.txn.txn.note;
             const receivedNote = Buffer.from(noteArrayFromTxn).toString('utf8');
             this.logger.info("Note from confirmed AlgoPoaP Delete TXN: %s", receivedNote);
@@ -966,13 +911,13 @@ const AlgoPoapDeployer = class {
     }
     async runDeployer() {
         await this.deployerAccount()
-        if (this.config.deployer['deployer_report']) await this.deployerReport()
-        if (this.config.deployer['delete_apps']) await this.deleteApps(this.config.deployer.apps_to_delete)
+        if (this.config.deployer['deployer_report']) await this.deployerReport();
+        if (this.config.deployer['delete_apps']) await this.deleteApps(this.config.deployer.apps_to_delete);
         if (this.config.deployer['create_geo_index']) {
             {
                 try {
 
-                    await this.createGeoIndex()
+                    await this.createGeoIndex();
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -981,10 +926,7 @@ const AlgoPoapDeployer = class {
         }
         if (this.config.deployer['deployer_contracts']) {
             try {
-
-                await this.deployMainContract(this.accountObject.addr, this.accountObject)
-
-
+                await this.deployMainContract(this.accountObject.addr, this.accountObject);
             }
             catch (err) {
                 this.logger.error(err);
@@ -993,9 +935,7 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['deployer_update_contracts']) {
             {
                 try {
-
-                    await this.updateMainContract(this.accountObject.addr, this.accountObject)
-
+                    await this.updateMainContract(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -1005,12 +945,7 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['setup_app']) {
             {
                 try {
-
-                    await this.setupMainContract(this.accountObject.addr, this.accountObject)
-
-
-
-
+                    await this.setupMainContract(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -1020,12 +955,8 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['test_metrics']) {
             {
                 try {
-
-                    await this.getMainMetrics(this.accountObject.addr, this.accountObject)
-                    await this.getMainMetric(this.accountObject.addr, this.accountObject)
-
-
-
+                    await this.getMainMetrics(this.accountObject.addr, this.accountObject);
+                    await this.getMainMetric(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -1035,8 +966,7 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['test_item_closeout']) {
             {
                 try {
-
-                    await this.closeOutItemContract(this.accountObject.addr, this.accountObject)
+                    await this.closeOutItemContract(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -1046,8 +976,7 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['test_main_optin']) {
             {
                 try {
-
-                    await this.optinMainContract(this.accountObject.addr, this.accountObject)
+                    await this.optinMainContract(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -1057,12 +986,7 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['test_item_create']) {
             {
                 try {
-
-                    await this.deployItemContract(this.accountObject.addr, this.accountObject)
-
-
-
-
+                    await this.deployItemContract(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -1072,8 +996,7 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['test_item_update']) {
             {
                 try {
-
-                    await this.updateItemContract(this.accountObject.addr, this.accountObject)
+                    await this.updateItemContract(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -1083,8 +1006,7 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['test_main_closeout']) {
             {
                 try {
-
-                    await this.closeOutMainContract(this.accountObject.addr, this.accountObject)
+                    await this.closeOutMainContract(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -1094,8 +1016,7 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['test_item_optin']) {
             {
                 try {
-
-                    await this.optinItemContract(this.accountObject.addr, this.accountObject)
+                    await this.optinItemContract(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -1105,12 +1026,7 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['test_item_delete']) {
             {
                 try {
-
-                    await this.deleteItemContract(this.accountObject.addr, this.accountObject)
-
-
-
-
+                    await this.deleteItemContract(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -1122,9 +1038,9 @@ const AlgoPoapDeployer = class {
                 try {
 
                     if (Number(this.itemAsaId) > 0) {
-                        await this.reSetupItemContract(this.accountObject.addr, this.accountObject)
+                        await this.reSetupItemContract(this.accountObject.addr, this.accountObject);
                     } else {
-                        await this.setupItemContract(this.accountObject.addr, this.accountObject)
+                        await this.setupItemContract(this.accountObject.addr, this.accountObject);
                     }
 
 
@@ -1139,8 +1055,7 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['test_item_activate']) {
             {
                 try {
-
-                    await this.activateItemContract(this.accountObject.addr, this.accountObject)
+                    await this.activateItemContract(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -1150,8 +1065,7 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['test_item_release']) {
             {
                 try {
-
-                    await this.releaseItemContract(this.accountObject.addr, this.accountObject)
+                    await this.releaseItemContract(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
@@ -1161,8 +1075,7 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['test_item_claim']) {
             {
                 try {
-
-                    await this.claimItemContract(this.accountObject.addr, this.accountObject)
+                    await this.claimItemContract(this.accountObject.addr, this.accountObject);
                 }
                 catch (err) {
                     this.logger.error(err);
