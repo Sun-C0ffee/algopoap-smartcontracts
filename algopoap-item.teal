@@ -43,28 +43,21 @@
     // Byte poap_parent_address
     // Byte poap_author_address
     // Uint64 poap_asa_id
-
-
     // Uint64 poap_setup_time
     // Uint64 poap_activate_time
     // Uint64 poap_release_time
-
     // Byte poap_is_activated
     // Byte poap_is_setup
     // Byte poap_is_released
-
-
     // Uint64 poap_item_onboard_count
     // Uint64 poap_item_txn_count
     // Uint64 poap_item_claim_count
     // Uint64 poap_item_nft_issuance_count
     // Uint64 poap_item_txn_issuance_count
-
     // Byte poap_item_last_attendee
     // Byte poap_item_last_claim
     // Byte poap_item_last_nft_issuance
     // Byte poap_item_last_txn_issuance
-
     // Byte poap_name
     // Byte poap_logo
     // Byte poap_desc
