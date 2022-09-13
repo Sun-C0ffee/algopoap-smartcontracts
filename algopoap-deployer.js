@@ -906,6 +906,7 @@ const AlgoPoapDeployer = class {
 
         const fileContent = JSON.stringify(geoIndexDistinct, null, 2);
         fs.writeFileSync("geoindex.json", fileContent);
+        this.geoIndex = geoIndexDistinct;
 
 
     }
