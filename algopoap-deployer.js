@@ -1,1212 +1,1191 @@
 // A cave man simple deployer to mend the progress with rapid deployment of AlgoPoaP contracts
 
 
-const algosdk = require('algosdk');
-const fs = require('fs')
+
+
 const geolib = require('geolib');
-const path = require('path');
 const fetch = require('node-fetch');
-const logger = require('./logger');
-const config = require('./config.json');
-const mode = config.deployer.mode
-const appExists = true
-let accountExists = false;
-
-// Global scope variables
-let algodToken;
-let algodPort;
-let algodServer;
-let indexerPort;
-
-let geoIndex = config.deployer.geo_index
-let applicationAddr = config.algorand.asc_main_address;
-let applicationItemAddr = config.algorand.asc_item_address;
-let applicationId = config.algorand.asc_main_id;
-let applicationItemId = config.algorand.asc_last_item_id;
-let itemAsaId = config.algorand.item_asa_id;
-let accountObject;
-let accountAddress;
-let accountBalance;
-
-let assetsHeld;
-let assetsCreated;
-let appsCreated;
-let assetsHeldBalance;
-let assetsCreatedBalance;
 
 
-let trxPayment;
-let trxTransfer;
+const AlgoPoapDeployer = class {
+    constructor(props) {
+        this.config = props.config
+        this.logger = props.logger
+        this.algosdk = props.algosdk
 
-algodServer = config.algorand.algod_remote_server;
-algodToken = config.algorand.algod_remote_token;
-algodPort = config.algorand.algod_remote_port
+        this.mode = props.config.deployer.mode
+        this.geoIndex = props.config.deployer.geo_index
+        this.applicationAddr = props.config.algorand.asc_main_address
+        this.applicationItemAddr = props.config.algorand.asc_item_address
+        this.applicationId = props.config.algorand.asc_main_id
+        this.applicationItemId = props.config.algorand.asc_last_item_id
+        this.itemAsaId = props.config.algorand.item_asa_id
 
-let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+        this.algodServer = props.config.algorand.algod_remote_server
+        this.algodToken = props.config.algorand.algod_remote_token
+        this.algodPort = props.config.algorand.algod_remote_port
+        this.algodClient = new props.algosdk.Algodv2(this.algodToken, this.algodServer, this.algodPort)
+        this.indexerServer = props.config.algorand.indexer_remote_server
+        this.indexerToken = props.config.algorand.indexer_remote_token
+        this.indexerPort = props.config.algorand.indexer_remote_port
+        this.indexerClient = new props.algosdk.Indexer(this.algodToken, this.indexerServer, this.indexerPort)
+        this.mnemonic = props.mnemonic
+        this.approvalProgData = props.approvalProgData
+        this.clearProgData = props.clearProgData
+        this.contract = props.contract
+        this.itemApprovalProgData = props.itemApprovalProgData
+        this.itemClearProgData = props.itemClearProgData
+        this.itemContract = props.itemContract
+        this.accountObject = null
+        this.accountAddress = null
+        this.accountBalance = null
+        this.assetsHeld = null
+        this.assetsCreated = null
+        this.appsCreated = null
+        this.assetsHeldBalance = null
+        this.assetsCreatedBalance = null
+        this.trxPayment = null
+        this.trxTransfer = null
 
-indexerServer = config.algorand.indexer_remote_server;
-algodToken = config.algorand.indexer_remote_token;
-indexerPort = config.algorand.indexer_remote_port
-let indexerClient = new algosdk.Indexer(algodToken, indexerServer, indexerPort);
-
-const mnemonic = path.join(__dirname, 'algopoap_mnemonic.txt');
-const accountMnemonic = fs.readFileSync(mnemonic, 'utf8');
-
-
-
-const importAccount = function () {
-    try {
-        const acc = algosdk.mnemonicToSecretKey(accountMnemonic);
-        accountAddress = acc.addr
-        logger.info("Account Address = %s", acc.addr);
-        let acc_mnemonic_check = algosdk.secretKeyToMnemonic(acc.sk);
-
-        let acc_decoded = algosdk.decodeAddress(acc.addr);
-        logger.info("Account Address Decoded Public Key = %s", acc_decoded.publicKey.toString());
-        logger.info("Account Address Decoded Checksum = %s", acc_decoded.checksum.toString());
-        let acc_encoded = algosdk.encodeAddress(acc_decoded.publicKey);
-        logger.info("Account Address Encoded = %s", acc_encoded);
-
-
-        logger.warn(config.algorand['algo_dispencer'] + acc.addr);
-        return acc;
     }
-    catch (err) {
-        logger.error(err);
+    client() {
+        return this.algodClient
     }
-};
-async function waitForConfirmation(txId) {
-    logger.info("waiting for transaction: %s", txId)
-    let response = await algodClient.status().do();
-    let lastround = response["last-round"];
-    while (true) {
-        const pendingInfo = await algodClient
-            .pendingTransactionInformation(txId)
-            .do();
-        if (
-            pendingInfo["confirmed-round"] !== null &&
-            pendingInfo["confirmed-round"] > 0
-        ) {
-            logger.info(
-                "Transaction %s  confirmed in round %s", txId, pendingInfo["confirmed-round"]);
-            break;
+    indexerClient() {
+        return this.indexerClient
+    }
+    importAccount() {
+        try {
+            const acc = this.algosdk.mnemonicToSecretKey(this.mnemonic);
+            this.logger.info("Account Address = %s", acc.addr);
+            let acc_mnemonic_check = this.algosdk.secretKeyToMnemonic(acc.sk);
+            let acc_decoded = this.algosdk.decodeAddress(acc.addr);
+            this.logger.info("Account Address Decoded Public Key = %s", acc_decoded.publicKey.toString());
+            this.logger.info("Account Address Decoded Checksum = %s", acc_decoded.checksum.toString());
+            let acc_encoded = this.algosdk.encodeAddress(acc_decoded.publicKey);
+            this.logger.info("Account Address Encoded = %s", acc_encoded);
+            this.logger.warn(this.config.algorand['algo_dispencer'] + acc.addr);
+            return acc;
         }
-        lastround++;
-        await algodClient.statusAfterBlock(lastround).do();
-    }
-}
-async function fetchAlgoWalletInfo() {
-    if (algosdk.isValidAddress(accountObject.addr)) {
-        const url = `https://algoindexer.testnet.algoexplorerapi.io/v2/accounts/${accountObject.addr}`;
-        const urlTrx = `https://algoindexer.testnet.algoexplorerapi.io/v2/accounts/${accountObject.addr}/transactions?limit=10`;
-        let res = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-        let data = await res.json()
-        if (data) {
-            if (data.account) {
-                if (String(data.account.address) === String(accountObject.addr)) {
-
-                    accountBalance = data.account.amount
-
-                    assetsHeld = data.account.assets
-                    assetsCreated = data.account["created-assets"]
-                    appsCreated = data.account["created-apps"]
-                    assetsHeldBalance = !!assetsHeld ? assetsHeld.length : 0
-                    assetsCreatedBalance = !!assetsCreated ? assetsCreated.length : 0
-                    if (appsCreated) appsCreatedBalance = appsCreated.length
-
-
-                    logger.info('------------------------------')
-                    logger.info("Account Balance = %s", accountBalance);
-                    logger.info('------------------------------')
-                    logger.info("Account Created Assets = %s", JSON.stringify(assetsCreated, null, 2));
-                    logger.info('------------------------------')
-                    logger.info("Account Created Assets Balance= %s", assetsHeldBalance);
-                    logger.info('------------------------------')
-                    logger.info("Account Held Assets = %s", JSON.stringify(assetsHeld, null, 2));
-                    logger.info('------------------------------')
-                    logger.info("Account Held Assets Balance= %s", + assetsHeldBalance);
-                    logger.info('------------------------------')
-                    logger.info("Account Created Apps = %s", JSON.stringify(appsCreated, null, 2));
-                    logger.info('------------------------------')
-                    logger.info("Account Created Apps Balance = %s", appsCreatedBalance);
-                    logger.info('------------------------------')
-                }
+        catch (err) {
+            this.logger.error(err);
+        }
+    };
+    async waitForConfirmation(txId) {
+        this.logger.info("waiting for transaction: %s", txId)
+        let response = await this.algodClient.status().do();
+        let lastround = response["last-round"];
+        while (true) {
+            const pendingInfo = await this.algodClient
+                .pendingTransactionInformation(txId)
+                .do();
+            if (
+                pendingInfo["confirmed-round"] !== null &&
+                pendingInfo["confirmed-round"] > 0
+            ) {
+                this.logger.info(
+                    "Transaction %s  confirmed in round %s", txId, pendingInfo["confirmed-round"]);
+                break;
             }
-
-        }
-        let resTrx = await fetch(urlTrx, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-        let dataTrx = await resTrx.json()
-        if (dataTrx) {
-            if (dataTrx.transactions) {
-
-                trxPayment = dataTrx.transactions.filter(
-                    (trx) => !!trx["payment-transaction"]
-                )
-                trxTransfer = dataTrx.transactions.filter(
-                    (trx) => !!trx["asset-transfer-transaction"]
-                )
-                logger.info('trxPayment: %s', trxPayment.length)
-                logger.info('trxTransfer: %s', trxTransfer.length)
-
-            }
-        }
-
-
-    }
-}
-async function printCreatedAsset() {
-
-    let accountInfo = await indexerClient.lookupAccountByID(accountObject.addr).do();
-
-    accountBalance = accountInfo.account.amount
-
-    assetsCreated = accountInfo['account']["created-assets"]
-
-
-    assetsCreatedBalance = !!assetsCreated ? assetsCreated.length : 0
-
-
-
-    logger.info('------------------------------')
-    logger.info("Printed Account Balance = %s", accountBalance);
-    logger.info('------------------------------')
-    logger.info("Printed Account Created Assets = %s", JSON.stringify(!!assetsCreated ? assetsCreated.length : {}, null, 2));
-    logger.info('------------------------------')
-    logger.info("Printed Account Created Assets Balance= %s", assetsHeldBalance);
-    logger.info('------------------------------')
-
-    if (!!assetsCreated) {
-        for (idx = 0; idx < accountInfo['account']['created-assets'].length; idx++) {
-            let sAsset = accountInfo['account']['created-assets'][idx];
-            if (assetid) {
-                if (sAsset['index'] == assetid) {
-                    let params = JSON.stringify(sAsset['params'], null, 2);
-                    logger.info('------------------------------')
-                    logger.info("AssetID = %s", sAsset['index']);
-                    logger.info("Asset params = %s", params);
-                    break;
-                }
-            } else {
-                let params = JSON.stringify(sAsset['params'], null, 2);
-                logger.info('------------------------------')
-                logger.info("Created AssetID = %s", sAsset['index']);
-                logger.info("Created Asset Info = %s", params);
-            }
+            lastround++;
+            await this.algodClient.statusAfterBlock(lastround).do();
         }
     }
-}
-async function printAssetHolding(account, assetid) {
-    let accountInfo = await indexerClient.lookupAccountByID(account).do();
-    accountBalance = accountInfo.account.amount
-
-    assetsHeld = accountInfo.account.assets
-
-
-    assetsHeldBalance = !!assetsHeld ? assetsHeld.length : 0
-
-
-
-
-    logger.info('------------------------------')
-    logger.info("Printed Account Balance = %s", accountBalance);
-    logger.info('------------------------------')
-
-    logger.info("Printed Account Held Assets = %s", JSON.stringify(!!assetsHeld ? assetsHeld.length : {}, null, 2));
-    logger.info('------------------------------')
-    logger.info("Printed Account Held Assets Balance= %s", assetsHeldBalance);
-    logger.info('------------------------------')
-
-    if (!!assetsHeld) {
-        for (idx = 0; idx < accountInfo['account']['assets'].length; idx++) {
-            let sAsset = accountInfo['account']['assets'][idx];
-            if (assetid) {
-                if (sAsset['asset-id'] == assetid) {
-                    let assetHoldings = JSON.stringify(sAsset, null, 2);
-                    logger.info("Printed Held Asset Info = %s", assetHoldings);
-                    break;
-                }
-            } else {
-                let assetHoldings = JSON.stringify(sAsset, null, 2);
-                logger.info('------------------------------')
-                logger.info("Printed Held AssetID = %s", sAsset['asset-id']);
-                logger.info("Printed Held Asset Info = %s", assetHoldings);
-            }
-        }
-    }
-}
-async function deployMainContract(addr, acc) {
-    localInts = config.deployer['num_local_int'];
-    localBytes = config.deployer['num_local_byte'];
-    globalInts = config.deployer['num_global_int'];
-    globalBytes = config.deployer['num_global_byte'];
-    let params = await algodClient.getTransactionParams().do();
-    onComplete = algosdk.OnApplicationComplete.NoOpOC;
-    const filePathApproval = path.join(__dirname, 'algopoap-main.teal');
-    const filePathClear = path.join(__dirname, 'algopoap-clear.teal');
-    const approvalProgData = await fs.promises.readFile(filePathApproval);
-    const clearProgData = await fs.promises.readFile(filePathClear);
-    const compiledResult = await algodClient.compile(approvalProgData).do();
-    const compiledClearResult = await algodClient.compile(clearProgData).do();
-    const compiledResultUint8 = new Uint8Array(Buffer.from(compiledResult.result, "base64"));
-    const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledClearResult.result, "base64"));
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Contract Hash = %s", compiledResult.hash);
-    //logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
-    logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
-    //logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
-    
-    let appTxn = algosdk.makeApplicationCreateTxnFromObject({from: addr, suggestedParams:params, onComplete,
-        approvalProgram: compiledResultUint8, clearProgram:compiledClearResultUint8,
-        numLocalInts:localInts, numLocalByteSlices:localBytes, numGlobalInts:globalInts, numGlobalByteSlices:globalBytes, extraPages:1});
-    let appTxnId = appTxn.txID().toString();
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Application Creation TXId =  %s", appTxnId);
-    let signedAppTxn = appTxn.signTxn(acc.sk);
-    await algodClient.sendRawTransaction(signedAppTxn).do();
-    await algosdk.waitForConfirmation(algodClient, appTxnId, 5)
-    //await waitForConfirmation(appTxnId);
-    let transactionResponse = await algodClient.pendingTransactionInformation(appTxnId).do();
-    let appId = transactionResponse['application-index'];
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Application ID: %s", appId);
-    logger.info('------------------------------')
-    applicationId = appId
-    applicationAddr = algosdk.getApplicationAddress(appId);
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Application Address: %s", applicationAddr);
-    logger.info('------------------------------')
-}
-async function updateMainContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    onComplete = algosdk.OnApplicationComplete.UpdateApplicationOC;
-    const filePathApproval = path.join(__dirname, 'algopoap-main.teal');
-    const filePathClear = path.join(__dirname, 'algopoap-clear.teal');
-    const approvalProgData = await fs.promises.readFile(filePathApproval);
-    const clearProgData = await fs.promises.readFile(filePathClear);
-    const compiledResult = await algodClient.compile(approvalProgData).do();
-    const compiledClearResult = await algodClient.compile(clearProgData).do();
-    const compiledResultUint8 = new Uint8Array(Buffer.from(compiledResult.result, "base64"));
-    const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledClearResult.result, "base64"));
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Contract Hash = %s", compiledResult.hash);
-    //logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
-    logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
-    //logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
-    /*   let note = algosdk.encodeObj(
-          `Update AlgoPoaP Application ID: ${applicationId}`
-      ); */
-
-
-    let appTxn = algosdk.makeApplicationUpdateTxn(addr, params, Number(applicationId),
-        compiledResultUint8, compiledClearResultUint8);
-    let appTxnId = appTxn.txID().toString();
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Application Update TXId =  %s", appTxnId);
-    let signedAppTxn = appTxn.signTxn(acc.sk);
-    await algodClient.sendRawTransaction(signedAppTxn).do();
-    await algosdk.waitForConfirmation(algodClient, appTxnId, 5)
-    //await waitForConfirmation(appTxnId);
-    let transactionResponse = await algodClient.pendingTransactionInformation(appTxnId).do();
-
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Updated Main Application ID: %s", applicationId);
-    logger.info('------------------------------')
-
-    applicationAddr = algosdk.getApplicationAddress(Number(applicationId));
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Updated Main Application Address: %s", applicationAddr);
-    logger.info('------------------------------')
-}
-function getMethodByName(name, contract) {
-    const m = contract.methods.find((mt) => { return mt.name == name })
-    if (m === undefined)
-        throw Error("Method undefined: " + name)
-    return m
-}
-async function setupMainContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    const atc = new algosdk.AtomicTransactionComposer()
-    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
-    const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
-    const buff = await fs.promises.readFile(filePathContractSchema);
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    const commonParams = {
-        appID: Number(applicationId),
-        sender: acc.addr,
-        suggestedParams: params,
-        signer: signer
-    }
-    let method = getMethodByName("setup", contract)
-    atc.addMethodCall({
-        method: method,
-        methodArgs: ['v0.0.9'],
-        ...commonParams
-    })
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
-    const result = await atc.execute(algodClient, 2)
-    for (const idx in result.methodResults) {
-        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
-        let res = buff.slice(2, buff.byteLength).toString()
-        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
-
-
-    }
-}
-async function getMainMetrics(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    const atc = new algosdk.AtomicTransactionComposer()
-    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
-    const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
-    const buff = await fs.promises.readFile(filePathContractSchema);
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    const commonParams = {
-        appID: Number(applicationId),
-        sender: acc.addr,
-        suggestedParams: params,
-        signer: signer
-    }
-    let method = getMethodByName("get_metrics", contract)
-    atc.addMethodCall({
-        method: method,
-        methodArgs: [],
-        ...commonParams
-    })
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
-    const result = await atc.execute(algodClient, 2)
-    for (const idx in result.methodResults) {
-        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
-        let res = buff.toString()
-        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
-
-
-    }
-}
-async function getMainMetric(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    const atc = new algosdk.AtomicTransactionComposer()
-    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
-    const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
-    const buff = await fs.promises.readFile(filePathContractSchema);
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    const commonParams = {
-        appID: Number(applicationId),
-        sender: acc.addr,
-        suggestedParams: params,
-        signer: signer
-    }
-    let method = getMethodByName("get_metric", contract)
-    atc.addMethodCall({
-        method: method,
-        methodArgs: ['poap_count'],
-        ...commonParams
-    })
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
-    const result = await atc.execute(algodClient, 2)
-    for (const idx in result.methodResults) {
-        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
-        let res = buff.toString()
-        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
-
-
-    }
-}
-async function deployItemContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    const atc = new algosdk.AtomicTransactionComposer()
-    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
-    const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
-    const filePathItemContract = path.join(__dirname, 'algopoap-item.teal');
-    const filePathItemContractClear = path.join(__dirname, 'algopoap-clear.teal');
-    const itemApprovalProgData = await fs.promises.readFile(filePathItemContract);
-    const itemClearProgData = await fs.promises.readFile(filePathItemContractClear);
-    const compiledItemResult = await algodClient.compile(itemApprovalProgData).do();
-    const compiledItemClearResult = await algodClient.compile(itemClearProgData).do();
-    const compiledResultUint8 = new Uint8Array(Buffer.from(compiledItemResult.result, "base64"));
-    const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledItemClearResult.result, "base64"));
-
-
-
-
-    const buff = await fs.promises.readFile(filePathContractSchema);
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    const commonParams = {
-        appID: Number(applicationId),
-        sender: acc.addr,
-        suggestedParams: params,
-        signer: signer,
-    }
-    let method = getMethodByName("item_create", contract)
-
-    const ptxn = new algosdk.Transaction({
-        from: acc.addr,
-        to: applicationAddr,
-        amount: 2 * params.fee,
-        fee: params.fee,
-        ...params
-    })
-
-    const tws = { txn: ptxn, signer: signer }
-
-    atc.addMethodCall({
-        method: method,
-        methodArgs: [tws, compiledResultUint8, compiledClearResultUint8],
-        ...commonParams
-    })
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
-    const result = await atc.execute(algodClient, 2)
-    for (const idx in result.methodResults) {
-
-        let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
-        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
-
-
-    }
-}
-async function updateItemContract(addr, acc) {
-    localInts = config.deployer['num_local_int'];
-    localBytes = config.deployer['num_local_byte'];
-    globalInts = config.deployer['num_global_int'];
-    globalBytes = config.deployer['num_global_byte'];
-    let params = await algodClient.getTransactionParams().do();
-    const atc = new algosdk.AtomicTransactionComposer()
-    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
-    const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
-    const filePathItemContract = path.join(__dirname, 'algopoap-item.teal');
-    const filePathItemContractClear = path.join(__dirname, 'algopoap-clear.teal');
-    const itemApprovalProgData = await fs.promises.readFile(filePathItemContract);
-    const itemClearProgData = await fs.promises.readFile(filePathItemContractClear);
-    const compiledItemResult = await algodClient.compile(itemApprovalProgData).do();
-    const compiledItemClearResult = await algodClient.compile(itemClearProgData).do();
-    const compiledResultUint8 = new Uint8Array(Buffer.from(compiledItemResult.result, "base64"));
-    const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledItemClearResult.result, "base64"));
-
-
-
-
-    const buff = await fs.promises.readFile(filePathContractSchema);
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    const commonParams = {
-        appID: Number(applicationId),
-        sender: acc.addr,
-        suggestedParams: params,
-        signer: signer,
-    }
-    let method = getMethodByName("item_update", contract)
-
-    let application = Number(applicationItemId)
-    atc.addMethodCall({
-        method: method,
-        methodArgs: [application, compiledResultUint8, compiledClearResultUint8],
-        ...commonParams
-    })
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
-    const result = await atc.execute(algodClient, 2)
-    for (const idx in result.methodResults) {
-
-        let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
-        logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
-
-
-    }
-}
-async function deleteItemContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    const atc = new algosdk.AtomicTransactionComposer()
-    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
-    const filePathContractSchema = path.join(__dirname, 'algopoap-contract.json');
-
-    const buff = await fs.promises.readFile(filePathContractSchema);
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    const commonParams = {
-        appID: Number(applicationId),
-        sender: acc.addr,
-        suggestedParams: params,
-        signer: signer
-    }
-    let method = getMethodByName("item_delete", contract)
-
-
-    atc.addMethodCall({
-        method: method,
-        methodArgs: [applicationItemId],
-        ...commonParams
-    })
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
-    const result = await atc.execute(algodClient, 2)
-    for (const idx in result.methodResults) {
-
-
-        logger.info("AlgoPoaP Main Contract ABI Exec method result: void");
-
-
-    }
-}
-async function setupItemContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    const atc = new algosdk.AtomicTransactionComposer()
-    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
-    const filePathContractSchema = path.join(__dirname, 'algopoap-item-contract.json');
-
-
-    const buff = await fs.promises.readFile(filePathContractSchema);
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    const commonParams = {
-        appID: Number(Number(applicationItemId)),
-        sender: acc.addr,
-        suggestedParams: params,
-        signer: signer
-    }
-    const ptxn = new algosdk.Transaction({
-        from: acc.addr,
-        to: applicationAddr,
-        amount: 3 * params.fee,
-        fee: 2 * params.fee,
-
-        ...params
-    })
-
-    const tws = { txn: ptxn, signer: signer }
-    let method = getMethodByName("setup", contract)
-
-
-    atc.addMethodCall({
-        method: method,
-        methodArgs: [tws, addr, Number(applicationId), '-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 3, 1, 1, 1, 1, 6, 1]],
-        ...commonParams
-    })
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
-    const result = await atc.execute(algodClient, 2)
-    for (const idx in result.methodResults) {
-
-        let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
-        logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
-
-
-    }
-}
-async function reSetupItemContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    const atc = new algosdk.AtomicTransactionComposer()
-    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
-    const filePathContractSchema = path.join(__dirname, 'algopoap-item-contract.json');
-
-
-    const buff = await fs.promises.readFile(filePathContractSchema);
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    const commonParams = {
-        appID: Number(Number(applicationItemId)),
-        sender: acc.addr,
-        suggestedParams: params,
-        signer: signer
-    }
-    const ptxn = new algosdk.Transaction({
-        from: acc.addr,
-        to: applicationAddr,
-        amount: params.fee,
-        fee: params.fee,
-        ...params
-    })
-
-    const tws = { txn: ptxn, signer: signer }
-    let method = getMethodByName("re_setup", contract)
-
-    atc.addMethodCall({
-        method: method,
-        methodArgs: [tws, addr, Number(applicationId), Number(itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 3, 1, 1, 1, 1, 6, 1]],
-        ...commonParams
-    })
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
-    const result = await atc.execute(algodClient, 2)
-    for (const idx in result.methodResults) {
-
-        let res = algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
-        logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
-
-
-    }
-}
-async function activateItemContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    const atc = new algosdk.AtomicTransactionComposer()
-    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
-    const filePathContractSchema = path.join(__dirname, 'algopoap-item-contract.json');
-
-
-    const buff = await fs.promises.readFile(filePathContractSchema);
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    const commonParams = {
-        appID: Number(Number(applicationItemId)),
-        sender: acc.addr,
-        suggestedParams: params,
-        signer: signer
-    }
-    let attendees_qty = 3
-    const ptxn = new algosdk.Transaction({
-        type: 'pay',
-        from: acc.addr,
-        to: applicationAddr,
-        amount: attendees_qty * 4 * params.fee,
-        fee: params.fee,
-        ...params
-    })
-    const atxn = new algosdk.Transaction({
-        type: 'axfer',
-        from: acc.addr,
-        to: acc.addr,
-        assetIndex: Number(itemAsaId),
-        amount: 0,
-        fee: 2 * params.fee,
-        ...params
-    })
-
-    const tws0 = { txn: ptxn, signer: signer }
-    const tws1 = { txn: atxn, signer: signer }
-    let method = getMethodByName("activate", contract)
-
-    atc.addMethodCall({
-        method: method,
-        methodArgs: [tws0, tws1, Number(applicationId), Number(itemAsaId)],
-        ...commonParams
-    })
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
-    const result = await atc.execute(algodClient, 2)
-    for (const idx in result.methodResults) {
-
-        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
-        let res = buff.toString()
-        logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
-
-
-    }
-}
-async function releaseItemContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    const atc = new algosdk.AtomicTransactionComposer()
-    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
-    const filePathContractSchema = path.join(__dirname, 'algopoap-item-contract.json');
-
-
-    const buff = await fs.promises.readFile(filePathContractSchema);
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    const commonParams = {
-        appID: Number(Number(applicationItemId)),
-        sender: acc.addr,
-        suggestedParams: params,
-        signer: signer
-    }
-
-
-
-    let method = getMethodByName("release", contract)
-
-    atc.addMethodCall({
-        method: method,
-        methodArgs: [Number(applicationId)],
-        ...commonParams
-    })
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
-    const result = await atc.execute(algodClient, 2)
-    for (const idx in result.methodResults) {
-
-        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
-        let res = buff.toString()
-        logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
-
-
-    }
-}
-async function claimItemContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    const atc = new algosdk.AtomicTransactionComposer()
-    const signer = algosdk.makeBasicAccountTransactionSigner(acc)
-    const filePathContractSchema = path.join(__dirname, 'algopoap-item-contract.json');
-
-
-    const buff = await fs.promises.readFile(filePathContractSchema);
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    const commonParams = {
-        appID: Number(Number(applicationItemId)),
-        sender: acc.addr,
-        suggestedParams: params,
-        signer: signer
-    }
-    const ptxn = new algosdk.Transaction({
-        type: 'pay',
-        from: acc.addr,
-        to: applicationAddr,
-        amount: 0,
-        fee: params.fee,
-        ...params
-    })
-
-    const tws0 = { txn: ptxn, signer: signer }
-    let method = getMethodByName("claim", contract)
-    let method_budget_1 = getMethodByName("budget_increase_call_1", contract)
-    let method_budget_2 = getMethodByName("budget_increase_call_2", contract)
-    let method_budget_3 = getMethodByName("budget_increase_call_3", contract)
-    let note_claim = algosdk.encodeObj(
-        "AlgoPoaP Claim Transaction"
-    );
- 
-    //let oncomplete = algosdk.OnApplicationComplete.NoOpOC
-/*     let sigTxn = algosdk.makeApplicationCallTxnFromObject({
-        appIndex:Number(applicationItemId),
-        suggestedParams: params,
-        from: acc.addr,
-        fee: params.fee,
-        note: note,
-        onComplete: oncomplete,
-    }) */
-    //const tws1 = { txn: sigTxn, signer: signer }
-    atc.addMethodCall({
-        method: method_budget_1,
-        methodArgs: [],
-        ...commonParams
-    })
-    atc.addMethodCall({
-        method: method_budget_2,
-        methodArgs: [],
-        ...commonParams
-    }) 
-    atc.addMethodCall({
-        method: method_budget_3,
-        methodArgs: [],
-        ...commonParams
-    }) 
-
-
-    let rawData = Buffer.from("test string").toString('base64')
-    let appAddr = algosdk.getApplicationAddress(Number(applicationItemId))
-    let sig = algosdk.tealSign(acc.sk, rawData, appAddr )
-    
-    let signedBytes = algosdk.signBytes(rawData, acc.sk )
-    let verify = algosdk.verifyBytes(rawData,signedBytes, acc.addr) 
-    console.log(verify)
-
-    atc.addMethodCall({
-        method: method,
-        note: note_claim,
-        methodArgs: [tws0, Number(itemAsaId), Number(applicationId), addr, sig,rawData , [30, 3232, 100, 2345, 1671942604]],
-        ...commonParams
-    })
-    
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
-
-
-    const result = await atc.execute(algodClient, 2)
-    for (const idx in result.methodResults) {
-
-        let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
-        let res = buff.toString()
-        logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
-
-
-    }
-}
-async function closeOutMainContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    let appTxn = algosdk.makeApplicationCloseOutTxn(addr, params, Number(applicationId));
-
-    let appTxnId = appTxn.txID().toString();
-
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Application close out TXId =  %s", appTxnId);
-    let signedAppTxn = appTxn.signTxn(acc.sk);
-
-    await algodClient.sendRawTransaction(signedAppTxn).do();
-    await algosdk.waitForConfirmation(algodClient, appTxnId, 5)
-    logger.info('------------------------------')
-
-
-}
-async function closeOutItemContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-
-    let appTxnItem = algosdk.makeApplicationCloseOutTxn(addr, params, Number(applicationItemId));
-
-    let appTxnIdItem = appTxnItem.txID().toString();
-    logger.info('------------------------------')
-
-    logger.info("AlgoPoaP Item Application close out TXId =  %s", appTxnIdItem);
-
-    let signedAppTxnItem = appTxnItem.signTxn(acc.sk);
-    await algodClient.sendRawTransaction(signedAppTxnItem).do();
-    await algosdk.waitForConfirmation(algodClient, appTxnIdItem, 5)
-    logger.info('------------------------------')
-
-
-}
-async function optinMainContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-    let appTxn = algosdk.makeApplicationOptInTxn(addr, params, Number(applicationId));
-
-    let appTxnId = appTxn.txID().toString();
-
-    logger.info('------------------------------')
-    logger.info("AlgoPoaP Main Application Optin TXId =  %s", appTxnId);
-    let signedAppTxn = appTxn.signTxn(acc.sk);
-
-    await algodClient.sendRawTransaction(signedAppTxn).do();
-    await algosdk.waitForConfirmation(algodClient, appTxnId, 5)
-    logger.info('------------------------------')
-
-
-}
-async function optinItemContract(addr, acc) {
-    let params = await algodClient.getTransactionParams().do();
-
-    let appTxnItem = algosdk.makeApplicationOptInTxn(addr, params, Number(applicationItemId));
-
-    let appTxnIdItem = appTxnItem.txID().toString();
-    logger.info('------------------------------')
-
-    logger.info("AlgoPoaP Item Application Optin TXId =  %s", appTxnIdItem);
-
-    let signedAppTxnItem = appTxnItem.signTxn(acc.sk);
-    await algodClient.sendRawTransaction(signedAppTxnItem).do();
-    await algosdk.waitForConfirmation(algodClient, appTxnIdItem, 5)
-    logger.info('------------------------------')
-
-
-}
-async function deployerAccount() {
-
-    try {
-        accountObject = await importAccount();
-        accountAddress = accountObject.addr;
-
-        accountExists = true;
-        /* await keypress(); */
-
-    }
-    catch (err) {
-        logger.error(err);
-    }
-
-}
-async function deployerReport() {
-
-    try {
-        if (!accountExists) await deployerAccount()
-
-        await fetchAlgoWalletInfo()
-
-        await printCreatedAsset();
-        await printAssetHolding(accountObject.addr);
-
-
-    }
-    catch (err) {
-        logger.error(err);
-    }
-
-}
-async function deleteApps(appsTodelete) {
-    let wallet = config.algorand.algo_wallet_address
-    let apps = appsTodelete || []
-    if (!accountExists) await deployerAccount()
-    for (let i = 0; i < apps.length; i++) {
-        logger.info('Now deleting AlgoPoaP APP: %s', apps[i])
-
-        let params = await algodClient.getTransactionParams().do();
-        params.fee = 1000;
-        params.flatFee = true;
-        let sender = wallet;
-        let revocationTarget = undefined;
-        let closeRemainderTo = undefined;
-
-        let note = algosdk.encodeObj(
-            JSON.stringify({
-                system: "Deleting AlgoPoaP main app",
-                date: `${new Date()}`,
+    async fetchAlgoWalletInfo() {
+        if (this.algosdk.isValidAddress(this.accountObject.addr)) {
+            const url = `https://algoindexer.testnet.algoexplorerapi.io/v2/accounts/${this.accountObject.addr}`;
+            const urlTrx = `https://algoindexer.testnet.algoexplorerapi.io/v2/accounts/${this.accountObject.addr}/transactions?limit=10`;
+            let res = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
             })
+            let data = await res.json()
+            if (data) {
+                if (data.account) {
+                    if (String(data.account.address) === String(this.accountObject.addr)) {
+
+                        this.accountBalance = data.account.amount
+
+                        this.assetsHeld = data.account.assets
+                        this.assetsCreated = data.account["created-assets"]
+                        this.appsCreated = data.account["created-apps"]
+                        this.assetsHeldBalance = !!this.assetsHeld ? this.assetsHeld.length : 0
+                        this.assetsCreatedBalance = !!this.assetsCreated ? this.assetsCreated.length : 0
+                        if (this.appsCreated) this.appsCreatedBalance = this.appsCreated.length
+
+
+                        this.logger.info('------------------------------')
+                        this.logger.info("Account Balance = %s", this.accountBalance);
+                        this.logger.info('------------------------------')
+                        this.logger.info("Account Created Assets = %s", JSON.stringify(this.assetsCreated, null, 2));
+                        this.logger.info('------------------------------')
+                        this.logger.info("Account Created Assets Balance= %s", this.assetsHeldBalance);
+                        this.logger.info('------------------------------')
+                        this.logger.info("Account Held Assets = %s", JSON.stringify(this.assetsHeld, null, 2));
+                        this.logger.info('------------------------------')
+                        this.logger.info("Account Held Assets Balance= %s", + this.assetsHeldBalance);
+                        this.logger.info('------------------------------')
+                        this.logger.info("Account Created Apps = %s", JSON.stringify(this.appsCreated, null, 2));
+                        this.logger.info('------------------------------')
+                        this.logger.info("Account Created Apps Balance = %s", this.appsCreatedBalance);
+                        this.logger.info('------------------------------')
+                    }
+                }
+
+            }
+            let resTrx = await fetch(urlTrx, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            let dataTrx = await resTrx.json()
+            if (dataTrx) {
+                if (dataTrx.transactions) {
+
+                    this.trxPayment = dataTrx.transactions.filter(
+                        (trx) => !!trx["payment-transaction"]
+                    )
+                    this.trxTransfer = dataTrx.transactions.filter(
+                        (trx) => !!trx["asset-transfer-transaction"]
+                    )
+                    this.logger.info('trxPayment: %s', this.trxPayment.length)
+                    this.logger.info('trxTransfer: %s', this.trxTransfer.length)
+
+                }
+            }
+
+
+        }
+    }
+    async printCreatedAsset() {
+
+        let accountInfo = await this.indexerClient.lookupAccountByID(this.accountObject.addr).do();
+
+        this.accountBalance = accountInfo.account.amount
+
+        this.assetsCreated = accountInfo['account']["created-assets"]
+
+
+        this.assetsCreatedBalance = !!this.assetsCreated ? this.assetsCreated.length : 0
+
+
+
+        this.logger.info('------------------------------')
+        this.logger.info("Printed Account Balance = %s", this.accountBalance);
+        this.logger.info('------------------------------')
+        this.logger.info("Printed Account Created Assets = %s", JSON.stringify(!!this.assetsCreated ? this.assetsCreated.length : {}, null, 2));
+        this.logger.info('------------------------------')
+        this.logger.info("Printed Account Created Assets Balance= %s", this.assetsHeldBalance);
+        this.logger.info('------------------------------')
+
+        if (!!this.assetsCreated) {
+            for (let idx = 0; idx < accountInfo['account']['created-assets'].length; idx++) {
+                let sAsset = accountInfo['account']['created-assets'][idx];
+                if (assetid) {
+                    if (sAsset['index'] == assetid) {
+                        let params = JSON.stringify(sAsset['params'], null, 2);
+                        this.logger.info('------------------------------')
+                        this.logger.info("AssetID = %s", sAsset['index']);
+                        this.logger.info("Asset params = %s", params);
+                        break;
+                    }
+                } else {
+                    let params = JSON.stringify(sAsset['params'], null, 2);
+                    this.logger.info('------------------------------')
+                    this.logger.info("Created AssetID = %s", sAsset['index']);
+                    this.logger.info("Created Asset Info = %s", params);
+                }
+            }
+        }
+    }
+    async printAssetHolding(account, assetid) {
+        let accountInfo = await this.indexerClient.lookupAccountByID(account).do();
+        this.accountBalance = accountInfo.account.amount
+
+        this.assetsHeld = accountInfo.account.assets
+
+
+        this.assetsHeldBalance = !!this.assetsHeld ? this.assetsHeld.length : 0
+
+
+
+
+        this.logger.info('------------------------------')
+        this.logger.info("Printed Account Balance = %s", this.accountBalance);
+        this.logger.info('------------------------------')
+
+        this.logger.info("Printed Account Held Assets = %s", JSON.stringify(!!this.assetsHeld ? this.assetsHeld.length : {}, null, 2));
+        this.logger.info('------------------------------')
+        this.logger.info("Printed Account Held Assets Balance= %s", this.assetsHeldBalance);
+        this.logger.info('------------------------------')
+
+        if (!!this.assetsHeld) {
+            for (let idx = 0; idx < accountInfo['account']['assets'].length; idx++) {
+                let sAsset = accountInfo['account']['assets'][idx];
+                if (assetid) {
+                    if (sAsset['asset-id'] == assetid) {
+                        let assetHoldings = JSON.stringify(sAsset, null, 2);
+                        this.logger.info("Printed Held Asset Info = %s", assetHoldings);
+                        break;
+                    }
+                } else {
+                    let assetHoldings = JSON.stringify(sAsset, null, 2);
+                    this.logger.info('------------------------------')
+                    this.logger.info("Printed Held AssetID = %s", sAsset['asset-id']);
+                    this.logger.info("Printed Held Asset Info = %s", assetHoldings);
+                }
+            }
+        }
+    }
+
+    async deployMainContract(addr, acc) {
+        localInts = this.config.deployer['num_local_int'];
+        localBytes = this.config.deployer['num_local_byte'];
+        globalInts = this.config.deployer['num_global_int'];
+        globalBytes = this.config.deployer['num_global_byte'];
+        let params = await this.algodClient.getTransactionParams().do();
+        let onComplete = this.algosdk.OnApplicationComplete.NoOpOC;
+
+        const compiledResult = await this.algodClient.compile(this.approvalProgData).do();
+        const compiledClearResult = await this.algodClient.compile(this.clearProgData).do();
+        const compiledResultUint8 = new Uint8Array(Buffer.from(compiledResult.result, "base64"));
+        const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledClearResult.result, "base64"));
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Contract Hash = %s", compiledResult.hash);
+        //this.logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
+        this.logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
+        //this.logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
+
+        let appTxn = this.algosdk.makeApplicationCreateTxnFromObject({
+            from: addr, suggestedParams: params, onComplete,
+            approvalProgram: compiledResultUint8, clearProgram: compiledClearResultUint8,
+            numLocalInts: localInts, numLocalByteSlices: localBytes, numGlobalInts: globalInts, numGlobalByteSlices: globalBytes, extraPages: 1
+        });
+        let appTxnId = appTxn.txID().toString();
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Application Creation TXId =  %s", appTxnId);
+        let signedAppTxn = appTxn.signTxn(acc.sk);
+        await this.algodClient.sendRawTransaction(signedAppTxn).do();
+        await this.algosdk.waitForConfirmation(this.algodClient, appTxnId, 5)
+        //await waitForConfirmation(appTxnId);
+        let transactionResponse = await this.algodClient.pendingTransactionInformation(appTxnId).do();
+        let appId = transactionResponse['application-index'];
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Application ID: %s", appId);
+        this.logger.info('------------------------------')
+        this.applicationId = appId
+        this.applicationAddr = this.algosdk.getApplicationAddress(appId);
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Application Address: %s", this.applicationAddr);
+        this.logger.info('------------------------------')
+    }
+    async updateMainContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        let onComplete = this.algosdk.OnApplicationComplete.UpdateApplicationOC;
+  
+        const compiledResult = await this.algodClient.compile(this.approvalProgData).do();
+        const compiledClearResult = await this.algodClient.compile(this.clearProgData).do();
+        const compiledResultUint8 = new Uint8Array(Buffer.from(compiledResult.result, "base64"));
+        const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledClearResult.result, "base64"));
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Contract Hash = %s", compiledResult.hash);
+        //this.logger.info("AlgoPoaP Main Contract Result = %s", compiledResult.result)
+        this.logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
+        //this.logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
+        /*   let note = this.algosdk.encodeObj(
+              `Update AlgoPoaP Application ID: ${this.applicationId}`
+          ); */
+
+
+        let appTxn = this.algosdk.makeApplicationUpdateTxn(addr, params, Number(this.applicationId),
+            compiledResultUint8, compiledClearResultUint8);
+        let appTxnId = appTxn.txID().toString();
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Application Update TXId =  %s", appTxnId);
+        let signedAppTxn = appTxn.signTxn(acc.sk);
+        await this.algodClient.sendRawTransaction(signedAppTxn).do();
+        await this.algosdk.waitForConfirmation(this.algodClient, appTxnId, 5)
+        //await waitForConfirmation(appTxnId);
+        let transactionResponse = await this.algodClient.pendingTransactionInformation(appTxnId).do();
+
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Updated Main Application ID: %s", this.applicationId);
+        this.logger.info('------------------------------')
+
+        this.applicationAddr = this.algosdk.getApplicationAddress(Number(this.applicationId));
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Updated Main Application Address: %s", this.applicationAddr);
+        this.logger.info('------------------------------')
+    }
+    getMethodByName(name, contract) {
+        const m = contract.methods.find((mt) => { return mt.name == name })
+        if (m === undefined)
+            throw Error("Method undefined: " + name)
+        return m
+    }
+    async setupMainContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        const atc = new this.algosdk.AtomicTransactionComposer()
+        const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
+
+        const contract = new this.algosdk.ABIContract(JSON.parse(this.contract.toString()))
+        const commonParams = {
+            appID: Number(this.applicationId),
+            sender: acc.addr,
+            suggestedParams: params,
+            signer: signer
+        }
+        let method = this.getMethodByName("setup", contract)
+        atc.addMethodCall({
+            method: method,
+            methodArgs: ['v0.0.9'],
+            ...commonParams
+        })
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
+        const result = await atc.execute(this.algodClient, 2)
+        for (const idx in result.methodResults) {
+            let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+            let res = buff.slice(2, buff.byteLength).toString()
+            this.logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+
+
+        }
+    }
+    async getMainMetrics(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        const atc = new this.algosdk.AtomicTransactionComposer()
+        const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
+   
+        const contract = new this.algosdk.ABIContract(JSON.parse(this.contract.toString()))
+        const commonParams = {
+            appID: Number(this.applicationId),
+            sender: acc.addr,
+            suggestedParams: params,
+            signer: signer
+        }
+        let method = this.getMethodByName("get_metrics", contract)
+        atc.addMethodCall({
+            method: method,
+            methodArgs: [],
+            ...commonParams
+        })
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
+        const result = await atc.execute(this.algodClient, 2)
+        for (const idx in result.methodResults) {
+            let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+            let res = buff.toString()
+            this.logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+
+
+        }
+    }
+    async getMainMetric(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        const atc = new this.algosdk.AtomicTransactionComposer()
+        const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
+    
+        const contract = new this.algosdk.ABIContract(JSON.parse(this.contract.toString()))
+        const commonParams = {
+            appID: Number(this.applicationId),
+            sender: acc.addr,
+            suggestedParams: params,
+            signer: signer
+        }
+        let method = this.getMethodByName("get_metric", contract)
+        atc.addMethodCall({
+            method: method,
+            methodArgs: ['poap_count'],
+            ...commonParams
+        })
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
+        const result = await atc.execute(this.algodClient, 2)
+        for (const idx in result.methodResults) {
+            let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+            let res = buff.toString()
+            this.logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+
+
+        }
+    }
+    async deployItemContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        const atc = new this.algosdk.AtomicTransactionComposer()
+        const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
+ 
+
+        const compiledItemResult = await this.algodClient.compile(this.itemApprovalProgData).do();
+        const compiledItemClearResult = await this.algodClient.compile(this.itemClearProgData).do();
+        const compiledResultUint8 = new Uint8Array(Buffer.from(compiledItemResult.result, "base64"));
+        const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledItemClearResult.result, "base64"));
+
+
+
+
+    
+        const contract = new this.algosdk.ABIContract(JSON.parse(this.contract.toString()))
+        const commonParams = {
+            appID: Number(this.applicationId),
+            sender: acc.addr,
+            suggestedParams: params,
+            signer: signer,
+        }
+        let method = this.getMethodByName("item_create", contract)
+
+        const ptxn = new this.algosdk.Transaction({
+            from: acc.addr,
+            to: this.applicationAddr,
+            amount: 2 * params.fee,
+            fee: params.fee,
+            ...params
+        })
+
+        const tws = { txn: ptxn, signer: signer }
+
+        atc.addMethodCall({
+            method: method,
+            methodArgs: [tws, compiledResultUint8, compiledClearResultUint8],
+            ...commonParams
+        })
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
+        const result = await atc.execute(this.algodClient, 2)
+        for (let idx in result.methodResults) {
+
+            let res = this.algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
+            this.logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+
+
+        }
+    }
+    async updateItemContract(addr, acc) {
+        localInts = this.config.deployer['num_local_int'];
+        localBytes = this.config.deployer['num_local_byte'];
+        globalInts = this.config.deployer['num_global_int'];
+        globalBytes = this.config.deployer['num_global_byte'];
+        let params = await this.algodClient.getTransactionParams().do();
+        const atc = new this.algosdk.AtomicTransactionComposer()
+        const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
+    
+   
+        const compiledItemResult = await this.algodClient.compile(this.itemApprovalProgData).do();
+        const compiledItemClearResult = await this.algodClient.compile(itemClearProgData).do();
+        const compiledResultUint8 = new Uint8Array(Buffer.from(compiledItemResult.result, "base64"));
+        const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledItemClearResult.result, "base64"));
+
+
+
+
+        
+        const contract = new this.algosdk.ABIContract(JSON.parse(buff.toString()))
+        const commonParams = {
+            appID: Number(this.applicationId),
+            sender: acc.addr,
+            suggestedParams: params,
+            signer: signer,
+        }
+        let method = this.getMethodByName("item_update", contract)
+
+        let application = Number(this.applicationItemId)
+        atc.addMethodCall({
+            method: method,
+            methodArgs: [application, compiledResultUint8, compiledClearResultUint8],
+            ...commonParams
+        })
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
+        const result = await atc.execute(this.algodClient, 2)
+        for (const idx in result.methodResults) {
+
+            let res = this.algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
+            this.logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
+
+
+        }
+    }
+    async deleteItemContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        const atc = new this.algosdk.AtomicTransactionComposer()
+        const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
+    
+
+      
+        const contract = new this.algosdk.ABIContract(JSON.parse(this.itemContract.toString()))
+        const commonParams = {
+            appID: Number(this.applicationId),
+            sender: acc.addr,
+            suggestedParams: params,
+            signer: signer
+        }
+        let method = this.getMethodByName("item_delete", contract)
+
+
+        atc.addMethodCall({
+            method: method,
+            methodArgs: [this.applicationItemId],
+            ...commonParams
+        })
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
+        const result = await atc.execute(this.algodClient, 2)
+        for (const idx in result.methodResults) {
+
+
+            this.logger.info("AlgoPoaP Main Contract ABI Exec method result: void");
+
+
+        }
+    }
+    async setupItemContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        const atc = new this.algosdk.AtomicTransactionComposer()
+        const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
+
+
+
+
+        const contract = new this.algosdk.ABIContract(JSON.parse(this.itemContract.toString()))
+        const commonParams = {
+            appID: Number(Number(this.applicationItemId)),
+            sender: acc.addr,
+            suggestedParams: params,
+            signer: signer
+        }
+        const ptxn = new this.algosdk.Transaction({
+            from: acc.addr,
+            to: this.applicationAddr,
+            amount: 3 * params.fee,
+            fee: 2 * params.fee,
+
+            ...params
+        })
+
+        const tws = { txn: ptxn, signer: signer }
+        let method = this.getMethodByName("setup", contract)
+
+
+        atc.addMethodCall({
+            method: method,
+            methodArgs: [tws, addr, Number(this.applicationId), '-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 3, 1, 1, 1, 1, 6, 1]],
+            ...commonParams
+        })
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+        const result = await atc.execute(this.algodClient, 2)
+        for (const idx in result.methodResults) {
+
+            let res = this.algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
+            this.logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
+
+
+        }
+    }
+    async reSetupItemContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        const atc = new this.algosdk.AtomicTransactionComposer()
+        const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
+
+        const contract = new this.algosdk.ABIContract(JSON.parse(this.itemContract.toString()))
+        const commonParams = {
+            appID: Number(Number(this.applicationItemId)),
+            sender: acc.addr,
+            suggestedParams: params,
+            signer: signer
+        }
+        const ptxn = new this.algosdk.Transaction({
+            from: acc.addr,
+            to: this.applicationAddr,
+            amount: params.fee,
+            fee: params.fee,
+            ...params
+        })
+
+        const tws = { txn: ptxn, signer: signer }
+        let method = this.getMethodByName("re_setup", contract)
+
+        atc.addMethodCall({
+            method: method,
+            methodArgs: [tws, addr, Number(this.applicationId), Number(this.itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 3, 1, 1, 1, 1, 6, 1]],
+            ...commonParams
+        })
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+        const result = await atc.execute(this.algodClient, 2)
+        for (const idx in result.methodResults) {
+
+            let res = this.algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
+            this.logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
+
+
+        }
+    }
+    async activateItemContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        const atc = new this.algosdk.AtomicTransactionComposer()
+        const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
+   
+        const contract = new this.algosdk.ABIContract(JSON.parse(this.itemContract.toString()))
+        const commonParams = {
+            appID: Number(Number(this.applicationItemId)),
+            sender: acc.addr,
+            suggestedParams: params,
+            signer: signer
+        }
+        let attendees_qty = 3
+        const ptxn = new this.algosdk.Transaction({
+            type: 'pay',
+            from: acc.addr,
+            to: this.applicationAddr,
+            amount: attendees_qty * 4 * params.fee,
+            fee: params.fee,
+            ...params
+        })
+        const atxn = new this.algosdk.Transaction({
+            type: 'axfer',
+            from: acc.addr,
+            to: acc.addr,
+            assetIndex: Number(this.itemAsaId),
+            amount: 0,
+            fee: 2 * params.fee,
+            ...params
+        })
+
+        const tws0 = { txn: ptxn, signer: signer }
+        const tws1 = { txn: atxn, signer: signer }
+        let method = this.getMethodByName("activate", contract)
+
+        atc.addMethodCall({
+            method: method,
+            methodArgs: [tws0, tws1, Number(this.applicationId), Number(this.itemAsaId)],
+            ...commonParams
+        })
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+        const result = await atc.execute(this.algodClient, 2)
+        for (const idx in result.methodResults) {
+
+            let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+            let res = buff.toString()
+            this.logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
+
+
+        }
+    }
+    async releaseItemContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        const atc = new this.algosdk.AtomicTransactionComposer()
+        const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
+
+        const contract = new this.algosdk.ABIContract(JSON.parse(this.itemContract.toString()))
+        const commonParams = {
+            appID: Number(Number(this.applicationItemId)),
+            sender: acc.addr,
+            suggestedParams: params,
+            signer: signer
+        }
+
+
+
+        let method = this.getMethodByName("release", contract)
+
+        atc.addMethodCall({
+            method: method,
+            methodArgs: [Number(this.applicationId)],
+            ...commonParams
+        })
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+        const result = await atc.execute(this.algodClient, 2)
+        for (const idx in result.methodResults) {
+
+            let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+            let res = buff.toString()
+            this.logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
+
+
+        }
+    }
+    async claimItemContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        const atc = new this.algosdk.AtomicTransactionComposer()
+        const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
+
+        const contract = new this.algosdk.ABIContract(JSON.parse(this.itemContract.toString()))
+        const commonParams = {
+            appID: Number(Number(this.applicationItemId)),
+            sender: acc.addr,
+            suggestedParams: params,
+            signer: signer
+        }
+        const ptxn = new this.algosdk.Transaction({
+            type: 'pay',
+            from: acc.addr,
+            to: this.applicationAddr,
+            amount: 0,
+            fee: params.fee,
+            ...params
+        })
+
+        const tws0 = { txn: ptxn, signer: signer }
+        let method = this.getMethodByName("claim", contract)
+        let method_budget_1 = this.getMethodByName("budget_increase_call_1", contract)
+        let method_budget_2 = this.getMethodByName("budget_increase_call_2", contract)
+        let method_budget_3 = this.getMethodByName("budget_increase_call_3", contract)
+        let note_claim = this.algosdk.encodeObj(
+            "AlgoPoaP Claim Transaction"
         );
 
-
-        let txn = algosdk.makeApplicationDeleteTxnFromObject({
-            suggestedParams: params,
-            type: "appl",
-            appIndex: Number(apps[i]),
-            from: sender,
-            appOnComplete: 5,
-            note: note,
-            closeRemainderTo: undefined,
-            revocationTarget: undefined,
-            rekeyTo: undefined,
-        });
-        const signedTxn = txn.signTxn(accountObject.sk);
-        const { txId } = await algodClient.sendRawTransaction(signedTxn).do();
-        await algosdk.waitForConfirmation(algodClient, txId, 5)
-        //await waitForConfirmation(txId);
-        let ptx = await algodClient.pendingTransactionInformation(txId).do();
-
-        const noteArrayFromTxn = ptx.txn.txn.note;
-        const receivedNote = Buffer.from(noteArrayFromTxn).toString('utf8');
-        logger.info("Note from confirmed AlgoPoaP Delete TXN: %s", receivedNote);
-    }
-
-}
-async function createGeoIndex() {
-    let geoIndex = []
-    for (i = 0; i < 90; i++) {
-        let lat = i
-        let lng1 = 0
-        let lng2 = 0.0001
-        geoIndex.push({
-            lat,
-            //lng1,
-            //lng2,
-            distance: geolib.getDistance(
-                { latitude: lat, longitude: lng1 },
-                { latitude: lat, longitude: lng2 }
-            ),
-
+        //let oncomplete = this.algosdk.OnApplicationComplete.NoOpOC
+        /*     let sigTxn = this.algosdk.makeApplicationCallTxnFromObject({
+                appIndex:Number(this.applicationItemId),
+                suggestedParams: params,
+                from: acc.addr,
+                fee: params.fee,
+                note: note,
+                onComplete: oncomplete,
+            }) */
+        //const tws1 = { txn: sigTxn, signer: signer }
+        atc.addMethodCall({
+            method: method_budget_1,
+            methodArgs: [],
+            ...commonParams
         })
+        atc.addMethodCall({
+            method: method_budget_2,
+            methodArgs: [],
+            ...commonParams
+        })
+        atc.addMethodCall({
+            method: method_budget_3,
+            methodArgs: [],
+            ...commonParams
+        })
+
+
+        let rawData = Buffer.from("test string").toString('base64')
+        let appAddr = this.algosdk.getApplicationAddress(Number(this.applicationItemId))
+        let sig = this.algosdk.tealSign(acc.sk, rawData, appAddr)
+
+        let signedBytes = this.algosdk.signBytes(rawData, acc.sk)
+        let verify = this.algosdk.verifyBytes(rawData, signedBytes, acc.addr)
+        console.log(verify)
+
+        atc.addMethodCall({
+            method: method,
+            note: note_claim,
+            methodArgs: [tws0, Number(this.itemAsaId), Number(this.applicationId), addr, sig, rawData, [30, 3232, 100, 2345, 1671942604]],
+            ...commonParams
+        })
+
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
+
+
+        const result = await atc.execute(this.algodClient, 2)
+        for (const idx in result.methodResults) {
+
+            let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
+            let res = buff.toString()
+            this.logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
+
+
+        }
     }
-    let utilArray = [];
-    let geoIndexDistinct = []
-    geoIndex.forEach((item) => {
-        if (utilArray.indexOf(item.distance) === -1) {
-            utilArray.push(item.distance)
-            geoIndexDistinct.push(item)
+    async closeOutMainContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        let appTxn = this.algosdk.makeApplicationCloseOutTxn(addr, params, Number(this.applicationId));
+
+        let appTxnId = appTxn.txID().toString();
+
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Application close out TXId =  %s", appTxnId);
+        let signedAppTxn = appTxn.signTxn(acc.sk);
+
+        await this.algodClient.sendRawTransaction(signedAppTxn).do();
+        await this.algosdk.waitForConfirmation(this.algodClient, appTxnId, 5)
+        this.logger.info('------------------------------')
+
+
+    }
+    async closeOutItemContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+
+        let appTxnItem = this.algosdk.makeApplicationCloseOutTxn(addr, params, Number(this.applicationItemId));
+
+        let appTxnIdItem = appTxnItem.txID().toString();
+        this.logger.info('------------------------------')
+
+        this.logger.info("AlgoPoaP Item Application close out TXId =  %s", appTxnIdItem);
+
+        let signedAppTxnItem = appTxnItem.signTxn(acc.sk);
+        await this.algodClient.sendRawTransaction(signedAppTxnItem).do();
+        await this.algosdk.waitForConfirmation(this.algodClient, appTxnIdItem, 5)
+        this.logger.info('------------------------------')
+
+
+    }
+    async optinMainContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+        let appTxn = this.algosdk.makeApplicationOptInTxn(addr, params, Number(this.applicationId));
+
+        let appTxnId = appTxn.txID().toString();
+
+        this.logger.info('------------------------------')
+        this.logger.info("AlgoPoaP Main Application Optin TXId =  %s", appTxnId);
+        let signedAppTxn = appTxn.signTxn(acc.sk);
+
+        await this.algodClient.sendRawTransaction(signedAppTxn).do();
+        await this.algosdk.waitForConfirmation(this.algodClient, appTxnId, 5)
+        this.logger.info('------------------------------')
+
+
+    }
+    async optinItemContract(addr, acc) {
+        let params = await this.algodClient.getTransactionParams().do();
+
+        let appTxnItem = this.algosdk.makeApplicationOptInTxn(addr, params, Number(this.applicationItemId));
+
+        let appTxnIdItem = appTxnItem.txID().toString();
+        this.logger.info('------------------------------')
+
+        this.logger.info("AlgoPoaP Item Application Optin TXId =  %s", appTxnIdItem);
+
+        let signedAppTxnItem = appTxnItem.signTxn(acc.sk);
+        await this.algodClient.sendRawTransaction(signedAppTxnItem).do();
+        await this.algosdk.waitForConfirmation(this.algodClient, appTxnIdItem, 5)
+        this.logger.info('------------------------------')
+
+
+    }
+    async deployerAccount() {
+
+        try {
+            const account = await this.importAccount();
+            this.accountObject = account
+            this.accountAddress = account.addr;
+        }
+        catch (err) {
+            this.logger.error(err);
         }
 
+    }
+    async deployerReport() {
 
-    })
-
-    const fileContent = JSON.stringify(geoIndexDistinct, null, 2);
-    fs.writeFileSync("geoindex.json", fileContent);
-
-
-}
-async function runDeployer() {
-    if (!accountExists) await deployerAccount()
-    if (config.deployer['deployer_contracts']) {
         try {
 
-            await deployMainContract(accountObject.addr, accountObject)
+
+            await this.fetchAlgoWalletInfo()
+
+            await this.printCreatedAsset();
+            await this.printAssetHolding(this.accountObject.addr);
 
 
         }
         catch (err) {
-            logger.error(err);
+            this.logger.error(err);
         }
+
     }
-    if (config.deployer['deployer_update_contracts']) {
-        {
-            try {
+    async deleteApps(appsTodelete) {
+        let wallet = this.config.algorand.algo_wallet_address
+        let apps = appsTodelete || []
+        for (let i = 0; i < apps.length; i++) {
+            this.logger.info('Now deleting AlgoPoaP APP: %s', apps[i])
 
-                await updateMainContract(accountObject.addr, accountObject)
+            let params = await this.algodClient.getTransactionParams().do();
+            params.fee = 1000;
+            params.flatFee = true;
+            let sender = wallet;
+            let revocationTarget = undefined;
+            let closeRemainderTo = undefined;
 
-            }
-            catch (err) {
-                logger.error(err);
-            }
+            let note = this.algosdk.encodeObj(
+                JSON.stringify({
+                    system: "Deleting AlgoPoaP main app",
+                    date: `${new Date()}`,
+                })
+            );
+
+
+            let txn = this.algosdk.makeApplicationDeleteTxnFromObject({
+                suggestedParams: params,
+                type: "appl",
+                appIndex: Number(apps[i]),
+                from: sender,
+                appOnComplete: 5,
+                note: note,
+                closeRemainderTo: undefined,
+                revocationTarget: undefined,
+                rekeyTo: undefined,
+            });
+            const signedTxn = txn.signTxn(this.accountObject.sk);
+            const { txId } = await this.algodClient.sendRawTransaction(signedTxn).do();
+            await this.algosdk.waitForConfirmation(this.algodClient, txId, 5)
+            //await waitForConfirmation(txId);
+            let ptx = await this.algodClient.pendingTransactionInformation(txId).do();
+
+            const noteArrayFromTxn = ptx.txn.txn.note;
+            const receivedNote = Buffer.from(noteArrayFromTxn).toString('utf8');
+            this.logger.info("Note from confirmed AlgoPoaP Delete TXN: %s", receivedNote);
         }
+
     }
-    if (config.deployer['setup_app']) {
-        {
-            try {
+    async createGeoIndex() {
+        let geoIndex = []
+        for (i = 0; i < 90; i++) {
+            let lat = i
+            let lng1 = 0
+            let lng2 = 0.0001
+            geoIndex.push({
+                lat,
+                //lng1,
+                //lng2,
+                distance: geolib.getDistance(
+                    { latitude: lat, longitude: lng1 },
+                    { latitude: lat, longitude: lng2 }
+                ),
 
-                await setupMainContract(accountObject.addr, accountObject)
-
-
-
-
-            }
-            catch (err) {
-                logger.error(err);
-            }
+            })
         }
+        let utilArray = [];
+        let geoIndexDistinct = []
+        geoIndex.forEach((item) => {
+            if (utilArray.indexOf(item.distance) === -1) {
+                utilArray.push(item.distance)
+                geoIndexDistinct.push(item)
+            }
+
+
+        })
+
+        const fileContent = JSON.stringify(geoIndexDistinct, null, 2);
+        fs.writeFileSync("geoindex.json", fileContent);
+
+
     }
-    if (config.deployer['test_metrics']) {
-        {
-            try {
+    async runDeployer() {
+        await this.deployerAccount()
+        if (this.config.deployer['deployer_report']) await this.deployerReport()
+        if (this.config.deployer['delete_apps']) await this.deleteApps(this.config.deployer.apps_to_delete)
+        if (this.config.deployer['create_geo_index']) {
+            {
+                try {
 
-                await getMainMetrics(accountObject.addr, accountObject)
-                await getMainMetric(accountObject.addr, accountObject)
-
-
-
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_item_closeout']) {
-        {
-            try {
-
-                await closeOutItemContract(accountObject.addr, accountObject)
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_main_optin']) {
-        {
-            try {
-
-                await optinMainContract(accountObject.addr, accountObject)
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_item_create']) {
-        {
-            try {
-
-                await deployItemContract(accountObject.addr, accountObject)
-
-
-
-
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_item_update']) {
-        {
-            try {
-
-                await updateItemContract(accountObject.addr, accountObject)
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_main_closeout']) {
-        {
-            try {
-
-                await closeOutMainContract(accountObject.addr, accountObject)
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_item_optin']) {
-        {
-            try {
-
-                await optinItemContract(accountObject.addr, accountObject)
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_item_delete']) {
-        {
-            try {
-
-                await deleteItemContract(accountObject.addr, accountObject)
-
-
-
-
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_item_setup']) {
-        {
-            try {
-
-                if (Number(itemAsaId) > 0) {
-                    await reSetupItemContract(accountObject.addr, accountObject)
-                } else {
-                    await setupItemContract(accountObject.addr, accountObject)
+                    await this.createGeoIndex()
                 }
-
-
-
-
-            }
-            catch (err) {
-                logger.error(err);
+                catch (err) {
+                    this.logger.error(err);
+                }
             }
         }
-    }
-    if (config.deployer['test_item_activate']) {
-        {
+        if (this.config.deployer['deployer_contracts']) {
             try {
 
-                await activateItemContract(accountObject.addr, accountObject)
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_item_release']) {
-        {
-            try {
+                await this.deployMainContract(this.accountObject.addr, this.accountObject)
 
-                await releaseItemContract(accountObject.addr, accountObject)
-            }
-            catch (err) {
-                logger.error(err);
-            }
-        }
-    }
-    if (config.deployer['test_item_claim']) {
-        {
-            try {
 
-                await claimItemContract(accountObject.addr, accountObject)
             }
             catch (err) {
-                logger.error(err);
+                this.logger.error(err);
             }
         }
-    }
-    if (config.deployer['deployer_report']) await deployerReport()
-    if (config.deployer['delete_apps']) await deleteApps(config.deployer.apps_to_delete)
-    if (config.deployer['create_geo_index']) {
-        {
-            try {
+        if (this.config.deployer['deployer_update_contracts']) {
+            {
+                try {
 
-                await createGeoIndex()
-            }
-            catch (err) {
-                logger.error(err);
+                    await this.updateMainContract(this.accountObject.addr, this.accountObject)
+
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
             }
         }
+        if (this.config.deployer['setup_app']) {
+            {
+                try {
+
+                    await this.setupMainContract(this.accountObject.addr, this.accountObject)
+
+
+
+
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+        if (this.config.deployer['test_metrics']) {
+            {
+                try {
+
+                    await this.getMainMetrics(this.accountObject.addr, this.accountObject)
+                    await this.getMainMetric(this.accountObject.addr, this.accountObject)
+
+
+
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+        if (this.config.deployer['test_item_closeout']) {
+            {
+                try {
+
+                    await this.closeOutItemContract(this.accountObject.addr, this.accountObject)
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+        if (this.config.deployer['test_main_optin']) {
+            {
+                try {
+
+                    await this.optinMainContract(this.accountObject.addr, this.accountObject)
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+        if (this.config.deployer['test_item_create']) {
+            {
+                try {
+
+                    await this.deployItemContract(this.accountObject.addr, this.accountObject)
+
+
+
+
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+        if (this.config.deployer['test_item_update']) {
+            {
+                try {
+
+                    await this.updateItemContract(this.accountObject.addr, this.accountObject)
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+        if (this.config.deployer['test_main_closeout']) {
+            {
+                try {
+
+                    await this.closeOutMainContract(this.accountObject.addr, this.accountObject)
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+        if (this.config.deployer['test_item_optin']) {
+            {
+                try {
+
+                    await this.optinItemContract(this.accountObject.addr, this.accountObject)
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+        if (this.config.deployer['test_item_delete']) {
+            {
+                try {
+
+                    await this.deleteItemContract(this.accountObject.addr, this.accountObject)
+
+
+
+
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+        if (this.config.deployer['test_item_setup']) {
+            {
+                try {
+
+                    if (Number(this.itemAsaId) > 0) {
+                        await this.reSetupItemContract(this.accountObject.addr, this.accountObject)
+                    } else {
+                        await this.setupItemContract(this.accountObject.addr, this.accountObject)
+                    }
+
+
+
+
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+        if (this.config.deployer['test_item_activate']) {
+            {
+                try {
+
+                    await this.activateItemContract(this.accountObject.addr, this.accountObject)
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+        if (this.config.deployer['test_item_release']) {
+            {
+                try {
+
+                    await this.releaseItemContract(this.accountObject.addr, this.accountObject)
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+        if (this.config.deployer['test_item_claim']) {
+            {
+                try {
+
+                    await this.claimItemContract(this.accountObject.addr, this.accountObject)
+                }
+                catch (err) {
+                    this.logger.error(err);
+                }
+            }
+        }
+
+        process.exit();
     }
-    process.exit();
 }
 
 
-module.exports = runDeployer
+
+
+
+
+
+
+
+
+
+module.exports = AlgoPoapDeployer
