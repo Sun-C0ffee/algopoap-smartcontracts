@@ -275,8 +275,6 @@ b b_log_return
 b_deletion:
 callsub sub_check_owner
 byte 0x151f7c75
-byte "algopoap_item_delete"
-concat
 global CurrentApplicationID
 itob
 concat
@@ -286,8 +284,6 @@ b b_log_return
 b_update:
 callsub sub_check_owner
 byte 0x151f7c75
-byte "algopoap_item_update"
-concat
 global CurrentApplicationID
 itob
 concat
@@ -695,6 +691,17 @@ int 0
 assert
 gtxn 3 Fee
 store 23
+itxn_begin
+int pay
+itxn_field TypeEnum
+txn Sender
+itxn_field Receiver
+load 23
+itxn_field Amount
+int 1000
+itxn_field Fee
+itxn_submit
+
 b b_claim_check
 
 

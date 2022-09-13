@@ -265,10 +265,9 @@ async function deployMainContract(addr, acc) {
     logger.info("AlgoPoaP Clear Hash = %s", compiledClearResult.hash);
     //logger.info("AlgoPoaP Clear Result = %s", compiledClearResult.result);
     
-    let extraPages = 1
     let appTxn = algosdk.makeApplicationCreateTxnFromObject({from: addr, suggestedParams:params, onComplete,
         approvalProgram: compiledResultUint8, clearProgram:compiledClearResultUint8,
-        numLocalInts:localInts, numLocalByteSlices:localBytes, numGlobalInts:globalInts, numGlobalByteSlices:globalBytes, extraPages});
+        numLocalInts:localInts, numLocalByteSlices:localBytes, numGlobalInts:globalInts, numGlobalByteSlices:globalBytes, extraPages:1});
     let appTxnId = appTxn.txID().toString();
     logger.info('------------------------------')
     logger.info("AlgoPoaP Main Application Creation TXId =  %s", appTxnId);
