@@ -1037,16 +1037,11 @@ const AlgoPoapDeployer = class {
         if (this.config.deployer['test_item_setup']) {
             {
                 try {
-
                     if (Number(this.itemAsaId) > 0) {
                         await this.reSetupItemContract(this.accountObject.addr, this.accountObject);
                     } else {
                         await this.setupItemContract(this.accountObject.addr, this.accountObject);
                     }
-
-
-
-
                 }
                 catch (err) {
                     this.logger.error(err);
