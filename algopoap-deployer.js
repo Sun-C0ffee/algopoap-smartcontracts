@@ -262,7 +262,6 @@ const AlgoPoapDeployer = class {
     async updateMainContract(addr, acc) {
         let params = await this.algodClient.getTransactionParams().do();
         let onComplete = this.algosdk.OnApplicationComplete.UpdateApplicationOC;
-
         const compiledResult = await this.algodClient.compile(this.approvalProgData).do();
         const compiledClearResult = await this.algodClient.compile(this.clearProgData).do();
         const compiledResultUint8 = new Uint8Array(Buffer.from(compiledResult.result, "base64"));
