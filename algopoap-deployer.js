@@ -447,10 +447,10 @@ const AlgoPoapDeployer = class {
     
    
         const compiledItemResult = await this.algodClient.compile(this.itemApprovalProgData).do();
-        const compiledItemClearResult = await this.algodClient.compile(itemClearProgData).do();
+        const compiledItemClearResult = await this.algodClient.compile(this.itemClearProgData).do();
         const compiledResultUint8 = new Uint8Array(Buffer.from(compiledItemResult.result, "base64"));
         const compiledClearResultUint8 = new Uint8Array(Buffer.from(compiledItemClearResult.result, "base64"));
-        const contract = new this.algosdk.ABIContract(JSON.parse(buff.toString()))
+        const contract = new this.algosdk.ABIContract(JSON.parse(this.itemContract.toString()))
         const commonParams = {
             appID: Number(this.applicationId),
             sender: acc.addr,
