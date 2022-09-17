@@ -1,4 +1,4 @@
-#pragma version 6
+#pragma version 7
 //   _______ __               ______               ______ 
 //  |   _   |  |.-----.-----.|   __ \.-----.---.-.|   __ \
 //  |       |  ||  _  |  _  ||    __/|  _  |  _  ||    __/
@@ -13,7 +13,7 @@
 // AlgoPoaP Item Smart Contract
 
 // Scratch space schema
-    // 0: Poa P ASA ID (if hasNFT is true)
+    // 0: PoaP ASA ID (if hasNFT is true)
     // 1: Parent application ID
     // 2: ASA Sender address to use with NFT sender sub
     // 3: ASA Amount to use with NFT sender sub
@@ -34,7 +34,7 @@
     // 18: poap_lng_unit_diff
     // 19: lng_diff
     // 20: lat_diff
-    // 21: poap_geo_buffer
+    // 21: poap_geo_radius
     // 22: poap_lat_unit_diff
     // 23: fee_to_refund
 
@@ -70,7 +70,7 @@
     // Uint64 poap_lat_dec
     // Uint64 poap_lng
     // Uint64 poap_lng_dec
-    // Uint64 poap_geo_buffer
+    // Uint64 poap_geo_radius
     // Uint64 poap_attendee_qty
     // Uint64 poap_has_nft
     // Uint64 poap_has_geo
@@ -425,8 +425,8 @@ load 16
 -
 store 20
 
-//geo buffer
-byte "poap_geo_buffer"
+//geo radius
+byte "poap_geo_radius"
 app_global_get
 store 21
 
@@ -448,7 +448,7 @@ load 18
 int 2
 exp
 store 24
-//geo buffer by power of 2
+//geo radius by power of 2
 load 21
 int 2
 exp
@@ -470,7 +470,7 @@ load 18
 >
 assert
 
-//check pythagorean triple for triangle of lat, lng and geo buffer
+//check pythagorean triple for triangle of lat, lng and geo radius
 load 23
 load 24
 +
@@ -494,7 +494,7 @@ sub_check_qr_secret:
 load 6
 load 8
 load 4
-ed25519verify
+ed25519verify_bare
 assert
 retsub
 
@@ -973,7 +973,7 @@ int 32
 extract_uint64
 app_global_put
 
-byte "poap_geo_buffer"
+byte "poap_geo_radius"
 load 10
 int 40
 extract_uint64
@@ -1048,12 +1048,3 @@ return
 // Handles rejection with error
 b_error:
 err
-
-
-
-
-
-
-
-
-
