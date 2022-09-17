@@ -716,10 +716,10 @@ const AlgoPoapDeployer = class {
         const compiledResult = await this.algodClient.compile(this.itemApprovalProgData).do();
         const compiledClearResult = await this.algodClient.compile(this.clearProgData).do();
 
-
-        let rawData = this.algosdk.encodeObj("secret test string")//"secret test string"//Buffer.from("secret test string").toString('base64')
+        let rawDataString = "secret test string"
+        let rawData = this.algosdk.encodeObj(rawDataString)//"secret test string"//Buffer.from("secret test string").toString('base64')
         let appAddr = this.algosdk.getApplicationAddress(Number(this.applicationItemId))
-        let sig = this.algosdk.tealSign(acc.sk, rawData, compiledResult.hash)
+        let sig = this.algosdk.tealSign(acc.sk, rawData, /* compiledResult.hash */appAddr)
         let pk = this.algosdk.decodeAddress(acc.addr).publicKey
         let signedBytes = this.algosdk.signBytes(rawData, acc.sk)
         let verify = this.algosdk.verifyBytes(rawData, signedBytes, acc.addr)
@@ -728,7 +728,7 @@ const AlgoPoapDeployer = class {
         atc.addMethodCall({
             method: method,
             note: note_claim,
-            methodArgs: [tws0, Number(this.itemAsaId), Number(this.applicationId), pk, sig, rawData, [30, 3232, 100, 2345, 1671942604]],
+            methodArgs: [tws0, Number(this.itemAsaId), Number(this.applicationId), pk/* acc.addr */, sig/* signedBytes */, rawData, [30, 3232, 100, 2345, 1671942604]],
             ...commonParams
         })
 
