@@ -195,7 +195,7 @@ txn ApplicationArgs 0
 bnz method_release
 
 // Checking application call's Arg 0 for claim method signature
-method "claim(pay,asset,application,byte[32],byte[64],byte[],(uint64,uint64,uint64,uint64,uint64))string"
+method "claim(pay,asset,application,byte[32],byte[64],string,(uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_claim

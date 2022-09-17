@@ -175,7 +175,7 @@
                     "name": "qr_signed"
                 },
                 {
-                    "type": "byte[]",
+                    "type": "string",
                     "name": "qr_data"
                 },
                 {
