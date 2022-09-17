@@ -719,7 +719,6 @@ b b_claim_check
 b_claim_check:
 byte "poap_author_address"
 app_global_get
-//txn ApplicationArgs 3
 store 4
 
 //string qr signed
