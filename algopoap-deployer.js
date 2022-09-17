@@ -729,7 +729,7 @@ const AlgoPoapDeployer = class {
         atc.addMethodCall({
             method: method,
             note: note_claim,
-            methodArgs: [tws0, Number(this.itemAsaId), Number(this.applicationId), pk/* acc.addr */, sig/* signedBytes */, rawData, [30, 3232, 100, 2345, 1671942604]],
+            methodArgs: [tws0, Number(this.itemAsaId), Number(this.applicationId), pk, sig/* signedBytes */, rawData, [30, 3232, 100, 2345, 1671942604]],
             ...commonParams
         })
 

@@ -500,7 +500,7 @@ load 8
 //account pk
 load 4
 //log
-ed25519verify
+ed25519verify_bare
 assert
 //itob
 //log
