@@ -494,14 +494,16 @@ sub_check_qr_secret:
 //qr data
 load 6
 //log
-//qr signed
+//qr signature
 load 8
 //log
-//account address
+//account pk
 load 4
 //log
 ed25519verify
 assert
+//itob
+//log
 retsub
 
 // Handles Release signature constraint check

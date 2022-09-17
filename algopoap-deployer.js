@@ -713,11 +713,13 @@ const AlgoPoapDeployer = class {
             methodArgs: [],
             ...commonParams
         })
+        const compiledResult = await this.algodClient.compile(this.itemApprovalProgData).do();
+        const compiledClearResult = await this.algodClient.compile(this.clearProgData).do();
 
 
         let rawData = this.algosdk.encodeObj("secret test string")//"secret test string"//Buffer.from("secret test string").toString('base64')
         let appAddr = this.algosdk.getApplicationAddress(Number(this.applicationItemId))
-        let sig = this.algosdk.tealSign(acc.sk, rawData, appAddr)
+        let sig = this.algosdk.tealSign(acc.sk, rawData, compiledResult.hash)
         let pk = this.algosdk.decodeAddress(acc.addr).publicKey
         let signedBytes = this.algosdk.signBytes(rawData, acc.sk)
         let verify = this.algosdk.verifyBytes(rawData, signedBytes, acc.addr)
