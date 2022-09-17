@@ -186,7 +186,7 @@
             "returns": {
                 "type": "string"
             },
-            "desc": "Claims an AlgoPoaP for an attendee and returns NFT sending inner-transaction hash"
+            "desc": "Claims an AlgoPoaP for an attendee and returns success string"
         },
         {
             "name": "release",
