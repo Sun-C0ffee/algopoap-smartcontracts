@@ -195,7 +195,7 @@ txn ApplicationArgs 0
 bnz method_release
 
 // Checking application call's Arg 0 for claim method signature
-method "claim(pay,asset,application,account,byte[],byte[],(uint64,uint64,uint64,uint64,uint64))string"
+method "claim(pay,asset,application,address,string,string,(uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_claim
@@ -491,9 +491,15 @@ retsub
 
 // Handles checking the QR secret from args
 sub_check_qr_secret:
+//qr data
 load 6
+//log
+//qr signed
 load 8
+//log
+//account address
 load 4
+//log
 ed25519verify
 assert
 retsub
@@ -709,11 +715,12 @@ assert
 b b_claim_check
 
 b_claim_check:
-byte "poap_author_address"
-app_global_get
+//byte "poap_author_address"
+//app_global_get
+txn ApplicationArgs 3
 store 4
 
-//string qr secret
+//string qr signed
 txn ApplicationArgs 4
 store 8
 

@@ -167,15 +167,15 @@
                     "name": "parent_application"
                 },
                 {
-                    "type": "account",
-                    "name": "attendee_account"
+                    "type": "address",
+                    "name": "attendee_pk"
                 },
                 {
-                    "type": "byte[]",
-                    "name": "qr_secret"
+                    "type": "string",
+                    "name": "qr_signed"
                 },
                 {
-                    "type": "byte[]",
+                    "type": "string",
                     "name": "qr_data"
                 },
                 {
