@@ -171,11 +171,11 @@
                     "name": "attendee_account"
                 },
                 {
-                    "type": "string",
+                    "type": "byte[]",
                     "name": "qr_secret"
                 },
                 {
-                    "type": "string",
+                    "type": "byte[]",
                     "name": "qr_data"
                 },
                 {

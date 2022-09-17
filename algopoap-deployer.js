@@ -715,10 +715,10 @@ const AlgoPoapDeployer = class {
         })
 
 
-        let rawData = Buffer.from("test string").toString('base64')
+        let rawData = this.algosdk.encodeObj({ secret: "test string" })//Buffer.from("test string").toString('base64')
         let appAddr = this.algosdk.getApplicationAddress(Number(this.applicationItemId))
         let sig = this.algosdk.tealSign(acc.sk, rawData, appAddr)
-
+        let pk = this.algosdk.decodeAddress(acc.addr).publicKey
         let signedBytes = this.algosdk.signBytes(rawData, acc.sk)
         let verify = this.algosdk.verifyBytes(rawData, signedBytes, acc.addr)
         console.log(verify)

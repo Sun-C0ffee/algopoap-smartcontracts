@@ -195,7 +195,7 @@ txn ApplicationArgs 0
 bnz method_release
 
 // Checking application call's Arg 0 for claim method signature
-method "claim(pay,asset,application,account,string,string,(uint64,uint64,uint64,uint64,uint64))string"
+method "claim(pay,asset,application,account,byte[],byte[],(uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_claim
@@ -494,7 +494,7 @@ sub_check_qr_secret:
 load 6
 load 8
 load 4
-ed25519verify_bare
+ed25519verify
 assert
 retsub
 
