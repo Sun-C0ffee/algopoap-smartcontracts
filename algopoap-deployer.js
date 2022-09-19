@@ -740,7 +740,7 @@ const AlgoPoapDeployer = class {
 
             let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
             let res = buff.toString()
-            this.logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
+            if(res.length > 0)this.logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
 
 
         }
