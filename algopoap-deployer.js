@@ -5,6 +5,7 @@
 
 const geolib = require('geolib');
 const fetch = require('node-fetch');
+const nacl = require('tweetnacl');
 
 const AlgoPoapDeployer = class {
     constructor(props) {
@@ -717,19 +718,16 @@ const AlgoPoapDeployer = class {
         //const compiledClearResult = await this.algodClient.compile(this.clearProgData).do();
 
         let rawDataString = "secret test string"
-        let rawData = Buffer.from(rawDataString).toString('base64')//this.algosdk.encodeObj(rawDataString)//"secret test string"//Buffer.from("secret test string").toString('base64')
-        let appAddr = this.algosdk.getApplicationAddress(Number(this.applicationItemId))
-        let sig = this.algosdk.tealSign(acc.sk, rawData,appAddr)
-        let sigBase64 = Buffer.from(sig).toString('base64')
-        let pk = this.algosdk.decodeAddress(acc.addr).publicKey
-        let signedBytes = this.algosdk.signBytes(rawData, acc.sk)
-        let verify = this.algosdk.verifyBytes(rawData, signedBytes, acc.addr)
-        console.log(verify)
+        nacl.sign.signatureLength = 64
+
+        let sig = nacl.sign.detached(Buffer.from(rawDataString), new Uint8Array(acc.sk))
+      
+       
 
         atc.addMethodCall({
             method: method,
             note: note_claim,
-            methodArgs: [tws0, Number(this.itemAsaId), Number(this.applicationId), pk, sig/* signedBytes */, rawData, [30, 3232, 100, 2345, 1671942604]],
+            methodArgs: [tws0, Number(this.itemAsaId), Number(this.applicationId),acc.addr, new Uint8Array(sig.buffer), rawDataString, [30, 3232, 100, 2345, 1671942604]],
             ...commonParams
         })
 

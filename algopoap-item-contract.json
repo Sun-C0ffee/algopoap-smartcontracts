@@ -167,7 +167,7 @@
                     "name": "parent_application"
                 },
                 {
-                    "type": "byte[32]",
+                    "type": "address",
                     "name": "attendee_pk"
                 },
                 {
