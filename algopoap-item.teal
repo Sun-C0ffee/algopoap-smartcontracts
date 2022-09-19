@@ -617,13 +617,16 @@ global GroupSize
 int 5
 ==
 assert
-gtxn 4 TypeEnum
-int appl
+//gtxn 4 TypeEnum
+//int appl
+//==
+//gtxn 4 ApplicationID
+//global CurrentApplicationID
+//==
+//&&
+method "claim(pay,asset,application,address,byte[64],string,(uint64,uint64,uint64,uint64,uint64))string"
+gtxn 4 ApplicationArgs 0
 ==
-gtxn 4 ApplicationID
-global CurrentApplicationID
-==
-&&
 assert
 byte 0x151f7c75
 byte "budget_increase_call"
