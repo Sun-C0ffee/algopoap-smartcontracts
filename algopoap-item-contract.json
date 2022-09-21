@@ -144,6 +144,10 @@
                 {
                     "type": "asset",
                     "name": "nft_asa"
+                },
+                {
+                    "type": "string",
+                    "name": "shared_secret"
                 }
             ],
             "returns": {

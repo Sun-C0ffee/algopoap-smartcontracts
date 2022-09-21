@@ -183,7 +183,7 @@ txn ApplicationArgs 0
 bnz method_setup
 
 // Checking application call's Arg 0 for activate method signature
-method "activate(pay,axfer,application,asset)string"
+method "activate(pay,axfer,application,asset,string)string"
 txn ApplicationArgs 0
 ==
 bnz method_activate
@@ -494,17 +494,17 @@ sub_check_qr_secret:
 //qr data
 load 6
 extract 2 0
-//log
 //qr signature
 load 8
-//log
 //account pk
 load 4
-//log
 ed25519verify_bare
 assert
-//itob
-//log
+load 6
+sha512_256
+byte "poap_shared_secret"
+app_global_get
+==
 retsub
 
 // Handles Release signature constraint check
@@ -588,6 +588,9 @@ b b_activate_finalize
 b_activate_finalize:
 byte "poap_is_activated"
 byte "true"
+app_global_put
+byte "poap_shared_secret"
+txn ApplicationArgs 3
 app_global_put
 byte "poap_activate_time"
 global LatestTimestamp

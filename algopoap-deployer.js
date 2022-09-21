@@ -6,6 +6,7 @@
 const geolib = require('geolib');
 const fetch = require('node-fetch');
 const nacl = require('tweetnacl');
+const sha512_256 = require('js-sha512').sha512_256;
 
 const AlgoPoapDeployer = class {
     constructor(props) {
@@ -384,8 +385,6 @@ const AlgoPoapDeployer = class {
         let params = await this.algodClient.getTransactionParams().do();
         const atc = new this.algosdk.AtomicTransactionComposer()
         const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
-
-
         const compiledItemResult = await this.algodClient.compile(this.itemApprovalProgData).do();
         const compiledItemClearResult = await this.algodClient.compile(this.itemClearProgData).do();
         const compiledResultUint8 = new Uint8Array(Buffer.from(compiledItemResult.result, "base64"));
@@ -516,7 +515,7 @@ const AlgoPoapDeployer = class {
 
         const tws = { txn: ptxn, signer: signer }
         let method = this.getMethodByName("setup", contract)
-
+       
 
         atc.addMethodCall({
             method: method,
@@ -607,13 +606,15 @@ const AlgoPoapDeployer = class {
         const tws0 = { txn: ptxn, signer: signer }
         const tws1 = { txn: atxn, signer: signer }
         let method = this.getMethodByName("activate", contract)
-
+        let rawDataString = "algopoap secret test string"
+        let hashedMessage = sha512_256(rawDataString);
         atc.addMethodCall({
             method: method,
-            methodArgs: [tws0, tws1, Number(this.applicationId), Number(this.itemAsaId)],
+            methodArgs: [tws0, tws1, Number(this.applicationId), Number(this.itemAsaId), hashedMessage],
             ...commonParams
         })
         this.logger.info('------------------------------')
+        this.logger.info("Hashed shared secret = %s", hashedMessage);
         this.logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
         const result = await atc.execute(this.algodClient, 2)
         for (const idx in result.methodResults) {
@@ -717,7 +718,7 @@ const AlgoPoapDeployer = class {
         //const compiledResult = await this.algodClient.compile(this.itemApprovalProgData).do();
         //const compiledClearResult = await this.algodClient.compile(this.clearProgData).do();
 
-        let rawDataString = "secret test string"
+        let rawDataString = "algopoap secret test string"
         nacl.sign.signatureLength = 64
 
         let sig = nacl.sign.detached(Buffer.from(rawDataString), new Uint8Array(acc.sk))
