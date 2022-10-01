@@ -35,6 +35,7 @@ const AlgoPoapDeployer = class {
         this.itemApprovalProgData = props.itemApprovalProgData
         this.itemClearProgData = props.itemClearProgData
         this.itemContract = props.itemContract
+        this.poapItem = props.poapItem
         this.accountObject = null
         this.accountAddress = null
         this.accountBalance = null
@@ -487,28 +488,7 @@ const AlgoPoapDeployer = class {
 
         const tws = { txn: ptxn, signer: signer }
         let method = this.getMethodByName("setup", contract)
-        const item = {
-            poapName: 'poap_name',
-            poapLogo: 'poap_logo',
-            poapDesc:'poap_desc',
-            poapTimezone: 'poap_timezone',
-            poapAddress: 'poap_address',
-            poapUrl: 'poap_url',
-            poapEmail:'poap_email',
-            start: 1661863665,
-            lat: 30,
-            lat_dec: 3232,
-            lng:100,
-            lng_dec:2345,
-            radius:150,
-            attendee_qty:3,
-            has_nft:1,
-            has_geo:1,
-            has_sig:1,
-            has_qrcode:1,
-            lng_unit_diff:6,
-            author_pays_fee:1
-        }
+        const item = this.poapItem
         let hashedItem = sha512_256(JSON.stringify(item));
 
         atc.addMethodCall({
@@ -549,28 +529,7 @@ const AlgoPoapDeployer = class {
 
         const tws = { txn: ptxn, signer: signer }
         let method = this.getMethodByName("re_setup", contract)
-        const item = {
-            poapName: 'poap_name',
-            poapLogo: 'poap_logo',
-            poapDesc:'poap_desc',
-            poapTimezone: 'poap_timezone',
-            poapAddress: 'poap_address',
-            poapUrl: 'poap_url',
-            poapEmail:'poap_email',
-            start: 1661863665,
-            lat: 30,
-            lat_dec: 3232,
-            lng:100,
-            lng_dec:2345,
-            radius:150,
-            attendee_qty:3,
-            has_nft:1,
-            has_geo:1,
-            has_sig:1,
-            has_qrcode:1,
-            lng_unit_diff:6,
-            author_pays_fee:1
-        }
+        const item = this.poapItem
         let hashedItem = sha512_256(JSON.stringify(item));
         atc.addMethodCall({
             method: method,

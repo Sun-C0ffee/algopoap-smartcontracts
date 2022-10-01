@@ -15,5 +15,6 @@ props.itemApprovalProgData = fs.readFileSync(path.join(__dirname, 'algopoap-item
 props.itemClearProgData = fs.readFileSync(path.join(__dirname, 'algopoap-clear.teal'));
 props.contract = fs.readFileSync(path.join(__dirname, 'algopoap-contract.json'));
 props.itemContract = fs.readFileSync(path.join(__dirname, 'algopoap-item-contract.json'));
+props.poapItem = config.deployer['poap_item']
 const algoPoapDeployer = new AlgoPoapDeployer(props)
 algoPoapDeployer.runDeployer()

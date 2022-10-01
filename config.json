@@ -1,29 +1,26 @@
 {
   "algorand": {
     "host": "",
-    "network":"testnet",
-    "asc_main_id":111108816,
-    "asc_item_id":111110686,
-    "item_asa_id":111111004,
-    "algo_wallet_address":"UTI7PAASILRDA3ISHY5M7J7LNRX2AIVQJWI7ZKCCGKVLMFD3VPR5PWSZ4I",
-    "asc_main_address":"7OIUGSPGX4YS7QSUAKIPFLMC2WLIEQYHGH3EIWYUE6YVG7MJSGUQXR5ENU",
-    "asc_item_address":"TTS7CLNFIOUBFORXCH2VOC4XS43WA27L77M5ZO6VX5OMHHIC2MOIRV7AS4",
-
-    "algod_remote_server":"https://node.testnet.algoexplorerapi.io",
-    "algod_remote_port":"",
-    "algod_remote_token":"",
-
-    "indexer_remote_server":"https://algoindexer.testnet.algoexplorerapi.io",
-    "indexer_remote_token":"",
-    "indexer_remote_port":"",
-    
-    "algo_dispencer":"https://dispenser.testnet.aws.algodev.network/?account=",
+    "network": "testnet",
+    "asc_main_id": 111108816,
+    "asc_item_id": 111110686,
+    "item_asa_id": 111111004,
+    "algo_wallet_address": "UTI7PAASILRDA3ISHY5M7J7LNRX2AIVQJWI7ZKCCGKVLMFD3VPR5PWSZ4I",
+    "asc_main_address": "7OIUGSPGX4YS7QSUAKIPFLMC2WLIEQYHGH3EIWYUE6YVG7MJSGUQXR5ENU",
+    "asc_item_address": "TTS7CLNFIOUBFORXCH2VOC4XS43WA27L77M5ZO6VX5OMHHIC2MOIRV7AS4",
+    "algod_remote_server": "https://node.testnet.algoexplorerapi.io",
+    "algod_remote_port": "",
+    "algod_remote_token": "",
+    "indexer_remote_server": "https://algoindexer.testnet.algoexplorerapi.io",
+    "indexer_remote_token": "",
+    "indexer_remote_port": "",
+    "algo_dispencer": "https://dispenser.testnet.aws.algodev.network/?account=",
     "verbose": false
   },
   "deployer": {
-    "version": "'v0.0.9'",
-    "mode":"remote",
-    "network":"testnet",
+    "version": "v0.0.9",
+    "mode": "remote",
+    "network": "testnet",
     "deployer_contracts": false,
     "deployer_update_contracts": false,
     "deployer_report": false,
@@ -35,17 +32,17 @@
     "test_item_create": false,
     "test_item_closeout": false,
     "test_item_optin": false,
-    "test_item_update": true,
+    "test_item_update": false,
     "test_item_delete": false,
     "test_item_setup": true,
     "test_item_activate": false,
     "test_item_release": false,
     "test_item_claim": false,
     "apps_to_delete": [],
-    "num_local_int":16,
-    "num_local_byte":0,
-    "num_global_int":30,
-    "num_global_byte":30,
+    "num_local_int": 16,
+    "num_local_byte": 0,
+    "num_global_int": 30,
+    "num_global_byte": 30,
     "create_geo_index": false,
     "geo_index": [
       {
@@ -96,11 +93,28 @@
         "lat": 88,
         "distance": 0
       }
-    ]
-  
+    ],
+    "poap_item": {
+      "poapName": "poap_name",
+      "poapLogo": "poap_logo",
+      "poapDesc":"poap_desc",
+      "poapTimezone": "poap_timezone",
+      "poapAddress": "poap_address",
+      "poapUrl": "poap_url",
+      "poapEmail":"poap_email",
+      "start": 1661863665,
+      "lat": 30,
+      "lat_dec": 3232,
+      "lng": 100,
+      "lng_dec": 2345,
+      "radius": 150,
+      "attendee_qty": 3,
+      "has_nft": 1,
+      "has_geo": 1,
+      "has_sig": 1,
+      "has_qrcode": 1,
+      "lng_unit_diff": 6,
+      "author_pays_fee": 1
+    }
   }
 }
-
-
-
-  
