@@ -79,19 +79,6 @@
           "desc": "Deletes an AlgoPoaP item smart contract and returns void (approve only)"
         },
         {
-          "name": "get_metric",
-          "args": [
-            {
-              "type": "string",
-              "name": "metric_signature"
-            }
-          ],
-          "returns": {
-            "type": "string"
-          },
-          "desc": "Gets an specific metric by signature string"
-        },
-        {
           "name": "get_metrics",
           "args": [],
           "returns": {

@@ -18,7 +18,7 @@ const AlgoPoapDeployer = class {
         this.applicationAddr = props.config.algorand.asc_main_address
         this.applicationItemAddr = props.config.algorand.asc_item_address
         this.applicationId = props.config.algorand.asc_main_id
-        this.applicationItemId = props.config.algorand.asc_last_item_id
+        this.applicationItemId = props.config.algorand.asc_item_id
         this.itemAsaId = props.config.algorand.item_asa_id
         this.algodServer = props.config.algorand.algod_remote_server
         this.algodToken = props.config.algorand.algod_remote_token
@@ -232,7 +232,7 @@ const AlgoPoapDeployer = class {
         let appTxn = this.algosdk.makeApplicationCreateTxnFromObject({
             from: addr, suggestedParams: params, onComplete,
             approvalProgram: compiledResultUint8, clearProgram: compiledClearResultUint8,
-            numLocalInts: localInts, numLocalByteSlices: localBytes, numGlobalInts: globalInts, numGlobalByteSlices: globalBytes, extraPages: 1
+            numLocalInts: localInts, numLocalByteSlices: localBytes, numGlobalInts: globalInts, numGlobalByteSlices: globalBytes, extraPages: 2
         });
         let appTxnId = appTxn.txID().toString();
         this.logger.info('------------------------------')
@@ -352,35 +352,7 @@ const AlgoPoapDeployer = class {
 
         }
     }
-    async getMainMetric(addr, acc) {
-        let params = await this.algodClient.getTransactionParams().do();
-        const atc = new this.algosdk.AtomicTransactionComposer()
-        const signer = this.algosdk.makeBasicAccountTransactionSigner(acc)
 
-        const contract = new this.algosdk.ABIContract(JSON.parse(this.contract.toString()))
-        const commonParams = {
-            appID: Number(this.applicationId),
-            sender: acc.addr,
-            suggestedParams: params,
-            signer: signer
-        }
-        let method = this.getMethodByName("get_metric", contract)
-        atc.addMethodCall({
-            method: method,
-            methodArgs: ['poap_count'],
-            ...commonParams
-        })
-        this.logger.info('------------------------------')
-        this.logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
-        const result = await atc.execute(this.algodClient, 2)
-        for (const idx in result.methodResults) {
-            let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
-            let res = buff.toString()
-            this.logger.info("AlgoPoaP Main Contract ABI Exec method result = %s", res);
-
-
-        }
-    }
     async deployItemContract(addr, acc) {
         let params = await this.algodClient.getTransactionParams().do();
         const atc = new this.algosdk.AtomicTransactionComposer()
@@ -397,7 +369,7 @@ const AlgoPoapDeployer = class {
             signer: signer,
         }
         let method = this.getMethodByName("item_create", contract)
-
+        
         const ptxn = new this.algosdk.Transaction({
             from: acc.addr,
             to: this.applicationAddr,
@@ -442,7 +414,7 @@ const AlgoPoapDeployer = class {
             signer: signer,
         }
         let method = this.getMethodByName("item_update", contract)
-
+        
         let application = Number(this.applicationItemId)
         atc.addMethodCall({
             method: method,
@@ -515,11 +487,33 @@ const AlgoPoapDeployer = class {
 
         const tws = { txn: ptxn, signer: signer }
         let method = this.getMethodByName("setup", contract)
-       
+        const item = {
+            poapName: 'poap_name',
+            poapLogo: 'poap_logo',
+            poapDesc:'poap_desc',
+            poapTimezone: 'poap_timezone',
+            poapAddress: 'poap_address',
+            poapUrl: 'poap_url',
+            poapEmail:'poap_email',
+            start: 1661863665,
+            lat: 30,
+            lat_dec: 3232,
+            lng:100,
+            lng_dec:2345,
+            radius:150,
+            attendee_qty:3,
+            has_nft:1,
+            has_geo:1,
+            has_sig:1,
+            has_qrcode:1,
+            lng_unit_diff:6,
+            author_pays_fee:1
+        }
+        let hashedItem = sha512_256(JSON.stringify(item));
 
         atc.addMethodCall({
             method: method,
-            methodArgs: [tws, addr, Number(this.applicationId), '-', 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 3, 1, 1, 1, 1, 6, 1]],
+            methodArgs: [tws, this.applicationAddr, Number(this.applicationId), hashedItem, item.poapName, item.poapLogo, item.poapDesc, item.poapTimezone, item.poapAddress, item.poapUrl, item.poapEmail, [item.start, item.lat, item.lat_dec, item.lng, item.lng_dec, item.radius, item.attendee_qty, item.has_nft, item.has_geo, item.has_sig, item.has_qrcode, item.lng_unit_diff, item.author_pays_fee]],
             ...commonParams
         })
         this.logger.info('------------------------------')
@@ -555,10 +549,32 @@ const AlgoPoapDeployer = class {
 
         const tws = { txn: ptxn, signer: signer }
         let method = this.getMethodByName("re_setup", contract)
-
+        const item = {
+            poapName: 'poap_name',
+            poapLogo: 'poap_logo',
+            poapDesc:'poap_desc',
+            poapTimezone: 'poap_timezone',
+            poapAddress: 'poap_address',
+            poapUrl: 'poap_url',
+            poapEmail:'poap_email',
+            start: 1661863665,
+            lat: 30,
+            lat_dec: 3232,
+            lng:100,
+            lng_dec:2345,
+            radius:150,
+            attendee_qty:3,
+            has_nft:1,
+            has_geo:1,
+            has_sig:1,
+            has_qrcode:1,
+            lng_unit_diff:6,
+            author_pays_fee:1
+        }
+        let hashedItem = sha512_256(JSON.stringify(item));
         atc.addMethodCall({
             method: method,
-            methodArgs: [tws, addr, Number(this.applicationId), Number(this.itemAsaId), 'poap_name', 'poap_logo', 'poap_desc', 'poap_timezone', 'poap_address', 'poap_url', 'poap_email', [1661863665, 30, 3232, 100, 2345, 150, 3, 1, 1, 1, 1, 6, 1]],
+            methodArgs: [tws, Number(this.applicationId), Number(this.itemAsaId),hashedItem, item.poapName, item.poapLogo, item.poapDesc, item.poapTimezone, item.poapAddress, item.poapUrl, item.poapEmail, [item.start, item.lat, item.lat_dec, item.lng, item.lng_dec, item.radius, item.attendee_qty, item.has_nft, item.has_geo, item.has_sig, item.has_qrcode, item.lng_unit_diff, item.author_pays_fee]],
             ...commonParams
         })
         this.logger.info('------------------------------')
@@ -722,13 +738,13 @@ const AlgoPoapDeployer = class {
         nacl.sign.signatureLength = 64
 
         let sig = nacl.sign.detached(Buffer.from(rawDataString), new Uint8Array(acc.sk))
-      
-       
+
+
 
         atc.addMethodCall({
             method: method,
             note: note_claim,
-            methodArgs: [tws0, Number(this.itemAsaId), Number(this.applicationId),acc.addr, new Uint8Array(sig.buffer), rawDataString, [30, 3232, 100, 2345, 1671942604]],
+            methodArgs: [tws0, Number(this.itemAsaId), Number(this.applicationId), acc.addr, new Uint8Array(sig.buffer), rawDataString, [30, 3232, 100, 2345, 1671942604]],
             ...commonParams
         })
 
@@ -741,7 +757,7 @@ const AlgoPoapDeployer = class {
 
             let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
             let res = buff.toString()
-            if(res.length > 0)this.logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
+            if (res.length > 0) this.logger.info("AlgoPoaP Item Contract ABI Exec method result = %s", res);
 
 
         }
@@ -941,7 +957,7 @@ const AlgoPoapDeployer = class {
             {
                 try {
                     await this.getMainMetrics(this.accountObject.addr, this.accountObject);
-                    await this.getMainMetric(this.accountObject.addr, this.accountObject);
+            
                 }
                 catch (err) {
                     this.logger.error(err);

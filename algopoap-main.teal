@@ -127,11 +127,7 @@ txn ApplicationArgs 0
 ==
 bnz method_item_delete
 
-// Checking application call's Arg 0 for get_metric method signature 
-method "get_metric(string)string"
-txn ApplicationArgs 0
-==
-bnz method_get_metric
+
 
 // Checking application call's Arg 0 for get_metrics method signature 
 method "get_metrics()string"
@@ -437,12 +433,7 @@ itxn_submit
 byte 0x151f7c75
 b b_log_return
 
-// Handles ABI method call for getting a single total metric of AlgoPoaP
-method_get_metric:
-byte 0x151f7c75
-byte "single_metric"
-concat
-b b_log_return
+
 
 // Handles ABI method call for getting all total metrics of AlgoPoaP
 method_get_metrics:

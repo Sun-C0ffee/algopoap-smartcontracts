@@ -177,7 +177,7 @@ txn ApplicationArgs 0
 bnz method_setup
 
 // Checking application call's Arg 0 for re_setup method signature
-method "re_setup(pay,account,application,asset,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
+method "re_setup(pay,application,asset,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
@@ -200,11 +200,6 @@ txn ApplicationArgs 0
 ==
 bnz method_claim
 
-// Checking application call's Arg 0 for get_metric method signature
-method "get_metric(string)string"
-txn ApplicationArgs 0
-==
-bnz method_get_metric
 
 // Checking application call's Arg 0 for get_metrics method signature
 method "get_metrics()string[]"
@@ -831,15 +826,6 @@ bnz b_claim_author_pays
 b b_claim_default
 
 
-
-
-// Handles ABI method call for getting a single total metric of AlgoPoaP item
-method_get_metric:
-byte 0x151f7c75
-byte "single metric"
-concat
-b b_log_return
-
 // Handles ABI method call for getting all total metrics of AlgoPoaP item
 method_get_metrics:
 byte 0x151f7c75
@@ -926,6 +912,16 @@ byte "-"
 app_global_put
 
 // Args to Global states PoaP data
+byte "poap_author_address"
+app_global_get
+global CurrentApplicationID
+itob
+txn ApplicationArgs 3
+app_local_put
+
+byte "poap_hash"
+txn ApplicationArgs 3
+app_global_put
 
 byte "poap_name"
 txn ApplicationArgs 4

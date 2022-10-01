@@ -18,8 +18,8 @@
                     "name": "pay_min_fee"
                 },
                 {
-                    "type": "account",
-                    "name": "author_account"
+                    "type": "address",
+                    "name": "parent_application_address"
                 },
                 {
                     "type": "application",
@@ -27,7 +27,7 @@
                 },
                 {
                     "type": "string",
-                    "name": "reserved"
+                    "name": "PoaP item object hash"
                 },
                 {
                     "type": "string",
@@ -75,10 +75,6 @@
                     "name": "pay_min_fee"
                 },
                 {
-                    "type": "account",
-                    "name": "author_account"
-                },
-                {
                     "type": "application",
                     "name": "parent_application"
                 },
@@ -86,6 +82,11 @@
                     "type": "asset",
                     "name": "item_nft"
                 },
+                {
+                    "type": "string",
+                    "name": "PoaP item object hash"
+                },
+               
                 {
                     "type": "string",
                     "name": "poap_name"
@@ -205,19 +206,7 @@
             },
             "desc": "Releases AlgoPoaP and allows all AlgoPoaP attendee's to start claiming"
         },
-        {
-            "name": "get_metric",
-            "args": [
-                {
-                    "type": "string",
-                    "name": "metric_signature"
-                }
-            ],
-            "returns": {
-                "type": "string"
-            },
-            "desc": "Gets an specific metric by signature string"
-        },
+
         {
             "name": "get_metrics",
             "args": [],
