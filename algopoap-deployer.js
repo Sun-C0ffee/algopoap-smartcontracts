@@ -315,7 +315,7 @@ const AlgoPoapDeployer = class {
         })
         this.logger.info('------------------------------')
         this.logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
-        const result = await atc.execute(this.algodClient, 2)
+        const result = await atc.execute(this.algodClient, 10)
         for (const idx in result.methodResults) {
             let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
             let res = buff.slice(2, buff.byteLength).toString()
@@ -344,7 +344,7 @@ const AlgoPoapDeployer = class {
         })
         this.logger.info('------------------------------')
         this.logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
-        const result = await atc.execute(this.algodClient, 2)
+        const result = await atc.execute(this.algodClient, 10)
         for (const idx in result.methodResults) {
             let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
             let res = buff.toString()
@@ -370,7 +370,7 @@ const AlgoPoapDeployer = class {
             signer: signer,
         }
         let method = this.getMethodByName("item_create", contract)
-        
+
         const ptxn = new this.algosdk.Transaction({
             from: acc.addr,
             to: this.applicationAddr,
@@ -388,7 +388,7 @@ const AlgoPoapDeployer = class {
         })
         this.logger.info('------------------------------')
         this.logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
-        const result = await atc.execute(this.algodClient, 2)
+        const result = await atc.execute(this.algodClient, 10)
         for (let idx in result.methodResults) {
 
             let res = this.algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
@@ -415,7 +415,7 @@ const AlgoPoapDeployer = class {
             signer: signer,
         }
         let method = this.getMethodByName("item_update", contract)
-        
+
         let application = Number(this.applicationItemId)
         atc.addMethodCall({
             method: method,
@@ -424,7 +424,7 @@ const AlgoPoapDeployer = class {
         })
         this.logger.info('------------------------------')
         this.logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
-        const result = await atc.execute(this.algodClient, 2)
+        const result = await atc.execute(this.algodClient, 10)
         for (const idx in result.methodResults) {
 
             let res = this.algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
@@ -457,7 +457,7 @@ const AlgoPoapDeployer = class {
         })
         this.logger.info('------------------------------')
         this.logger.info("AlgoPoaP Main Contract ABI Exec method = %s", method);
-        const result = await atc.execute(this.algodClient, 2)
+        const result = await atc.execute(this.algodClient, 10)
         for (const idx in result.methodResults) {
 
 
@@ -498,7 +498,7 @@ const AlgoPoapDeployer = class {
         })
         this.logger.info('------------------------------')
         this.logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
-        const result = await atc.execute(this.algodClient, 2)
+        const result = await atc.execute(this.algodClient, 10)
         for (const idx in result.methodResults) {
 
             let res = this.algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
@@ -533,12 +533,39 @@ const AlgoPoapDeployer = class {
         let hashedItem = sha512_256(JSON.stringify(item));
         atc.addMethodCall({
             method: method,
-            methodArgs: [tws, Number(this.applicationId), Number(this.itemAsaId),hashedItem, item.poapName, item.poapLogo, item.poapDesc, item.poapTimezone, item.poapAddress, item.poapUrl, item.poapEmail, [item.start, item.lat, item.lat_dec, item.lng, item.lng_dec, item.radius, item.attendee_qty, item.has_nft, item.has_geo, item.has_sig, item.has_qrcode, item.lng_unit_diff, item.author_pays_fee]],
+            methodArgs: [
+                tws,
+                Number(this.applicationId),
+                Number(this.itemAsaId),
+                hashedItem,
+                item.poapName,
+                item.poapLogo,
+                item.poapDesc,
+                item.poapTimezone,
+                item.poapAddress,
+                item.poapUrl,
+                item.poapEmail,
+                [
+                    item.start,
+                    item.lat,
+                    item.lat_dec,
+                    item.lng,
+                    item.lng_dec,
+                    item.radius,
+                    item.attendee_qty,
+                    item.has_nft,
+                    item.has_geo,
+                    item.has_sig,
+                    item.has_qrcode,
+                    item.lng_unit_diff,
+                    item.author_pays_fee
+                ]
+            ],
             ...commonParams
         })
         this.logger.info('------------------------------')
         this.logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
-        const result = await atc.execute(this.algodClient, 2)
+        const result = await atc.execute(this.algodClient, 10)
         for (const idx in result.methodResults) {
 
             let res = this.algosdk.decodeUint64(result.methodResults[idx].rawReturnValue)
@@ -591,7 +618,7 @@ const AlgoPoapDeployer = class {
         this.logger.info('------------------------------')
         this.logger.info("Hashed shared secret = %s", hashedMessage);
         this.logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
-        const result = await atc.execute(this.algodClient, 2)
+        const result = await atc.execute(this.algodClient, 10)
         for (const idx in result.methodResults) {
 
             let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
@@ -625,7 +652,7 @@ const AlgoPoapDeployer = class {
         })
         this.logger.info('------------------------------')
         this.logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
-        const result = await atc.execute(this.algodClient, 2)
+        const result = await atc.execute(this.algodClient, 10)
         for (const idx in result.methodResults) {
 
             let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
@@ -711,7 +738,7 @@ const AlgoPoapDeployer = class {
         this.logger.info("AlgoPoaP Item Contract ABI Exec method = %s", method);
 
 
-        const result = await atc.execute(this.algodClient, 2)
+        const result = await atc.execute(this.algodClient, 10)
         for (const idx in result.methodResults) {
 
             let buff = Buffer.from(result.methodResults[idx].rawReturnValue, "base64")
@@ -916,7 +943,7 @@ const AlgoPoapDeployer = class {
             {
                 try {
                     await this.getMainMetrics(this.accountObject.addr, this.accountObject);
-            
+
                 }
                 catch (err) {
                     this.logger.error(err);
