@@ -171,7 +171,7 @@ txn ApplicationArgs 0
 ==
 bnz method_budget_increase_call
 // Checking application call's Arg 0 for setup method signature
-method "setup(pay,account,application,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
+method "setup(pay,address,application,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
@@ -199,13 +199,6 @@ method "claim(pay,asset,application,address,byte[64],string,(uint64,uint64,uint6
 txn ApplicationArgs 0
 ==
 bnz method_claim
-
-
-// Checking application call's Arg 0 for get_metrics method signature
-method "get_metrics()string[]"
-txn ApplicationArgs 0
-==
-bnz method_get_metrics
 
 // If non of method checks matched then error and reject
 b b_error
@@ -259,9 +252,28 @@ txn Sender
 concat
 b b_log_return
 
+b_delete_asa:
+itxn_begin
+int 1000
+itxn_field Fee
+int acfg
+itxn_field TypeEnum
+txn Assets 0
+itxn_field ConfigAsset
+itxn_submit
+byte 0x151f7c75
+global CurrentApplicationID
+itob
+concat
+b b_log_return
+
+
 // Handles deletion of an item AlgoPoaP smart contract
 b_deletion:
 callsub sub_check_owner
+byte "algopoap_asa_id"
+app_global_get_ex
+bnz b_delete_asa
 byte 0x151f7c75
 global CurrentApplicationID
 itob
@@ -826,13 +838,6 @@ bnz b_claim_author_pays
 b b_claim_default
 
 
-// Handles ABI method call for getting all total metrics of AlgoPoaP item
-method_get_metrics:
-byte 0x151f7c75
-byte "All metrics"
-concat
-b b_log_return
-
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
 callsub sub_check_author 
@@ -869,12 +874,18 @@ assert
 // Check first transaction fee to be minimum 2 times minimal fee
 gtxn 0 Fee
 global MinTxnFee
+int 2
+*
 <=
 assert
 
 // Check first transaction amount to be 2 times minimal fee
 gtxn 0 Amount
 global MinTxnFee
+int 3
+*
+int 200000
++
 <=
 assert
 // Global states metrics setup

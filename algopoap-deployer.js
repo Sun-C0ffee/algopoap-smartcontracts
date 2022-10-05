@@ -493,7 +493,12 @@ const AlgoPoapDeployer = class {
 
         atc.addMethodCall({
             method: method,
-            methodArgs: [tws, this.applicationAddr, Number(this.applicationId), hashedItem, item.poapName, item.poapLogo, item.poapDesc, item.poapTimezone, item.poapAddress, item.poapUrl, item.poapEmail, [item.start, item.lat, item.lat_dec, item.lng, item.lng_dec, item.radius, item.attendee_qty, item.has_nft, item.has_geo, item.has_sig, item.has_qrcode, item.lng_unit_diff, item.author_pays_fee]],
+            methodArgs: [
+                tws,
+                 this.applicationAddr,
+                  Number(this.applicationId),
+                   hashedItem,
+                    item.poapName, item.poapLogo, item.poapDesc, item.poapTimezone, item.poapAddress, item.poapUrl, item.poapEmail, [item.start, item.lat, item.lat_dec, item.lng, item.lng_dec, item.radius, item.attendee_qty, item.has_nft, item.has_geo, item.has_sig, item.has_qrcode, item.lng_unit_diff, item.author_pays_fee]],
             ...commonParams
         })
         this.logger.info('------------------------------')

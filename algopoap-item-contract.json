@@ -208,14 +208,6 @@
         },
 
         {
-            "name": "get_metrics",
-            "args": [],
-            "returns": {
-                "type": "string"
-            },
-            "desc": "Gets all metrics"
-        },
-        {
             
             "name": "budget_increase_call_1",
             "args": [],
