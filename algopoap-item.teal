@@ -673,7 +673,7 @@ int pay
 assert
 
 gtxn 0 Fee
-2000
+int 2000
 <=
 assert
 
@@ -869,7 +869,7 @@ assert
 
 // Check first transaction fee to be minimum 2 times minimal fee
 gtxn 0 Fee
-2000
+int 2000
 <=
 assert
 
