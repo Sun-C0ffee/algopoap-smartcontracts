@@ -225,9 +225,11 @@ b_creation:
 byte "poap_author_address"
 txn Note
 app_global_put
+
 byte "poap_parent_address"
 txn Sender
 app_global_put
+
 byte "algopoap_item_create"
 b b_log_return
 
@@ -879,7 +881,7 @@ assert
 
 // Check first transaction receiver to be parent APP
 gtxn 0 Receiver
-global "poap_parent_address"
+byte "poap_parent_address"
 app_global_get
 ==
 assert
