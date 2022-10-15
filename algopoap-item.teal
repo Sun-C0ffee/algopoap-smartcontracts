@@ -721,7 +721,7 @@ b b_claim_check
 
 b_claim_default:
 gtxn 3 Fee
-2000
+int 2000
 <=
 assert
 b b_claim_check
