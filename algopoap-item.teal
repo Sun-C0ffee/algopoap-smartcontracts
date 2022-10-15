@@ -225,6 +225,9 @@ b_creation:
 byte "poap_author_address"
 txn Note
 app_global_put
+byte "poap_parent_address"
+txn Sender
+app_global_put
 byte "algopoap_item_create"
 b b_log_return
 
