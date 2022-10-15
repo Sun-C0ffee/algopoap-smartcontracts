@@ -46,7 +46,7 @@
     // Uint64 poap_setup_time
     // Uint64 poap_activate_time
     // Uint64 poap_release_time
-    // Byte poap_is_activated
+    // Uint64 poap_is_activated
     // Byte poap_is_setup
     // Byte poap_is_released
     // Uint64 poap_item_onboard_count
@@ -487,7 +487,7 @@ retsub
 sub_check_release:
 byte "poap_is_released"
 app_global_get
-byte "true"
+int 1
 ==
 assert
 retsub
@@ -568,11 +568,10 @@ b b_log_return
 
 // If author pays the activation fees for all participants
 b_activate_author_pays:
+
 byte "poap_attendee_qty"
 app_global_get
-int 3
-*
-global MinTxnFee
+int 3000
 *
 gtxn 0 Amount
 >=
@@ -590,7 +589,7 @@ b b_activate_finalize
 // Finalizing the activation
 b_activate_finalize:
 byte "poap_is_activated"
-byte "true"
+int 1
 app_global_put
 byte "poap_shared_secret"
 txn ApplicationArgs 3
@@ -669,9 +668,7 @@ int pay
 assert
 
 gtxn 0 Fee
-global MinTxnFee
-int 2
-*
+2000
 <=
 assert
 
@@ -688,7 +685,7 @@ b b_activate_default
 method_release:
 callsub sub_check_author
 byte "poap_is_released"
-byte "true"
+int 1
 app_global_put
 byte 0x151f7c75
 byte "algopoap_item_released"
@@ -719,9 +716,7 @@ b b_claim_check
 
 b_claim_default:
 gtxn 3 Fee
-global MinTxnFee
-int 2
-*
+2000
 <=
 assert
 b b_claim_check
@@ -869,23 +864,24 @@ assert
 
 // Check first transaction fee to be minimum 2 times minimal fee
 gtxn 0 Fee
-global MinTxnFee
-int 2
-*
+2000
 <=
 assert
 
 // Check first transaction amount to be 2 times minimal fee
 gtxn 0 Amount
-global MinTxnFee
-int 3
-*
-int 200000
-+
+int 203000
 <=
 assert
-// Global states metrics setup
 
+// Check first transaction receiver to be parent APP
+gtxn 0 Receiver
+global "poap_parent_address"
+app_global_get
+==
+assert
+
+// Global state metrics setup
 byte "poap_item_onboard_count"
 int 0
 app_global_put
@@ -926,7 +922,7 @@ itob
 txn ApplicationArgs 3
 app_local_put
 
-byte "poap_hash"
+byte "poap_nft_media"
 txn ApplicationArgs 3
 app_global_put
 
