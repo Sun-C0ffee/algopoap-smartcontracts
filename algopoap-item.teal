@@ -309,16 +309,15 @@ int acfg
 itxn_field TypeEnum
 byte "poap_attendee_qty"
 app_global_get
-int 10
-+
 itxn_field ConfigAssetTotal
 int 0
 itxn_field ConfigAssetDecimals
 byte "PoaP"
 itxn_field ConfigAssetUnitName
-byte "AlgoPoaP"
+byte "poap_name"
+app_global_get
 itxn_field ConfigAssetName
-byte "poap_url"
+byte "poap_nft_media"
 app_global_get
 itxn_field ConfigAssetURL
 global CurrentApplicationAddress
