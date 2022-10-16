@@ -248,8 +248,9 @@ int pay
 assert
 
 gtxn 0 Fee
-global MinTxnFee
-int 2
+//global MinTxnFee
+//int 2
+int 2000
 *
 >=
 assert
