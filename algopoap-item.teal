@@ -316,6 +316,8 @@ byte "PoaP"
 itxn_field ConfigAssetUnitName
 byte "poap_name"
 app_global_get
+byte "@arc3"
+concat
 itxn_field ConfigAssetName
 byte "poap_nft_media"
 app_global_get
