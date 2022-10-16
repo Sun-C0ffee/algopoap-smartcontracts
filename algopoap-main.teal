@@ -55,7 +55,7 @@ assert
 
 txn Fee
 global MinTxnFee
-<=
+>=
 assert
 
 // Checks the number of application args , if 0 then no method it is
@@ -251,12 +251,12 @@ txn Fee
 global MinTxnFee
 int 2
 *
-<=
+>=
 assert
 
 txn Amount
 global MinTxnFee
-<=
+>=
 assert
 
 txn GroupIndex
@@ -272,7 +272,7 @@ gtxns Amount
 global MinTxnFee
 int 2
 *
-<=
+>=
 assert
 // Inner transaction to create the new AlgoPoaP item smart contract
 

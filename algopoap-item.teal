@@ -106,7 +106,7 @@ assert
 
 txn Fee
 global MinTxnFee
-<=
+>=
 assert
 
 txn NumAppArgs
@@ -674,7 +674,7 @@ assert
 
 gtxn 0 Fee
 int 2000
-<=
+>=
 assert
 
 byte "author_pays_fee"
@@ -722,7 +722,7 @@ b b_claim_check
 b_claim_default:
 gtxn 3 Fee
 int 2000
-<=
+>=
 assert
 b b_claim_check
 
@@ -870,13 +870,13 @@ assert
 // Check first transaction fee to be minimum 2 times minimal fee
 gtxn 0 Fee
 int 2000
-<=
+>=
 assert
 
 // Check first transaction amount to be 2 times minimal fee
 gtxn 0 Amount
-int 203000
-<=
+int 303000
+>=
 assert
 
 // Check first transaction receiver to be current APP (topup)
