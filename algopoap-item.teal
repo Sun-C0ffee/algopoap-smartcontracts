@@ -673,7 +673,7 @@ int pay
 assert
 
 gtxn 0 Fee
-int 2000
+global MinTxnFee
 >=
 assert
 
@@ -721,7 +721,7 @@ b b_claim_check
 
 b_claim_default:
 gtxn 3 Fee
-int 2000
+global MinTxnFee
 >=
 assert
 b b_claim_check
@@ -869,7 +869,7 @@ assert
 
 // Check first transaction fee to be minimum 2 times minimal fee
 gtxn 0 Fee
-int 2000
+global MinTxnFee
 >=
 assert
 
