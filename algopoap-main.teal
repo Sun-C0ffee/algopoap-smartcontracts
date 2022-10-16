@@ -334,10 +334,10 @@ int 1
 +
 app_global_put
 
-txn Sender
-itxn TxID
-load 2
-app_local_put
+//txn Sender
+//itxn TxID
+//load 2
+//app_local_put
 
 byte 0x151f7c75
 load 2

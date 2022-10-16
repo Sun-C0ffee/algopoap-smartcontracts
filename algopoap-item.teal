@@ -920,13 +920,15 @@ byte "poap_item_last_txn_issuance"
 byte "-"
 app_global_put
 
+//Setting local state record as POAP_IPFS_URL:PoaP APP ID (the code block below is not for this and should change!)
+//byte "poap_author_address"
+//app_global_get
+//global CurrentApplicationID
+//itob
+//txn ApplicationArgs 3
+//app_local_put
+
 // Args to Global states PoaP data
-byte "poap_author_address"
-app_global_get
-global CurrentApplicationID
-itob
-txn ApplicationArgs 3
-app_local_put
 
 byte "poap_nft_media"
 txn ApplicationArgs 3
