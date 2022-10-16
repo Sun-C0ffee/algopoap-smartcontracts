@@ -247,14 +247,14 @@ int pay
 ==
 assert
 
-txn Fee
+gtxn 0 Fee
 global MinTxnFee
 int 2
 *
 >=
 assert
 
-txn Amount
+gtxn 0 Amount
 global MinTxnFee
 >=
 assert
@@ -310,7 +310,7 @@ int 0
 itxn_field LocalNumUint
 int 16
 itxn_field LocalNumByteSlice
-int 1
+int 0
 itxn_field ExtraProgramPages
 txn Sender
 itxn_field Note
