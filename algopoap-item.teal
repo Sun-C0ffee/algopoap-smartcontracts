@@ -879,10 +879,11 @@ int 203000
 <=
 assert
 
-// Check first transaction receiver to be parent APP
+// Check first transaction receiver to be current APP (topup)
 gtxn 0 Receiver
-byte "poap_parent_address"
-app_global_get
+//byte "poap_parent_address"
+//app_global_get
+global CurrentApplicationAddress
 ==
 assert
 
