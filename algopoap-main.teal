@@ -256,7 +256,8 @@ int 2000
 assert
 
 gtxn 0 Amount
-global MinTxnFee
+//global MinTxnFee
+int 1000
 >=
 assert
 
