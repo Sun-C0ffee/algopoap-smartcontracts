@@ -321,6 +321,7 @@ concat
 itxn_field ConfigAssetName
 byte "poap_nft_media"
 app_global_get
+extract 2 0
 itxn_field ConfigAssetURL
 global CurrentApplicationAddress
 dup
