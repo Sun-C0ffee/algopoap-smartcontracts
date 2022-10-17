@@ -809,6 +809,10 @@ assert
 global GroupSize
 int 5
 ==
+global GroupSize
+int 2
+==
+||
 assert
 
 gtxn 3 RekeyTo
