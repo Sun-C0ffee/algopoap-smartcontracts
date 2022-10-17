@@ -722,10 +722,16 @@ b b_claim_check
 
 
 b_claim_default:
+gtxn 3 Amount
+int 3000
+==
+assert
+
 gtxn 3 Fee
 global MinTxnFee
 >=
 assert
+
 b b_claim_check
 
 b_claim_check:
@@ -819,11 +825,6 @@ global ZeroAddress
 assert
 gtxn 3 TypeEnum
 int pay
-==
-assert
-
-gtxn 3 Amount
-int 0
 ==
 assert
 
