@@ -697,16 +697,6 @@ const AlgoPoapDeployer = class {
             "AlgoPoaP Claim Transaction"
         );
 
-        //let oncomplete = this.algosdk.OnApplicationComplete.NoOpOC
-        /*     let sigTxn = this.algosdk.makeApplicationCallTxnFromObject({
-                appIndex:Number(this.applicationItemId),
-                suggestedParams: params,
-                from: acc.addr,
-                fee: params.fee,
-                note: note,
-                onComplete: oncomplete,
-            }) */
-        //const tws1 = { txn: sigTxn, signer: signer }
         atc.addMethodCall({
             method: method_budget_1,
             methodArgs: [],
