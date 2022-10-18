@@ -203,6 +203,34 @@ bnz method_claim
 // If non of method checks matched then error and reject
 b b_error
 
+
+// Checks payment transaction
+sub_check_payment_txn:
+// Check first transaction RekeyTo
+gtxn 0 RekeyTo
+global ZeroAddress
+==
+assert
+
+// Check first transaction CloseRemainderTo
+gtxn 0 CloseRemainderTo
+global ZeroAddress
+==
+assert
+
+// Check first transaction AssetCloseTo
+gtxn 0 AssetCloseTo
+global ZeroAddress
+==
+assert
+
+// Check first transaction type to be pay
+gtxn 0 TypeEnum
+int pay
+==
+assert
+retsub
+
 //Checks the Sender to be the Creator (AlgoPoaP Author)
 sub_check_owner:
 txn Sender
@@ -519,6 +547,12 @@ retsub
 
 // Handles Release signature constraint check
 b_has_sig:
+
+global GroupSize
+int 5
+==
+assert
+
 callsub sub_check_release
 byte "poap_has_geo"
 app_global_get
@@ -651,26 +685,9 @@ return
 // Handles activate method
 method_activate:
 callsub sub_check_author
-
+callsub sub_check_payment_txn
 global GroupSize
 int 3
-==
-assert
-
-gtxn 0 RekeyTo
-global ZeroAddress
-==
-assert
-gtxn 0 CloseRemainderTo
-global ZeroAddress
-==
-assert
-gtxn 0 AssetCloseTo
-global ZeroAddress
-==
-assert
-gtxn 0 TypeEnum
-int pay
 ==
 assert
 
@@ -700,18 +717,13 @@ concat
 b b_log_return
 
 b_claim_author_pays:
-gtxn 3 Amount
-int 0
-==
-assert
-gtxn 3 Fee
-store 23
+
 itxn_begin
 int pay
 itxn_field TypeEnum
 txn Sender
 itxn_field Receiver
-load 23
+int 1000
 itxn_field Amount
 int 1000
 itxn_field Fee
@@ -722,16 +734,6 @@ b b_claim_check
 
 
 b_claim_default:
-gtxn 3 Amount
-int 3000
-==
-assert
-
-gtxn 3 Fee
-global MinTxnFee
->=
-assert
-
 b b_claim_check
 
 b_claim_check:
@@ -786,6 +788,11 @@ int 1
 ==
 bnz b_has_sig
 
+global GroupSize
+int 2
+==
+assert
+
 byte "poap_has_geo"
 app_global_get
 int 1
@@ -806,32 +813,17 @@ global CurrentApplicationID
 app_opted_in
 assert
 
-global GroupSize
-int 5
-==
-global GroupSize
-int 2
-==
-||
-assert
+callsub sub_check_payment_txn
 
-gtxn 3 RekeyTo
-global ZeroAddress
-==
-assert
-gtxn 3 CloseRemainderTo
-global ZeroAddress
-==
-assert
-gtxn 3 AssetCloseTo
-global ZeroAddress
-==
-assert
-gtxn 3 TypeEnum
-int pay
+gtxn 0 Amount
+int 3000
 ==
 assert
 
+gtxn 0 Fee
+global MinTxnFee
+>=
+assert
 
 byte "author_pays_fee"
 app_global_get
@@ -844,35 +836,14 @@ b b_claim_default
 // Handles setting up global states and creation of AlgoPoaP NFT
 method_setup:
 callsub sub_check_author 
+callsub sub_check_payment_txn
 //Checking group size
 global GroupSize
 int 2
 ==
 assert
 
-// Check first transaction RekeyTo
-gtxn 0 RekeyTo
-global ZeroAddress
-==
-assert
 
-// Check first transaction CloseRemainderTo
-gtxn 0 CloseRemainderTo
-global ZeroAddress
-==
-assert
-
-// Check first transaction AssetCloseTo
-gtxn 0 AssetCloseTo
-global ZeroAddress
-==
-assert
-
-// Check first transaction type to be pay
-gtxn 0 TypeEnum
-int pay
-==
-assert
 
 // Check first transaction fee to be minimum 2 times minimal fee
 gtxn 0 Fee
