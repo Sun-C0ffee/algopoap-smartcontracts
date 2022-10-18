@@ -587,8 +587,10 @@ b_finalize_claim:
 byte "poap_asa_id"
 app_global_get
 store 0
-txn Sender
+global CurrentApplicationAddress
 store 2
+txn Sender
+store 4
 int 1
 store 3
 
