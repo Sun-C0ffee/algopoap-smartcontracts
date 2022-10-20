@@ -305,9 +305,9 @@ int 30
 itxn_field GlobalNumByteSlice
 int 30
 itxn_field GlobalNumUint
-int 0
-itxn_field LocalNumUint
 int 16
+itxn_field LocalNumUint
+int 0
 itxn_field LocalNumByteSlice
 int 0
 itxn_field ExtraProgramPages
