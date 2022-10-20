@@ -836,7 +836,12 @@ byte "poap_nft_media"
 app_global_get
 app_local_get
 global CurrentApplicationID
-!=
+!==
+txn Sender
+byte "poap_author_address"
+app_global_get
+==
+||
 assert
 
 callsub sub_check_payment_txn
