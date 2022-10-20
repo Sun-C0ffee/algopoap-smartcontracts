@@ -733,7 +733,7 @@ txn Sender
 itxn_field Receiver
 int 1000
 itxn_field Amount
-int 1000
+global MinTxnFee
 itxn_field Fee
 itxn_submit
 
@@ -742,6 +742,15 @@ b b_claim_check
 
 
 b_claim_default:
+gtxn 0 Amount
+int 3000
+==
+assert
+
+gtxn 0 Fee
+global MinTxnFee
+>=
+assert
 b b_claim_check
 
 b_claim_check:
@@ -821,17 +830,17 @@ global CurrentApplicationID
 app_opted_in
 assert
 
+
+txn Sender
+byte "poap_nft_media"
+app_global_get
+app_local_get
+global CurrentApplicationID
+!=
+assert
+
 callsub sub_check_payment_txn
 
-gtxn 0 Amount
-int 3000
-==
-assert
-
-gtxn 0 Fee
-global MinTxnFee
->=
-assert
 
 byte "author_pays_fee"
 app_global_get
