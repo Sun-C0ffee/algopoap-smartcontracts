@@ -368,28 +368,8 @@ store 0
 app_global_put
 retsub 
 
-// Handles config of AlgoPoaP NFT during setup
-b_config_nft:
-dup
-itob
-store 0
-itxn_begin
-itxn_field ConfigAsset
-int acfg
-itxn_field TypeEnum
 
-global CurrentApplicationAddress
-dup
-dup2
-itxn_field ConfigAssetManager
-itxn_field ConfigAssetReserve
-itxn_field ConfigAssetFreeze
-itxn_field ConfigAssetClawback
-itxn_submit
-byte 0x151f7c75
-load 0
-concat
-b b_log_return
+
 
 //handles sending NFT using proper values from scratch store
 sub_send_nft:
@@ -1041,8 +1021,14 @@ app_global_put
 int 0
 byte "poap_asa_id"
 app_global_get_ex
-bnz b_config_nft
+bnz b_error
 callsub sub_create_nft
+
+txn Sender
+txn ApplicationArgs 3
+global CurrentApplicationID
+app_local_put
+
 byte 0x151f7c75
 load 0
 itob
