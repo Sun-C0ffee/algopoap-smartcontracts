@@ -163,7 +163,7 @@ global CurrentApplicationAddress
 assert
 
 gtxn 2 Fee
-int 2000
+int 4000
 ==
 assert
 
@@ -175,7 +175,7 @@ itxn_field Receiver
 // 0.2 Algos for Min Balance requirement 1000 MA for optin to PoaP item smart contract, 1000 MA for opting into ASA and 1000 MA for claim transaction
 int 203000
 itxn_field Amount
-int 2000
+int 0
 itxn_field Fee
 itxn_submit
 
@@ -185,9 +185,9 @@ itxn_field TypeEnum
 txn Sender
 itxn_field Receiver
 // 0.2 Algos for Min Balance requirement 1000 MA for optin to PoaP item smart contract, 1000 MA for opting into ASA and 1000 MA for claim transaction
-int 1000
+int 3000
 itxn_field Amount
-int 1000
+int 0
 itxn_field Fee
 itxn_submit
 retsub
