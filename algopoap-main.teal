@@ -162,6 +162,11 @@ global CurrentApplicationAddress
 ==
 assert
 
+gtxn 2 Sender
+global CreatorAddress
+==
+assert
+
 gtxn 2 Fee
 int 4000
 ==
