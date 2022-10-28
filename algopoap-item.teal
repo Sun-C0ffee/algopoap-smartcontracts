@@ -269,9 +269,9 @@ app_global_get
 int 1
 +
 app_global_put
-byte "poap_item_last_attendee"
-txn Sender
-app_global_put
+//byte "poap_item_last_attendee"
+//txn Sender
+//app_global_put
 
 byte "poap_item_onboard_count"
 dup
@@ -385,15 +385,15 @@ itxn_field AssetAmount
 load 4
 itxn_field AssetReceiver
 itxn_submit
-byte "poap_item_nft_issuance_count"
-dup
-app_global_get
-int 1
-+
-app_global_put
-byte "poap_item_last_nft_issuance"
-txn Sender
-app_global_put
+//byte "poap_item_nft_issuance_count"
+//dup
+//app_global_get
+//int 1
+//+
+//app_global_put
+//byte "poap_item_last_nft_issuance"
+//txn Sender
+//app_global_put
 retsub
 
 // Handles the timestamp from args is bigger than timestamp of AlgoPoaP activation
@@ -861,7 +861,7 @@ int 303000
 >=
 assert
 
-// Check first transaction receiver to be current APP (topup)
+// Check first transaction receiver to be current PoaP contract address
 gtxn 0 Receiver
 //byte "poap_parent_address"
 //app_global_get
@@ -890,17 +890,17 @@ byte "poap_item_txn_issuance_count"
 int 0
 app_global_put
 
-byte "poap_item_last_attendee"
-byte "-"
-app_global_put
+//byte "poap_item_last_attendee"
+//byte "-"
+//app_global_put
 
-byte "poap_item_last_nft_issuance"
-byte "-"
-app_global_put
+//byte "poap_item_last_nft_issuance"
+//byte "-"
+//app_global_put
 
-byte "poap_item_last_txn_issuance"
-byte "-"
-app_global_put
+//byte "poap_item_last_txn_issuance"
+//byte "-"
+//app_global_put
 
 // Args to Global states PoaP data
 
