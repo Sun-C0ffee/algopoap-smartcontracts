@@ -849,13 +849,13 @@ assert
 
 
 
-// Check first transaction fee to be minimum 2 times minimal fee
+// Check first transaction fee to be equal to or greater than minimum fee
 gtxn 0 Fee
 global MinTxnFee
 >=
 assert
 
-// Check first transaction amount to be 2 times minimal fee
+// Check first transaction amount 
 gtxn 0 Amount
 int 303000
 >=
