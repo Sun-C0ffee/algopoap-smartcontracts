@@ -15,6 +15,7 @@
 // Scratch space schema
     // 1: Application ID
     // 2: PoaP item newly created Application ID
+    // 3: PoaP transaction sender address
 
 // Local state schema for algopoap author
     // 0-15 Uint64 PoaP item app ids
@@ -147,6 +148,50 @@ txn Sender
 concat
 b b_log_return
 
+// Handles toping up the account of newly onboarded with 0 balance
+sub_topup:
+global GroupSize
+int 2
+==
+assert
+gtxn 2 Amount
+int 0
+==
+gtxn 2 Receiver
+global CurrentApplicationAddress
+==
+assert
+
+gtxn 2 Fee
+int 2000
+==
+assert
+
+itxn_begin
+int pay
+itxn_field TypeEnum
+gtxn 2 Sender
+itxn_field Receiver
+// 0.2 Algos for Min Balance requirement 1000 MA for optin to PoaP item smart contract, 1000 MA for opting into ASA and 1000 MA for claim transaction
+int 203000
+itxn_field Amount
+int 2000
+itxn_field Fee
+itxn_submit
+
+itxn_begin
+int pay
+itxn_field TypeEnum
+txn Sender
+itxn_field Receiver
+// 0.2 Algos for Min Balance requirement 1000 MA for optin to PoaP item smart contract, 1000 MA for opting into ASA and 1000 MA for claim transaction
+int 1000
+itxn_field Amount
+int 1000
+itxn_field Fee
+itxn_submit
+retsub
+
 // Handles opting into (onboarding) a main AlgoPoaP smart contract
 b_optin:
 byte "poap_onboard_count"
@@ -156,8 +201,20 @@ int 1
 +
 app_global_put
 
-byte "algopoap_optin_"
 txn Sender
+store 3
+
+load 3
+balance
+store 4
+load 4
+bnz b_optin_finale
+callsub sub_topup
+b b_optin_finale
+
+b_optin_finale:
+byte "algopoap_optin_"
+load 3
 concat
 b b_log_return
 
