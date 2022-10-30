@@ -181,8 +181,8 @@ int pay
 itxn_field TypeEnum
 txn Sender
 itxn_field Receiver
-// 0.2 Algos for Min Balance requirement 1000 MA for optin to PoaP item smart contract, 1000 MA for opting into ASA and 1000 MA for claim transaction
-int 203000
+// 278500 min app optin req, 3000 for 3 txns 
+int 381500
 itxn_field Amount
 global MinTxnFee
 itxn_field Fee

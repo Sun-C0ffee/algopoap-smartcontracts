@@ -54,10 +54,6 @@
     // Uint64 poap_item_claim_count
     // Uint64 poap_item_nft_issuance_count
     // Uint64 poap_item_txn_issuance_count
-    // Byte poap_item_last_attendee
-    // Byte poap_item_last_claim
-    // Byte poap_item_last_nft_issuance
-    // Byte poap_item_last_txn_issuance
     // Byte poap_name
     // Byte poap_logo
     // Byte poap_desc
@@ -269,9 +265,7 @@ app_global_get
 int 1
 +
 app_global_put
-//byte "poap_item_last_attendee"
-//txn Sender
-//app_global_put
+
 
 byte "poap_item_onboard_count"
 dup
@@ -385,15 +379,6 @@ itxn_field AssetAmount
 load 4
 itxn_field AssetReceiver
 itxn_submit
-//byte "poap_item_nft_issuance_count"
-//dup
-//app_global_get
-//int 1
-//+
-//app_global_put
-//byte "poap_item_last_nft_issuance"
-//txn Sender
-//app_global_put
 retsub
 
 // Handles the timestamp from args is bigger than timestamp of AlgoPoaP activation
@@ -889,18 +874,6 @@ app_global_put
 byte "poap_item_txn_issuance_count"
 int 0
 app_global_put
-
-//byte "poap_item_last_attendee"
-//byte "-"
-//app_global_put
-
-//byte "poap_item_last_nft_issuance"
-//byte "-"
-//app_global_put
-
-//byte "poap_item_last_txn_issuance"
-//byte "-"
-//app_global_put
 
 // Args to Global states PoaP data
 
