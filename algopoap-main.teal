@@ -182,7 +182,7 @@ int pay
 itxn_field TypeEnum
 global CreatorAddress
 itxn_field Receiver
-int 203000
+int 4000
 itxn_field Amount
 global MinTxnFee
 itxn_field Fee
@@ -194,7 +194,7 @@ itxn_field TypeEnum
 txn Sender
 itxn_field Receiver
 // 0.2 Algos for Min Balance requirement 1000 MA for optin to PoaP item smart contract, 1000 MA for opting into ASA and 1000 MA for claim transaction
-int 4000
+int 203000
 itxn_field Amount
 global MinTxnFee
 itxn_field Fee
