@@ -247,8 +247,31 @@ itob
 concat
 b b_log_return
 
+b_drain:
+itxn_begin
+int pay
+itxn_field TypeEnum
+txn Sender
+dup
+itxn_field Receiver
+balance
+int 2000
+-
+itxn_field Amount
+global MinTxnFee
+itxn_field Fee
+itxn_submit
+byte "algopoap_closeout_drain"
+txn Sender
+concat
+b b_log_return
+
 // Handles close out (offboarding) from a main AlgoPoaP smart contract
 b_closeout:
+txn Sender
+global CreatorAddress
+==
+bnz b_drain
 byte "algopoap_closeout"
 txn Sender
 concat
