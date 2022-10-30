@@ -154,20 +154,20 @@ global GroupSize
 int 2
 ==
 assert
-gtxn 2 Amount
+gtxn 1 Amount
 int 0
 ==
-gtxn 2 Receiver
+gtxn 1 Receiver
 global CurrentApplicationAddress
 ==
 assert
 
-gtxn 2 Sender
+gtxn 1 Sender
 global CreatorAddress
 ==
 assert
 
-gtxn 2 Fee
+gtxn 1 Fee
 int 4000
 ==
 assert
@@ -175,7 +175,7 @@ assert
 itxn_begin
 int pay
 itxn_field TypeEnum
-gtxn 2 Sender
+gtxn 1 Sender
 itxn_field Receiver
 // 0.2 Algos for Min Balance requirement 1000 MA for optin to PoaP item smart contract, 1000 MA for opting into ASA and 1000 MA for claim transaction
 int 203000
