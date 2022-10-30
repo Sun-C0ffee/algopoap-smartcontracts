@@ -251,9 +251,9 @@ b_drain:
 itxn_begin
 int pay
 itxn_field TypeEnum
-txn Sender
-dup
+global CreatorAddress
 itxn_field Receiver
+global CurrentApplicationAddress
 balance
 int 2000
 -
