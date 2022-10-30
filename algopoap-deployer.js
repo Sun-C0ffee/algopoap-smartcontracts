@@ -233,7 +233,7 @@ const AlgoPoapDeployer = class {
         let appTxn = this.algosdk.makeApplicationCreateTxnFromObject({
             from: addr, suggestedParams: params, onComplete,
             approvalProgram: compiledResultUint8, clearProgram: compiledClearResultUint8,
-            numLocalInts: localInts, numLocalByteSlices: localBytes, numGlobalInts: globalInts, numGlobalByteSlices: globalBytes, extraPages: 0
+            numLocalInts: 1, numLocalByteSlices: 1, numGlobalInts: 4, numGlobalByteSlices: 4, extraPages: 0
         });
         let appTxnId = appTxn.txID().toString();
         this.logger.info('------------------------------')

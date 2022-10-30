@@ -26,8 +26,7 @@
 // Global state schema
     // Uint64 poap_onboard_count
     // Uint64 poap_count
-    // Byte poap_last_appid
-    // Byte poap_last_author
+
 
 
 //////////////////////////////////////////////////////////////
@@ -296,13 +295,9 @@ byte "poap_count"
 int 0
 app_global_put
 
-byte "poap_last_appid"
-int 0
-app_global_put
 
-byte "poap_last_author"
-byte "-"
-app_global_put
+
+
 
 byte 0x151f7c75
 txn ApplicationArgs 1
@@ -409,13 +404,6 @@ itxn_submit
 itxn CreatedApplicationID
 store 2
 
-byte "poap_last_appid"
-load 2
-app_global_put
-
-byte "poap_last_author"
-txn Sender
-app_global_put
 
 byte "poap_count"
 dup
