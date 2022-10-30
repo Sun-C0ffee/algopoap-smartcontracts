@@ -164,6 +164,7 @@ int 0
 gtxn 1 Receiver
 global CurrentApplicationAddress
 ==
+&&
 assert
 
 gtxn 1 Sender
@@ -179,9 +180,8 @@ assert
 itxn_begin
 int pay
 itxn_field TypeEnum
-gtxn 1 Sender
+global CreatorAddress
 itxn_field Receiver
-// 0.2 Algos for Min Balance requirement 1000 MA for optin to PoaP item smart contract, 1000 MA for opting into ASA and 1000 MA for claim transaction
 int 203000
 itxn_field Amount
 int 0
