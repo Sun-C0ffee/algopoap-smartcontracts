@@ -57,6 +57,10 @@ assert
 txn Fee
 global MinTxnFee
 >=
+txn Fee
+int 0
+==
+||
 assert
 
 // Checks the number of application args , if 0 then no method it is
