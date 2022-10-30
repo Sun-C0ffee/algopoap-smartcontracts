@@ -159,7 +159,7 @@ int 2
 ==
 assert
 gtxn 1 Amount
-int 0
+int 2000
 ==
 gtxn 1 Receiver
 global CurrentApplicationAddress
@@ -173,7 +173,7 @@ global CreatorAddress
 assert
 
 gtxn 1 Fee
-int 4000
+int 2000
 ==
 assert
 
@@ -184,7 +184,7 @@ global CreatorAddress
 itxn_field Receiver
 int 203000
 itxn_field Amount
-int 0
+global MinTxnFee
 itxn_field Fee
 itxn_submit
 
@@ -196,7 +196,7 @@ itxn_field Receiver
 // 0.2 Algos for Min Balance requirement 1000 MA for optin to PoaP item smart contract, 1000 MA for opting into ASA and 1000 MA for claim transaction
 int 4000
 itxn_field Amount
-int 0
+global MinTxnFee
 itxn_field Fee
 itxn_submit
 retsub
