@@ -50,8 +50,8 @@
     // Uint64 poap_item_claim_count
     // Uint64 poap_item_nft_issuance_count
     // Uint64 poap_item_txn_issuance_count
+    // Uint64 poap_item_attendee_count
     // Byte poap_shared_secret
-
     // Byte poap_name
     // Byte poap_logo
     // Byte poap_nft_media
