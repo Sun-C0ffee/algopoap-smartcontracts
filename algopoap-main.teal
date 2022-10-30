@@ -389,9 +389,9 @@ substring3
 itxn_field ClearStateProgram
 int 12
 itxn_field GlobalNumByteSlice
-int 25
+int 18
 itxn_field GlobalNumUint
-int 3
+int 2
 itxn_field LocalNumUint
 int 1
 itxn_field LocalNumByteSlice
