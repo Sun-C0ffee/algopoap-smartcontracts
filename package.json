@@ -1,6 +1,6 @@
 {
     "name": "algopoap-smartcontracts",
-    "version": "0.0.9",
+    "version": "1.5.0",
     "description": "This package implements AlgoPoaP's smart contracts on Algorand blockchain",
     "main": "index.js",
     "scripts": {
