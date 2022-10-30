@@ -160,10 +160,10 @@ txn ApplicationArgs 0
 bnz method_setup
 
 // Checking application call's Arg 0 for re_setup method signature
-method "re_setup(pay,application,asset,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
-txn ApplicationArgs 0
-==
-bnz method_setup
+//method "re_setup(pay,application,asset,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
+//txn ApplicationArgs 0
+//==
+//bnz method_setup
 
 // Checking application call's Arg 0 for activate method signature
 method "activate(pay,axfer,application,asset,string)string"
@@ -240,6 +240,7 @@ app_global_put
 byte "poap_parent_address"
 txn Sender
 app_global_put
+
 
 byte "algopoap_item_create"
 b b_log_return
@@ -842,6 +843,7 @@ global CurrentApplicationAddress
 assert
 
 // Global state metrics setup
+
 byte "poap_item_onboard_count"
 int 0
 app_global_put
