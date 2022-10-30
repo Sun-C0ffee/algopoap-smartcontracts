@@ -182,7 +182,7 @@ itxn_field TypeEnum
 txn Sender
 itxn_field Receiver
 // 278500 min app optin req, 3000 for 3 txns 
-int 381500
+int 764000
 itxn_field Amount
 global MinTxnFee
 itxn_field Fee
