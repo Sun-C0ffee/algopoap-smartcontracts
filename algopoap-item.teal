@@ -281,8 +281,9 @@ app_global_get
 global CurrentApplicationID
 app_local_put
 
-byte "algopoap_item_optin_"
-load 2
+
+byte 0x151f7c75
+byte "algopoap_item_optin_import"
 concat
 b b_log_return
 
@@ -290,11 +291,12 @@ b b_log_return
 b_optin:
 
 global GroupSize
-int 6
+int 2
 ==
 bnz b_import_local
-byte "algopoap_item_optin_"
-txn Sender
+
+byte 0x151f7c75
+byte "algopoap_item_optin"
 concat
 b b_log_return
 
