@@ -289,7 +289,11 @@ b_optin:
 
 global GroupSize
 int 2
-==
+<
+txn Sender
+global CreatorAddress
+!=
+&&
 bnz b_import_local
 
 byte 0x151f7c75
