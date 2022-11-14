@@ -247,23 +247,52 @@ app_global_put
 byte "algopoap_item_create"
 b b_log_return
 
+
+
+
+b_import_local:
+byte "poap_asa_id"
+app_global_get
+dup
+store 1
+txn Sender
+dup
+store 2
+==
+load 2
+load 1
+asset_holding_get AssetBalance
+int 1
+>=
+&&
+assert
+
+load 2
+global CurrentApplicationID
+byte "poap_nft_media"
+app_global_get
+app_local_get_ex
+!
+assert
+
+load 2
+byte "poap_nft_media"
+app_global_get
+global CurrentApplicationID
+app_local_put
+
+byte "algopoap_item_optin_"
+load 2
+concat
+b b_log_return
+
 // Handles opting into (onboarding) an item AlgoPoaP smart contract
 b_optin:
-//byte "poap_item_attendee_count"
-//dup
-//app_global_get
-//int 1
-//+
-//app_global_put
 
-
-//byte "poap_item_onboard_count"
-//dup
-//app_global_get
-//int 1
-//+
-//app_global_put
-
+global GroupSize
+int 6
+==
+bnz b_import_local
 byte "algopoap_item_optin_"
 txn Sender
 concat
@@ -575,12 +604,12 @@ b b_log_return
 // If author pays the activation fees for all participants
 b_activate_author_pays:
 
+gtxn 0 Amount
 byte "poap_attendee_qty"
 app_global_get
-int 3000
+int 768000
 *
-gtxn 0 Amount
->=
+>
 assert
 b b_activate_finalize
 
