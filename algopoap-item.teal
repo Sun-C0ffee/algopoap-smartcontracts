@@ -291,7 +291,8 @@ global GroupSize
 int 2
 <
 txn Sender
-global CreatorAddress
+byte "poap_author_address"
+app_global_get
 !=
 &&
 bnz b_import_local
