@@ -253,18 +253,15 @@ b b_log_return
 b_import_local:
 byte "poap_asa_id"
 app_global_get
-dup
 store 1
 txn Sender
-dup
 store 2
-==
+
 load 2
 load 1
 asset_holding_get AssetBalance
 int 1
 >=
-&&
 assert
 
 load 2
