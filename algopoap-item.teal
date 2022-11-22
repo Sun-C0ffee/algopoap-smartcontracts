@@ -354,6 +354,8 @@ int acfg
 itxn_field TypeEnum
 byte "poap_attendee_qty"
 app_global_get
+int 1
++
 itxn_field ConfigAssetTotal
 int 0
 itxn_field ConfigAssetDecimals
