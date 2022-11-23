@@ -415,10 +415,10 @@ dup
 store 17
 >=
 assert
-load 7
-load 17
->=
-assert
+// load 7
+// load 17
+// >=
+// assert
 
 retsub
 
