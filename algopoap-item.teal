@@ -409,7 +409,7 @@ retsub
 // Handles the timestamp from args is bigger than timestamp of AlgoPoaP activation
 sub_check_timestamp:
 global LatestTimestamp
-byte "poap_activate_time"
+byte "poap_start_timestamp"
 app_global_get
 dup
 store 17
