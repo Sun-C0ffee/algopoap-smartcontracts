@@ -58,6 +58,10 @@
                     "name": "poap_email"
                 },
                 {
+                    "type": "string",
+                    "name": "poap_metadatahash"
+                },
+                {
                     "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
                     "name": "poap_uint64_tuple"
                 }
@@ -66,66 +70,6 @@
                 "type": "string"
             },
             "desc": "Sets up an AlgoPoaP smart contract item for the first time"
-        },
-        {
-            "name": "re_setup",
-            "args": [
-                {
-                    "type": "pay",
-                    "name": "pay_min_fee"
-                },
-                {
-                    "type": "application",
-                    "name": "parent_application"
-                },
-                {
-                    "type": "asset",
-                    "name": "item_nft"
-                },
-                {
-                    "type": "string",
-                    "name": "PoaP item object hash"
-                },
-               
-                {
-                    "type": "string",
-                    "name": "poap_name"
-                },
-                {
-                    "type": "string",
-                    "name": "poap_logo"
-                },
-                {
-                    "type": "string",
-                    "name": "poap_desc"
-                },
-                {
-                    "type": "string",
-                    "name": "poap_timezone"
-                },
-                {
-                    "type": "string",
-                    "name": "poap_address"
-                },
-                {
-                    "type": "string",
-                    "name": "poap_url"
-                },
-                {
-                    "type": "string",
-                    "name": "poap_email"
-                },
-            
-                {
-                    "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
-                    "name": "poap_uint64_tuple"
-                }
-              
-            ],
-            "returns": {
-                "type": "string"
-            },
-            "desc": "Sets up an AlgoPoaP smart contract item after first setup"
         },
         {
             "name": "activate",

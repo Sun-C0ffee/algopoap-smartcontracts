@@ -156,16 +156,10 @@ txn ApplicationArgs 0
 ==
 bnz method_budget_increase_call
 // Checking application call's Arg 0 for setup method signature
-method "setup(pay,address,application,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
+method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
-
-// Checking application call's Arg 0 for re_setup method signature
-//method "re_setup(pay,application,asset,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
-//txn ApplicationArgs 0
-//==
-//bnz method_setup
 
 // Checking application call's Arg 0 for activate method signature
 method "activate(pay,axfer,application,asset,string)string"
@@ -366,7 +360,8 @@ app_global_get
 byte "@arc3"
 concat
 itxn_field ConfigAssetName
-
+load 21
+itxn_field AssetMetadataHash
 
 byte base64 aXBmczovLw==
 byte "poap_nft_media"
@@ -915,7 +910,13 @@ byte "poap_email"
 txn ApplicationArgs 10
 app_global_put
 
+byte "poap_metadatahash"
 txn ApplicationArgs 11
+dup
+store 21
+app_global_put
+
+txn ApplicationArgs 12
 store 10
 
 byte "poap_start_timestamp"
