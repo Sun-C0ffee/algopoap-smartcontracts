@@ -360,7 +360,7 @@ app_global_get
 byte "@arc3"
 concat
 itxn_field ConfigAssetName
-load 21
+load 26
 itxn_field ConfigAssetMetadataHash
 
 byte base64 aXBmczovLw==
@@ -913,7 +913,7 @@ app_global_put
 byte "poap_metadatahash"
 txn ApplicationArgs 11
 dup
-store 21
+store 26
 app_global_put
 
 txn ApplicationArgs 12
