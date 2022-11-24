@@ -876,28 +876,6 @@ global CurrentApplicationAddress
 ==
 assert
 
-// Global state metrics setup
-
-//byte "poap_item_onboard_count"
-//int 0
-//app_global_put
-
-//byte "poap_item_txn_count"
-//int 0
-//app_global_put
-
-//byte "poap_item_claim_count"
-//int 0
-//app_global_put
-
-//byte "poap_item_nft_issuance_count"
-//int 0
-//app_global_put
-
-//byte "poap_item_txn_issuance_count"
-//int 0
-//app_global_put
-
 // Args to Global states PoaP data
 
 byte "poap_nft_media"
@@ -1055,7 +1033,7 @@ int 303000
 +
 >=
 assert
-xn Sender
+txn Sender
 txn ApplicationArgs 3
 global CurrentApplicationID
 app_local_put
