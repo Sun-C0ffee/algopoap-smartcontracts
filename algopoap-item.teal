@@ -366,10 +366,14 @@ app_global_get
 byte "@arc3"
 concat
 itxn_field ConfigAssetName
-byte "ipfs.algopoap.xyz/ipfs/"
+
+
+byte base64 "aXBmczovLw=="
 byte "poap_nft_media"
 app_global_get
 extract 2 0
+concat
+byte base64 "I2FyYzM="
 concat
 itxn_field ConfigAssetURL
 global CurrentApplicationAddress
