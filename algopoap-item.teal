@@ -615,7 +615,7 @@ byte "poap_attendee_qty"
 app_global_get
 int 768000
 *
->
+>=
 assert
 b b_activate_finalize
 
@@ -1053,7 +1053,7 @@ int 1000
 *
 int 303000
 +
->
+>=
 assert
 xn Sender
 txn ApplicationArgs 3
