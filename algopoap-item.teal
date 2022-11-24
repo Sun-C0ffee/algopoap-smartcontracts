@@ -368,12 +368,12 @@ concat
 itxn_field ConfigAssetName
 
 
-byte base64 "aXBmczovLw=="
+byte base64 aXBmczovLw==
 byte "poap_nft_media"
 app_global_get
 extract 2 0
 concat
-byte base64 "I2FyYzM="
+byte base64 I2FyYzM=
 concat
 itxn_field ConfigAssetURL
 global CurrentApplicationAddress
