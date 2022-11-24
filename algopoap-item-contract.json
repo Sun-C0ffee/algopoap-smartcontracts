@@ -58,7 +58,7 @@
                     "name": "poap_email"
                 },
                 {
-                    "type": "string",
+                    "type": "byte[32]",
                     "name": "poap_metadatahash"
                 },
                 {

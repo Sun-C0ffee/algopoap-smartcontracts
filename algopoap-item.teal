@@ -156,7 +156,7 @@ txn ApplicationArgs 0
 ==
 bnz method_budget_increase_call
 // Checking application call's Arg 0 for setup method signature
-method "setup(pay,address,application,string,string,string,string,string,string,string,string,string,(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
+method "setup(pay,address,application,string,string,string,string,string,string,string,string,byte[32],(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
@@ -361,7 +361,7 @@ byte "@arc3"
 concat
 itxn_field ConfigAssetName
 load 26
-extract 4 0
+extract 2 0
 itxn_field ConfigAssetMetadataHash
 
 byte base64 aXBmczovLw==
