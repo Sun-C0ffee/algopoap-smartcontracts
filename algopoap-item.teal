@@ -361,6 +361,7 @@ byte "@arc3"
 concat
 itxn_field ConfigAssetName
 load 26
+base64_decode StdEncoding
 itxn_field ConfigAssetMetadataHash
 
 byte base64 aXBmczovLw==
