@@ -361,10 +361,10 @@ byte "@arc3"
 concat
 itxn_field ConfigAssetName
 load 26
-extract 2 0
-log
+//extract 2 0
+//log
 // extract 2 0
-// itxn_field ConfigAssetMetadataHash
+itxn_field ConfigAssetMetadataHash
 
 byte base64 aXBmczovLw==
 byte "poap_nft_media"
