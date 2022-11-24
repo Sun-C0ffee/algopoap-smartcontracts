@@ -374,9 +374,10 @@ concat
 itxn_field ConfigAssetURL
 global CurrentApplicationAddress
 dup
-dup2
 itxn_field ConfigAssetManager
 itxn_field ConfigAssetReserve
+global ZeroAddress
+dup
 itxn_field ConfigAssetFreeze
 itxn_field ConfigAssetClawback
 itxn_submit
