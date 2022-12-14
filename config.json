@@ -114,7 +114,8 @@
       "has_sig": 1,
       "has_qrcode": 1,
       "lng_unit_diff": 6,
-      "author_pays_fee": 1
+      "author_pays_fee": 1,
+      "is_single": 0
     }
   }
 }
