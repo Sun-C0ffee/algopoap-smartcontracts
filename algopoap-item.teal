@@ -156,7 +156,7 @@ txn ApplicationArgs 0
 ==
 bnz method_budget_increase_call
 // Checking application call's Arg 0 for setup method signature
-method "setup(pay,address,application,string,string,string,string,string,string,string,string,byte[32],(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
+method "setup(pay,address,application,string,string,string,string,string,string,string,string,byte[32],(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64))string"
 txn ApplicationArgs 0
 ==
 bnz method_setup
@@ -401,7 +401,7 @@ itxn_field TypeEnum
 load 0
 itxn_field XferAsset
 load 2
-itxn_field AssetSender
+itxn_field Sender
 load 3
 itxn_field AssetAmount
 load 4
@@ -579,6 +579,7 @@ b b_finalize_claim
 
 // Handles updating states, logging , sending PoaP and returning the value to method call of method_claim
 b_finalize_claim:
+
 byte "poap_asa_id"
 app_global_get
 store 0
@@ -598,17 +599,30 @@ app_global_get
 global CurrentApplicationID
 app_local_put
 
-//byte "poap_item_claim_count"
-//dup
-//app_global_get
-//int 1
-//+
-//app_global_put
+
+load 27
+int 0
+==
+bz b_finalize_claim_single
+
 
 byte 0x151f7c75
 byte "algopoap_item_claimed"
 concat
 b b_log_return
+
+b_finalize_claim_single:
+byte "is_single"
+load 27
+int 1
++
+app_global_put
+byte 0x151f7c75
+byte "algopoap_item_claimed"
+concat
+b b_log_return
+
+
 
 // If author pays the activation fees for all participants
 b_activate_author_pays:
@@ -825,6 +839,14 @@ global CurrentApplicationID
 app_opted_in
 assert
 
+byte "is_single"
+app_global_get
+store 27
+byte "poap_attendee_qty"
+app_global_get
+load 27
+>=
+assert
 
 txn Sender
 byte "poap_nft_media"
@@ -1002,6 +1024,13 @@ int 96
 extract_uint64
 dup 
 store 23
+app_global_put
+
+// Adding new option is_single which acts as a counter for greater than 0 values
+byte "is_single"
+load 10
+int 104
+extract_uint64
 app_global_put
 
 // ASA Existence check to route to creation or config branches and subs

@@ -3,10 +3,10 @@
   "desc": "AlgoPoaP Parent smart contract",
   "networks": {
     "MainNet": {
-      "appID": 0
+      "appID": 946441472
     },
     "TestNet": {
-      "appID": 106595642
+      "appID": 119642157
     }
   },
   "methods": [

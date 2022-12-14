@@ -445,6 +445,14 @@ dup
 store 1
 itxn_field ApplicationID
 
+load 1
+byte "poap_author_address"
+app_global_get_ex
+assert
+txn Sender
+==
+assert
+
 txn ApplicationArgs 2
 dup
 len
@@ -498,8 +506,17 @@ itxn_field OnCompletion
 txn ApplicationArgs 1
 btoi
 txnas Applications
+dup
+store 1
 itxn_field ApplicationID
 
+load 1
+byte "poap_author_address"
+app_global_get_ex
+assert
+txn Sender
+==
+assert
 //int 1000
 //itxn_field Fee
 
