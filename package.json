@@ -1,32 +1,31 @@
 {
-    "name": "algopoap-smartcontracts",
-    "version": "1.8.0",
-    "description": "This package implements AlgoPoaP's smart contracts on Algorand blockchain",
-    "main": "index.js",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "start": "node index.js"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/AlgoPoaP/algopoap-smartcontracts.git"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "MIT",
-    "bugs": {
-      "url": "https://github.com/AlgoPoaP/algopoap-smartcontracts/issues"
-    },
-    "homepage": "https://github.com/AlgoPoaP/algopoap-smartcontracts#readme",
-    "dependencies": {
-      "axios": "^0.26.0",
-      "algosdk": "latest",
-      "node-fetch": "2",
-      "esrever":"latest",
-      "winston":"latest",
-      "chalk":"4.1.0",
-      "geolib":"^3.3.3",
-      "js-sha512":"^0.8.0"
-    }
+  "name": "algopoap-smartcontracts",
+  "version": "1.9.0",
+  "description": "This package implements AlgoPoaP's smart contracts on Algorand blockchain",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlgoPoaP/algopoap-smartcontracts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlgoPoaP/algopoap-smartcontracts/issues"
+  },
+  "homepage": "https://github.com/AlgoPoaP/algopoap-smartcontracts#readme",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "algosdk": "latest",
+    "node-fetch": "2",
+    "esrever":"latest",
+    "winston":"latest",
+    "chalk":"4.1.0",
+    "geolib":"^3.3.3",
+    "js-sha512":"^0.8.0"
   }
-  
+}
