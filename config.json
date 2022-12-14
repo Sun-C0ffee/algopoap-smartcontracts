@@ -97,6 +97,7 @@
     "poap_item": {
       "poapName": "poap_name",
       "poapLogo": "poap_logo",
+      "poapNftMedia": "poap_nft_media",
       "poapDesc":"poap_desc",
       "poapTimezone": "poap_timezone",
       "poapAddress": "poap_address",
