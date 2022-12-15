@@ -9,6 +9,7 @@
     "asc_main_address": "23QHOYLQJUYXXWKHBZJRQGL45BS6HZNXZ4XBLFYFJDC5B45Z642UL5E2GY",
     "asc_item_address": "",
     "algod_remote_server": "https://node.algoexplorerapi.io",
+    "algod_remote_server": "https://node.algoexplorerapi.io",
     "algod_remote_port": "",
     "algod_remote_token": "",
     "indexer_remote_server": "https://node.algoexplorerapi.io/indexer",
@@ -100,6 +101,7 @@
     "poap_item": {
       "poapName": "poap_name",
       "poapLogo": "poap_logo",
+      "poapNftMedia": "poap_nft_media",
       "poapDesc":"poap_desc",
       "poapTimezone": "poap_timezone",
       "poapAddress": "poap_address",
@@ -117,7 +119,8 @@
       "has_sig": 1,
       "has_qrcode": 1,
       "lng_unit_diff": 6,
-      "author_pays_fee": 1
+      "author_pays_fee": 1,
+      "is_single": 0
     }
   }
 }
