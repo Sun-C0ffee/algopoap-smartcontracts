@@ -94,10 +94,7 @@ global MinTxnFee
 >=
 assert
 
-txn NumAppArgs
-int 0
-==
-bz b_method_check
+
 
 // Checking Application ID to be zero (app in creation)
 txn ApplicationID
@@ -126,6 +123,11 @@ txn OnCompletion
 int OptIn
 ==
 bnz b_optin
+
+txn NumAppArgs
+int 0
+==
+bz b_method_check
 
 // Checking onCompletion type for noop application call
 txn OnCompletion

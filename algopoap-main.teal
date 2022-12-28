@@ -62,11 +62,6 @@ int 0
 ||
 assert
 
-// Checks the number of application args , if 0 then no method it is
-txn NumAppArgs
-int 0
-==
-bz b_method_check
 
 // Checking Application ID to be zero (app in creation)
 txn ApplicationID
@@ -95,6 +90,12 @@ txn OnCompletion
 int OptIn
 ==
 bnz b_optin
+
+// Checks the number of application args , if 0 then no method it is
+txn NumAppArgs
+int 0
+==
+bz b_method_check
 
 // Checking onCompletion type for noop application call
 txn OnCompletion
